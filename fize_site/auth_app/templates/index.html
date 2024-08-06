@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geschool - Accueil</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+        }
+
+        .navbar {
+            background-color: #d0690e;
+        }
+
+        .navbar-brand,
+        .nav-link {
+            color: #ffffff !important;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #cce5ff !important;
+        }
+
+        .hero {
+            background: url('https://images.ctfassets.net/63bmaubptoky/sZriYkvztFPUnfxy83p_SiPo-cUxTL2x5XzyC5FRwvs/e37799a95f714bd48891d63c91c930be/logiciel-de-gestion-etablissement-scolaire-FR-Capterra-Header.png?w=2200') no-repeat center center;
+            background-size: cover;
+            color: #ffffff;
+            padding: 120px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            z-index: 2;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            z-index: 2;
+        }
+
+        .section-icon {
+            font-size: 2.5rem;
+            color: #d0690e; 
+            margin-bottom: 15px;
+        }
+
+        .section-card {
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .section-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .section-card .btn {
+            background-color: #d0690e;
+            color: #ffffff;
+        }
+
+        .section-card .btn:hover {
+            background-color: #d0690e; 
+        }
+
+        .footer {
+            background-color: #d0690e; 
+            color: #ffffff;
+            padding: 20px 0;
+        }
+
+        .footer p {
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="#">Geschool</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="">Gestion des Cours et Plannings</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="">Gestion des Absences</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'teacher_list' %}">Gestion des Professeurs</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'student_list' %}">Gestion des Élèves</a>
+                </li>
+                <!-- <li class="nav-item">
+                    <a class="nav-link" href="#login">Connexion</a>
+                </li> -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'connexion' %}">Déconnexion</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="container position-relative">
+            <h1>Bienvenue sur Geschool</h1>
+            <p>La solution complète pour la gestion scolaire</p>
+        </div>
+    </header>
+
+    <main class="container my-5">
+        <div class="row text-center">
+            <!-- Section Gestion des Cours et Plannings -->
+            <div class="col-md-4 mb-4">
+                <div class="card section-card">
+                    <div class="card-body">
+                        <i class="bi bi-calendar-check section-icon"></i>
+                        <h5 class="card-title">Gestion des Cours et Plannings</h5>
+                        <p class="card-text">Organisez et gérez les cours, les horaires et les plannings avec facilité.</p>
+                        <a href="#courses" class="btn btn-primary">En savoir plus</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Gestion des Absences -->
+            <div class="col-md-4 mb-4">
+                <div class="card section-card">
+                    <div class="card-body">
+                        <i class="bi bi-calendar-event section-icon"></i>
+                        <h5 class="card-title">Gestion des Absences</h5>
+                        <p class="card-text">Suivez les absences, les retards et les congés de manière efficace.</p>
+                        <a href="#absences" class="btn btn-primary">En savoir plus</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Professeurs -->
+            <div class="col-md-4 mb-4">
+                <div class="card section-card">
+                    <div class="card-body">
+                        <i class="bi bi-person-bounding-box section-icon"></i>
+                        <h5 class="card-title">Professeurs</h5>
+                        <p class="card-text">Gérez les informations et les plannings des professeurs facilement.</p>
+                        <a href="" class="btn btn-primary">En savoir plus</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Élèves -->
+            <div class="col-md-4 mb-4">
+                <div class="card section-card">
+                    <div class="card-body">
+                        <i class="bi bi-person-lines-fill section-icon"></i>
+                        <h5 class="card-title">Élèves</h5>
+                        <p class="card-text">Gérez les informations, les résultats et les plannings des élèves.</p>
+                        <a href="" class="btn btn-primary">En savoir plus</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section information -->
+            <div class="col-md-4 mb-4">
+                <div class="card section-card">
+                    <div class="card-body">
+                        <i class="bi bi-lock section-icon"></i>
+                        <h5 class="card-title">Notifications</h5>
+                        <p class="card-text">Voir les notifications</p>
+                        <a href="" class="btn btn-primary">Accéder</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Déconnexion -->
+            <div class="col-md-4 mb-4">
+                <div class="card section-card">
+                    <div class="card-body">
+                        <i class="bi bi-box-arrow-right section-icon"></i>
+                        <h5 class="card-title">Déconnexion</h5>
+                        <p class="card-text">Déconnectez-vous de votre compte en toute sécurité.</p>
+                        <a href="{% url 'connexion' %}" class="btn btn-primary">Se déconnecter</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer text-center py-3">
+        <p>&copy; 2024 Geschool. Tous droits réservés.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
