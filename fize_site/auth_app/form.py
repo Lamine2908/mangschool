@@ -180,7 +180,7 @@ class ClasseForm(forms.ModelForm):
 class NoteForm(forms.ModelForm):
     class Meta:
         model = Note
-        fields = ['competence', 'matiere','note_eva1', 'note_eva2', 'moyen_semes', 'moyen_annuel', 'appreciation']
+        fields = ['student', 'teacher', 'matiere','note_eva1', 'note_eva2', 'integration','moyen_semes', 'moyen_annuel', 'appreciation']
 
     def __init__(self, *args, **kwargs):
         super(NoteForm, self).__init__(*args, **kwargs)

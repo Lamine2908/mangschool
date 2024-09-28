@@ -337,11 +337,18 @@ def ajouter_notes(request, teacher_id):
     classes = Classe.objects.filter(teacher=teacher)
     students = Student.objects.filter(classe__in=classes).distinct()
     matieres = Matiere.objects.filter(classes__in=classes).distinct()
+    teachers = Teacher.objects.filter(classe__in=classes).distinct()
     
     if request.method == 'POST':
         form = NoteForm(request.POST)
         if form.is_valid():
             note = form.save(commit=False)
+            existence_note = Note.objects.filter(student=note.student, matiere=note.matiere, teacher=teacher).first()
+            
+            if existence_note:
+                messages.error(request, f"Une note existe déjà pour {note.student} dans {note.matiere}.")
+                return redirect('ajouter_notes', teacher_id=teacher_id)   
+                 
             note.teacher = teacher
             note.save()
             return redirect('afficher_notes', teacher_id=teacher_id)
@@ -352,6 +359,7 @@ def ajouter_notes(request, teacher_id):
         'classes': classes,
         'matieres': matieres,
         'students': students,
+        'teachers':teachers,
         'form': form,
     }
     
@@ -370,6 +378,25 @@ def afficher_notes(request, teacher_id):
     }
     
     return render(request, 'afficher_notes.html', context)
+
+def modifier_notes(request, note_id):
+    note = get_object_or_404(Note, id=note_id)
+    
+    if request.method == "POST":
+        form = NoteForm(request.POST, instance=note)
+        if form.is_valid():
+            form.save()
+            return redirect('afficher_notes', teacher_id=note.teacher.id)
+    else:
+        form = NoteForm(instance=note)
+    
+    context = {
+        'form': form,
+        'note': note,
+    }
+
+    return render(request, 'modifier_notes.html', context)
+
 
 def ajouter_classe(request):
     if request.method == 'POST':

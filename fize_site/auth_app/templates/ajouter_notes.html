@@ -50,13 +50,34 @@
 <body>
 
 <div class="container mt-5">
-    <h2>Ajouter une Note</h2>
+    <h2>Ajouter une Note {{classe.code}}</h2>
     <form method="post" class="needs-validation" novalidate>
         {% csrf_token %}
         
+        {% if messages %}
+        <div class="alert alert-custom">
+            {% for message in messages %}
+            <p class="mb-0">{{ message }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+
         <div class="mb-3">
-            <label for="competence" class="form-label">{{ form.competence.label }}</label>
-            {{ form.competence }}
+            <label for="teacher" class="form-label">Professeur</label>
+            <select name="teacher" id="teacher" class="form-select" required>
+                {% for teacher in teachers %}
+                    <option value="{{ teacher.id }}" readonly>{{ teacher.first_name }} {{ teacher.last_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="student" class="form-label">Étudiant</label>
+            <select name="student" id="student" class="form-select" required>
+                {% for student in students %}
+                    <option value="{{ student.id }}">{{ student.first_name }} {{ student.last_name }}</option>
+                {% endfor %}
+            </select>
         </div>
 
 
@@ -76,6 +97,11 @@
         </div>
 
         <div class="mb-3">
+            <label for="integration" class="form-label">{{ form.integration.label }}</label>
+            {{ form.integration }}
+        </div>
+
+        <div class="mb-3">
             <label for="moyen_semes" class="form-label">{{ form.moyen_semes.label }}</label>
             {{ form.moyen_semes }}
         </div>
@@ -88,15 +114,6 @@
         <div class="mb-3">
             <label for="appreciation" class="form-label">{{ form.appreciation.label }}</label>
             {{ form.appreciation }}
-        </div>
-
-        <div class="mb-3">
-            <label for="student" class="form-label">Étudiant</label>
-            <select name="student" id="student" class="form-select" required>
-                {% for student in students %}
-                    <option value="{{ student.id }}">{{ student.first_name }} {{ student.last_name }}</option>
-                {% endfor %}
-            </select>
         </div>
 
 

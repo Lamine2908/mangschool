@@ -39,28 +39,30 @@
         <thead>
             <tr>
                 <th>Étudiant</th>
-                <th>Compétence</th>
+                <th>Matiere</th>
                 <th>Évaluation 1</th>
-                <th>Note 1</th>
                 <th>Évaluation 2</th>
-                <th>Note 2</th>
+                <th>Integration</th>
                 <th>Moy Semes</th>
                 <th>Moy Ann</th>
                 <th>Appr</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
             {% for note in notes %}
                 <tr>
                     <td>{{ note.student.first_name }} {{ note.student.last_name }}</td>
-                    <td>{{ note.competence }}</td>
-                    <td>{{ note.evaluation1 }}</td>
+                    <td>{{ note.matiere }}</td>
                     <td>{{ note.note_eva1 }}</td>
-                    <td>{{ note.evaluation2 }}</td>
                     <td>{{ note.note_eva2 }}</td>
+                    <td>{{ note.integration }}</td>
                     <td>{{ note.moyen_semes }}</td>
                     <td>{{ note.moyen_annuel }}</td>
                     <td>{{ note.appreciation }}</td>
+                    <td>
+                        <a href="{% url 'modifier_notes' note.id %}" class="btn btn-warning btn-sm">Modifier</a>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>

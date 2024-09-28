@@ -36,7 +36,7 @@ class Teacher(models.Model):
     profession = models.CharField(max_length=100, blank=True, null=True)
     email = models.EmailField(unique=True, null=True, blank=True)
     classes = models.ManyToManyField('Classe', related_name='teachers')
-    
+    matieres = models.ManyToManyField('Matiere', related_name='matiere')
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
 
@@ -68,6 +68,8 @@ class Matiere(models.Model):
     semestre = models.CharField(max_length=10, default='semestre')
     filiere = models.ForeignKey(Filiere, on_delete=models.CASCADE, related_name='matieres', null=True)
 
+    def __str__(self):
+        return self.nom_matiere
 
 class Student(models.Model):
     id = models.AutoField(primary_key=True)
@@ -96,18 +98,19 @@ class Classe(models.Model):
         return self.name
 
 class Note(models.Model):
+    id = models.AutoField(primary_key=True, unique=True)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, null=True)
-    competence = models.CharField(max_length=20, default='pas encore', blank=True)
-    matiere = models.ForeignKey(Matiere,  on_delete=models.CASCADE, related_name='notes', default=1)
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, null=True, related_name='notes')
+    matiere = models.ForeignKey(Matiere, on_delete=models.CASCADE, null=True, related_name='matieres')
     note_eva1 = models.FloatField(default=0)
     note_eva2 = models.FloatField(default=0)
+    integration = models.FloatField(default=0)
     moyen_semes = models.FloatField(default=0)
     moyen_annuel = models.FloatField(default=0)
     appreciation = models.CharField(max_length=15, default='pas encore', blank=True)
     
     def __str__(self):
-        return f"{self.student} - {self.competence}"
+        return f"{self.student} - {self.moyen_semes}"
 
 
 class Enseigner(models.Model):
