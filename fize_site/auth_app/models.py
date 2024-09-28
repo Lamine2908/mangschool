@@ -9,8 +9,11 @@ from django.contrib.auth.models import User
 
 class Administrateur(models.Model):
     id = models.AutoField(primary_key=True)
+    matricule = models.CharField(max_length=20 ,unique=True, null=True)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
+    adresse = models.CharField(max_length=100, default="adresse")
+    telephone = models.IntegerField(unique=True, null=True)
     email = models.EmailField(unique=True, null=False, blank=False)
 
     def __str__(self):
