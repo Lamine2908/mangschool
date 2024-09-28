@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bulletin</title>
+</head>
+<body>
+    <h1>Bulletin</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>CTABD</th>
+                <th>UEA</th>
+                <th>Code</th>
+                <th>Nom</th>
+                <th>Éléments Constitutifs</th>
+                <th>Intégration</th>
+                <th>Moyenne</th>
+                <th>Validé</th>
+                <th>Crédit</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for bulletin in bulletins %}
+            <tr>
+                <td>{{ bulletin.ctabd }}</td>
+                <td>{{ bulletin.uea }}</td>
+                <td>{{ bulletin.code }}</td>
+                <td>{{ bulletin.nom }}</td>
+                <td>{{ bulletin.elements_constitutifs }}</td>
+                <td>{{ bulletin.integration }}</td>
+                <td>{{ bulletin.moyenne }}</td>
+                <td>{{ bulletin.valide|yesno:"Oui,Non" }}</td>
+                <td>{{ bulletin.credit }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

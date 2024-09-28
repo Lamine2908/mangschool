@@ -1,0 +1,25 @@
+<h1 class="text-center">État des paiements</h1>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Enseignant</th>
+            <th>Date de paiement</th>
+            <th>Moyen de paiement</th>
+            <th>Montant</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for payment in payments %}
+        <tr>
+            <td>{{ payment.teacher.first_name }} {{ payment.teacher.last_name }}</td>
+            <td>{{ payment.payment_date|date:"d/m/Y H:i" }}</td>
+            <td>{{ payment.payment_method }}</td>
+            <td>{{ payment.amount }} €</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4" class="text-center">Aucun paiement effectué</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

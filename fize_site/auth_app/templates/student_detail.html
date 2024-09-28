@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails de l'Étudiant</title>
+    <style>
+        .student-info {
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .student-info h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .student-info p {
+            font-size: 18px;
+        }
+        .student-photo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 80px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="student-info">
+            <h1>Détails de l'Étudiant</h1>
+            <img src="{{ student.photo_url }}" alt="{{ student.first_name }} {{ student.last_name }} " class="student-photo">
+            <p><strong>Prénom:</strong> {{ student.first_name }}</p>
+            <p><strong>Nom:</strong> {{ student.last_name }}</p>
+            <p><strong>Filière:</strong> {{ student.filiere }}</p>
+            <p><strong>Métier:</strong> {{ student.metier }}</p>
+            <p><strong>Classe:</strong> {{ student.classe }}</p>
+            <p><strong>Email:</strong> {{ student.email }}</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,3 +1,4 @@
+{% block content %}
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -8,12 +9,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f8f9fa;
-            margin: 0;
-        }
-
         .navbar {
             background-color: #d0690e;
         }
@@ -61,7 +56,7 @@
 
         .section-icon {
             font-size: 2.5rem;
-            color: #d0690e; 
+            color: #d0690e;
             margin-bottom: 15px;
         }
 
@@ -84,11 +79,11 @@
         }
 
         .section-card .btn:hover {
-            background-color: #d0690e; 
+            background-color: #c05b03;
         }
 
         .footer {
-            background-color: #d0690e; 
+            background-color: #d0690e;
             color: #ffffff;
             padding: 20px 0;
         }
@@ -101,33 +96,28 @@
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark">
-        <a class="navbar-brand" href="#">Geschool</a>
+        <a class="navbar-brand" href="{% url 'index' %}">Geschool</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
+            <ul class="navbar-nav ms-auto">
+               
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Accueil</a>
+                    <a class="nav-link active" aria-current="page" href="{% url 'espaceadmin' %}">Espace Admin</a>
                 </li>
+
                 <li class="nav-item">
-                    <a class="nav-link" href="">Gestion des Cours et Plannings</a>
+                    <a class="nav-link" href="{% url 'espaceprof' %}">Espace Prof</a>
                 </li>
+
                 <li class="nav-item">
-                    <a class="nav-link" href="">Gestion des Absences</a>
+                    <a class="nav-link" href="{% url 'connexion_eleve' %}">Espace Élève</a>
                 </li>
+               
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'teacher_list' %}">Gestion des Professeurs</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'student_list' %}">Gestion des Élèves</a>
-                </li>
-                <!-- <li class="nav-item">
-                    <a class="nav-link" href="#login">Connexion</a>
-                </li> -->
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'connexion' %}">Déconnexion</a>
+                    <a class="nav-link" href="{% url 'responsable_filiere' %}">Responsable Filière</a>
                 </li>
             </ul>
         </div>
@@ -141,78 +131,53 @@
     </header>
 
     <main class="container my-5">
+        
         <div class="row text-center">
-            <!-- Section Gestion des Cours et Plannings -->
-            <div class="col-md-4 mb-4">
+        
+            <div class="col-md-3 mb-4 d-flex justify-content-center">
                 <div class="card section-card">
                     <div class="card-body">
-                        <i class="bi bi-calendar-check section-icon"></i>
-                        <h5 class="card-title">Gestion des Cours et Plannings</h5>
-                        <p class="card-text">Organisez et gérez les cours, les horaires et les plannings avec facilité.</p>
-                        <a href="#courses" class="btn btn-primary">En savoir plus</a>
+                        <i class="bi bi-gear-fill section-icon"></i>
+                        <h5 class="card-title">Espace Admin</h5>
+                        <p class="card-text">Gérez les paramètres globaux et administratifs de l'établissement.</p>
+                        <a href="{% url 'espaceadmin' %}" class="btn btn-primary">Accéder</a>
                     </div>
                 </div>
             </div>
 
-            <!-- Section Gestion des Absences -->
-            <div class="col-md-4 mb-4">
-                <div class="card section-card">
-                    <div class="card-body">
-                        <i class="bi bi-calendar-event section-icon"></i>
-                        <h5 class="card-title">Gestion des Absences</h5>
-                        <p class="card-text">Suivez les absences, les retards et les congés de manière efficace.</p>
-                        <a href="#absences" class="btn btn-primary">En savoir plus</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Section Professeurs -->
-            <div class="col-md-4 mb-4">
+            <div class="col-md-3 mb-4 d-flex justify-content-center">
                 <div class="card section-card">
                     <div class="card-body">
                         <i class="bi bi-person-bounding-box section-icon"></i>
-                        <h5 class="card-title">Professeurs</h5>
-                        <p class="card-text">Gérez les informations et les plannings des professeurs facilement.</p>
-                        <a href="" class="btn btn-primary">En savoir plus</a>
+                        <h5 class="card-title">Espace Prof</h5>
+                        <p class="card-text">Accédez à vos cours, plannings et suivez vos élèves.</p>
+                        <a href="{% url 'espaceprof' %}" class="btn btn-primary">Accéder</a>
                     </div>
                 </div>
             </div>
 
-            <!-- Section Élèves -->
-            <div class="col-md-4 mb-4">
+            <div class="col-md-3 mb-4 d-flex justify-content-center">
                 <div class="card section-card">
                     <div class="card-body">
                         <i class="bi bi-person-lines-fill section-icon"></i>
-                        <h5 class="card-title">Élèves</h5>
-                        <p class="card-text">Gérez les informations, les résultats et les plannings des élèves.</p>
-                        <a href="" class="btn btn-primary">En savoir plus</a>
+                        <h5 class="card-title">Espace Élève</h5>
+                        <p class="card-text">Consultez vos résultats, vos plannings et vos absences.</p>
+                        <a href="{% url 'espaceeleve' %}" class="btn btn-primary">Accéder</a>
                     </div>
                 </div>
             </div>
 
-            <!-- Section information -->
-            <div class="col-md-4 mb-4">
+            <div class="col-md-3 mb-4 d-flex justify-content-center">
                 <div class="card section-card">
                     <div class="card-body">
-                        <i class="bi bi-lock section-icon"></i>
-                        <h5 class="card-title">Notifications</h5>
-                        <p class="card-text">Voir les notifications</p>
-                        <a href="" class="btn btn-primary">Accéder</a>
+                        <i class="bi bi-people-fill section-icon"></i>
+                        <h5 class="card-title">Responsable Filière</h5>
+                        <p class="card-text">Gérez les informations et les plannings de votre filière.</p>
+                        <a href="{% url 'responsable_filiere' %}" class="btn btn-primary">Accéder</a>
                     </div>
                 </div>
             </div>
 
-            <!-- Section Déconnexion -->
-            <div class="col-md-4 mb-4">
-                <div class="card section-card">
-                    <div class="card-body">
-                        <i class="bi bi-box-arrow-right section-icon"></i>
-                        <h5 class="card-title">Déconnexion</h5>
-                        <p class="card-text">Déconnectez-vous de votre compte en toute sécurité.</p>
-                        <a href="{% url 'connexion' %}" class="btn btn-primary">Se déconnecter</a>
-                    </div>
-                </div>
-            </div>
         </div>
     </main>
 
@@ -224,3 +189,4 @@
 </body>
 
 </html>
+{% endblock content %}

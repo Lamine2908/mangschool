@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sélectionner les destinataires</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Sélectionner les destinataires</h2>
+        <form method="post">
+            <!-- Token de sécurité CSRF -->
+            {% csrf_token %}
+            
+            <!-- Liste des étudiants -->
+            <h3>Étudiants</h3>
+            <ul class="list-group mb-3">
+                {% for student in students %}
+                <li class="list-group-item">
+                    <input type="checkbox" name="students" value="{{ student.id }}">
+                    {{ student.first_name }} {{ student.last_name }}
+                </li>
+                {% endfor %}
+            </ul>
+
+            <!-- Liste des enseignants -->
+            <h3>Enseignants</h3>
+            <ul class="list-group mb-3">
+                {% for teacher in teachers %}
+                <li class="list-group-item">
+                    <input type="checkbox" name="teachers" value="{{ teacher.id }}">
+                    {{ teacher.first_name }} {{ teacher.last_name }}
+                </li>
+                {% endfor %}
+            </ul>
+
+            <!-- Bouton pour soumettre le formulaire -->
+            <button type="submit" class="btn btn-primary">Envoyer le planning</button>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

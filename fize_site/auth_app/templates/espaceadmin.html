@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espace Administrateur - Geschool</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .navbar {
+            background-color: #1a3c5a;
+        }
+
+        .navbar-brand,
+        .nav-link {
+            color: #ffffff !important;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #cce5ff !important;
+        }
+
+        .hero {
+            background: url('https://images.ctfassets.net/63bmaubptoky/sZriYkvztFPUnfxy83p_SiPo-cUxTL2x5XzyC5FRwvs/e37799a95f714bd48891d63c91c930be/logiciel-de-gestion-etablissement-scolaire-FR-Capterra-Header.png?w=2200') no-repeat center center;
+            background-size: cover;
+            color: #ffffff;
+            padding: 20px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            z-index: 2;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            z-index: 2;
+        }
+
+        .section-icon {
+            font-size: 2.5rem;
+            color: #1a3c5a;
+            margin-bottom: 15px;
+        }
+
+        .section-card {
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .section-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .section-card .btn {
+            background-color: #1a3c5a;
+            color: #ffffff;
+        }
+
+        .section-card .btn:hover {
+            background-color: #1a3c5a;
+        }
+
+        .footer {
+            background-color: #1a3c5a;
+            color: #ffffff;
+            padding: 20px 0;
+        }
+
+        .footer p {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="#">Geschool</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Espace Administrateur</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'connexion' %}">Déconnexion</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="container position-relative">
+            <h1>Bienvenue {{Administrateur.first_name}} {{Administrateur.last_name}}</h1>
+            <p>Gérez les informations et les activités scolaires efficacement</p>
+        </div>
+    </header>
+
+    <main class="container my-5">
+        <div class="row text-center">
+
+            <div class="col-md-4 mb-4">
+                <div class="card section-card">
+                    <div class="card-body">
+                        <i class="bi bi-person-check section-icon"></i>
+                        <h5 class="card-title">Gérer les Étudiants</h5>
+                        <p class="card-text">Ajoutez, modifiez ou supprimez des informations d'étudiants.</p>
+                        <a href="{% url 'student_list' %}" class="btn btn-primary">Voir les Étudiants</a>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-md-4 mb-4">
+                <div class="card section-card">
+                    <div class="card-body">
+                        <i class="bi bi-person-check section-icon"></i>
+                        <h5 class="card-title">Gérer les Professeurs</h5>
+                        <p class="card-text">Ajoutez, modifiez ou supprimez des informations des Professeurs.</p>
+                        <a href="{% url 'teacher_list' %}" class="btn btn-primary">Voir les Professeurs</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card section-card">
+                    <div class="card-body">
+                        <i class="bi bi-bar-chart section-icon"></i>
+                        <h5 class="card-title">CLASSES_PROFESSEURS</h5>
+                        <p class="card-text">Accedez a cette page pour plus d' informations</p>
+                        <a href="{% url 'teacher_class' %}" class="btn btn-primary">Voir plus</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card section-card">
+                    <div class="card-body">
+                        <i class="bi bi-graph-up-arrow section-icon"></i>
+                        <h5 class="card-title">Gérer les Classes</h5>
+                        <p class="card-text">Accedez a cette page pour gerer les classses</p>
+                        <a href="{% url 'ajouter_classe' %}" class="btn btn-primary">Voir plus</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card section-card">
+                    <div class="card-body">
+                        <i class="bi bi-bar-chart section-icon"></i>
+                        <h5 class="card-title">Affecter les eleves</h5>
+                        <p class="card-text">Accedez a cette page pour </p>
+                        <a href="#" class="btn btn-primary">Affecter Élève</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card section-card">
+                    <div class="card-body">
+                        <i class="bi bi-clipboard-data section-icon"></i>
+                        <h5 class="card-title">Lister les classes</h5>
+                        <p class="card-text">Accedez a cette page pour lister les classes.</p>
+                        <a href="{% url 'class_info' %}" class="btn btn-primary">Voir les Classes</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card section-card">
+                    <div class="card-body">
+                        <i class="bi bi-clipboard-data section-icon"></i>
+                        <h5 class="card-title">CREER PLANNING</h5>
+                        <p class="card-text">Ajoutez, modifiez ou supprimez des cours et leur emploi du temps.</p>
+                        <a href="{% url 'create_planning' %}" class="btn btn-primary">Voir les Cours</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card section-card">
+                    <div class="card-body">
+                        <i class="bi bi-calendar3 section-icon"></i>
+                        <h5 class="card-title">VOIR LES PLANNINGS</h5>
+                        <p class="card-text">Acceder les emplois du temps pour l'école.</p>
+                        <a href="{% url 'planning_list' %}" class="btn btn-primary">Voir les Emplois du Temps</a>
+                    </div>
+                </div>
+            </div>
+
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer text-center py-3">
+        <p>&copy; 2024 Geschool. Tous droits réservés.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Affecter des Classes à un Enseignant</title>
+</head>
+<body>
+    <h1>Affecter des Classes à {{ teacher.first_name }} {{ teacher.last_name }}</h1>
+    
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Affecter les classes</button>
+    </form>
+
+    <a href="{% url 'teacher_list' %}">Retour à la liste des enseignants</a>
+</body>
+</html>

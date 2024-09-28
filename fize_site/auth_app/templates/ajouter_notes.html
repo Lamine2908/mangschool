@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajouter une Note</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .form-label {
+            font-weight: bold;
+        }
+        .form-control, .form-select {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 20px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container mt-5">
+    <h2>Ajouter une Note</h2>
+    <form method="post" class="needs-validation" novalidate>
+        {% csrf_token %}
+        
+        <div class="mb-3">
+            <label for="competence" class="form-label">{{ form.competence.label }}</label>
+            {{ form.competence }}
+        </div>
+
+
+        <div class="mb-3">
+            <label for="matiere" class="form-label">{{ form.matiere.label }}</label>
+            {{ form.matiere }}
+        </div>
+
+        <div class="mb-3">
+            <label for="note_eva1" class="form-label">{{ form.note_eva1.label }}</label>
+            {{ form.note_eva1 }}
+        </div>
+
+        <div class="mb-3">
+            <label for="note_eva2" class="form-label">{{ form.note_eva2.label }}</label>
+            {{ form.note_eva2 }}
+        </div>
+
+        <div class="mb-3">
+            <label for="moyen_semes" class="form-label">{{ form.moyen_semes.label }}</label>
+            {{ form.moyen_semes }}
+        </div>
+
+        <div class="mb-3">
+            <label for="moyen_annuel" class="form-label">{{ form.moyen_annuel.label }}</label>
+            {{ form.moyen_annuel }}
+        </div>
+
+        <div class="mb-3">
+            <label for="appreciation" class="form-label">{{ form.appreciation.label }}</label>
+            {{ form.appreciation }}
+        </div>
+
+        <div class="mb-3">
+            <label for="student" class="form-label">Étudiant</label>
+            <select name="student" id="student" class="form-select" required>
+                {% for student in students %}
+                    <option value="{{ student.id }}">{{ student.first_name }} {{ student.last_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+
+        <button type="submit" class="btn">Ajouter la note</button>
+    </form>
+</div>
+
+</body>
+</html>

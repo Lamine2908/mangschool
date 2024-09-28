@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gérer les Paiements des Enseignants</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Geschool</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'comptable' %}">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Gérer les Paiements</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <main class="container my-5">
+        <h1 class="text-center mb-4">Gérer les Paiements des Professeurs</h1>
+        
+        <div class="list-group">
+            <form method="post" action="{% url 'manage_payments' %}">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="teacher_id" class="form-label">Choisir un Enseignant</label>
+                    <select name="teacher_id" id="teacher_id" class="form-control" required>
+                        <option value="" disabled selected>-- Sélectionnez un enseignant --</option>
+                        {% for teacher in teachers %}
+                            <option value="{{ teacher.id }}">{{ teacher.first_name }} {{ teacher.last_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary">Enregistrer le Montant</button>
+            </form>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

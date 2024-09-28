@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Évaluations</title>
+</head>
+<body>
+    <h1>Liste des Évaluations</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Étudiant</th>
+                <th>Classe</th>
+                <th>Note</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for evaluation in evaluations %}
+            <tr>
+                <td>{{ evaluation.student }}</td>
+                <td>{{ evaluation.classe }}</td>
+                <td>{{ evaluation.note }}</td>
+                <td>{{ evaluation.date }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4">Aucune évaluation trouvée.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
