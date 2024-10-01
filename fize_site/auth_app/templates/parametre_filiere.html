@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Espace Comptable - Geschool</title>
+    <title>Espace Responsable de Filière - Geschool</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <style>
         .navbar {
-            background-color: #1a3c5a;
+            background-color: #d0690e;
         }
 
         .navbar-brand,
@@ -24,7 +25,7 @@
             background: url('https://images.ctfassets.net/63bmaubptoky/sZriYkvztFPUnfxy83p_SiPo-cUxTL2x5XzyC5FRwvs/e37799a95f714bd48891d63c91c930be/logiciel-de-gestion-etablissement-scolaire-FR-Capterra-Header.png?w=2200') no-repeat center center;
             background-size: cover;
             color: #ffffff;
-            padding: 20px 0;
+            padding: 120px 0;
             text-align: center;
             position: relative;
             overflow: hidden;
@@ -54,7 +55,7 @@
 
         .section-icon {
             font-size: 2.5rem;
-            color: #1a3c5a;
+            color: #d0690e;
             margin-bottom: 15px;
         }
 
@@ -72,16 +73,16 @@
         }
 
         .section-card .btn {
-            background-color: #1a3c5a;
+            background-color: #d0690e;
             color: #ffffff;
         }
 
         .section-card .btn:hover {
-            background-color: #1a3c5a;
+            background-color: #d0690e;
         }
 
         .footer {
-            background-color: #1a3c5a;
+            background-color: #d0690e;
             color: #ffffff;
             padding: 20px 0;
         }
@@ -91,6 +92,7 @@
         }
     </style>
 </head>
+
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark">
         <a class="navbar-brand" href="#">Geschool</a>
@@ -104,85 +106,49 @@
                     <a class="nav-link" href="#">Accueil</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Espace Comptable</a>
+                    <a class="nav-link active" aria-current="page" href="#">Espace Responsable</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'connexion' %}">Déconnexion</a>
+                    <a class="nav-link" href="{% url 'index' %}">Déconnexion</a>
                 </li>
             </ul>
         </div>
     </nav>
 
-    <header class="hero">
-        <div class="container position-relative">
-            <h1>Bienvenue {{Comptable.first_name}} {{Comptable.last_name}}</h1>
-            <p>Gérez les paiements et les finances de l'école efficacement</p>
-        </div>
-    </header>
-
     <main class="container my-5">
         <div class="row text-center">
             <div class="col-md-4 mb-4">
-                <div class="card section-card">
-                    <div class="card-body">
-                        <i class="bi bi-cash section-icon"></i>
-                        <h5 class="card-title">Gérer les Paiements</h5>
-                        <p class="card-text">Consultez et gérez les paiements des étudiants et des professeurs.</p>
-                        <a href="#" class="btn btn-primary">Voir les Paiements</a>
-                    </div>
+                <div class="section-card p-4">
+                    <i class="bi bi-book section-icon"></i>
+                    <h3>Ajouter Programme</h3>
+                    <p>Ajoutez et gérez les programmes de votre filière.</p>
+                    <a href="#" class="btn btn-primary">Ajouter</a>
                 </div>
             </div>
-
             <div class="col-md-4 mb-4">
-                <div class="card section-card">
-                    <div class="card-body">
-                        <i class="bi bi-person-lines-fill section-icon"></i>
-                        <h5 class="card-title">Paiements Professeurs</h5>
-                        <p class="card-text">Accedez a cette page pour payer les profs</p>
-                        <a href="#" class="btn btn-primary">Voir les Comptes</a>
-                    </div>
+                <div class="section-card p-4">
+                    <i class="bi bi-journal section-icon"></i>
+                    <h3>Gestion des Matières</h3>
+                    <p>Gérez les matières et les cours de votre filière.</p>
+                    <a href="{% url 'ajouter_matiere' %}" class="btn btn-primary">Gérer</a>
                 </div>
             </div>
-
             <div class="col-md-4 mb-4">
-                <div class="card section-card">
-                    <div class="card-body">
-                        <i class="bi bi-graph-up-arrow section-icon"></i>
-                        <h5 class="card-title">Rapports Financiers</h5>
-                        <p class="card-text">Générez et consultez des rapports financiers détaillés.</p>
-                        <a href="#" class="btn btn-primary">Voir les Rapports</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4 mb-4">
-                <div class="card section-card">
-                    <div class="card-body">
-                        <i class="bi bi-calendar3 section-icon"></i>
-                        <h5 class="card-title">Planification des Paiements</h5>
-                        <p class="card-text">Organisez et planifiez les paiements futurs.</p>
-                        <a href="#" class="btn btn-primary">Voir les Planifications</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4 mb-4">
-                <div class="card section-card">
-                    <div class="card-body">
-                        <i class="bi bi-bar-chart section-icon"></i>
-                        <h5 class="card-title">Analyse des Finances</h5>
-                        <p class="card-text">Analysez les tendances et les performances financières.</p>
-                        <a href="#" class="btn btn-primary">Voir les Analyses</a>
-                    </div>
+                <div class="section-card p-4">
+                    <i class="bi bi-gear section-icon"></i>
+                    <h3>Paramètres</h3>
+                    <p>Configurez d'autres paramètres de votre filière.</p>
+                    <a href="#" class="btn btn-primary">Configurer</a>
                 </div>
             </div>
         </div>
     </main>
 
-    <footer class="footer text-center py-3">
-        <p>&copy; 2024 Geschool. Tous droits réservés.</p>
+    <footer class="footer text-center">
+        <p>© 2024 Geschool. Tous droits réservés.</p>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

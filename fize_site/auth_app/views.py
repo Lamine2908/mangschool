@@ -2,8 +2,8 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
-from .models import Student, Teacher, Classe, Salle, Note, Matiere, CahierDeCours, TeacherPayment, Comptable, Paiement, Administrateur, Planning, ResponsableFiliere, ResponsableClasse
-from .form import StudentForm,PaiementForm, NoteForm, MatiereForm, CahierDeCoursForm, ClassInfoForm, TeacherPaymentForm, AssignStudentToClassForm, AssignClassToTeacherForm, AddStudentToClassForm, ComptableForm, ClasseForm, SalleForm, AssignClassForm, TeacherForm, PlanningForm , CustomUserCreationForm, ConnexionForm, ResponsableFiliereForm, TeacherUpdateForm, StudentUpdateForm
+from .models import Student, Teacher, Classe, Salle, Note, Matiere, CahierDeCours, Comptable, Administrateur, Planning, ResponsableFiliere, ResponsableClasse
+from .form import StudentForm, NoteForm, MatiereForm, CahierDeCoursForm, AssignClassToTeacherForm, AddStudentToClassForm, ClasseForm, SalleForm, TeacherForm, PlanningForm , CustomUserCreationForm, ConnexionForm, TeacherUpdateForm, StudentUpdateForm
 from django.core.mail import send_mail
 from django.utils import timezone
 
@@ -116,7 +116,6 @@ def connexion(request):
 
     return render(request, 'connexion.html', {'form': form})
 
-
 def index(request):
     return render(request, 'index.html')
 
@@ -187,8 +186,6 @@ def delete_student_by_id(request, student_id):
 
     return render(request, 'delete_students.html', {'student': student})
 
-def success_page(request):
-    return render(request, 'success.html')
 
 def filter_students_view(request):
     students = Student.objects.all()
@@ -293,43 +290,50 @@ def supprimer_matiere(request, matiere_id):
 
     return render(request, 'supprimer_matiere.html', {'matiere': matiere})
 
+def parametre_filiere(request, responsable_id):
+    responsable = get_object_or_404(ResponsableFiliere, id=responsable_id)
+    
+    context = {
+        'responsable': responsable,
+    }
+    
+    return render(request, 'parametre_filiere.html', context)
 
+# def paiement_etudiant(request, student_id):
+#     student = get_object_or_404(Student, id=student_id)
 
-def paiement_etudiant(request, student_id):
-    student = get_object_or_404(Student, id=student_id)
+#     if Paiement.objects.filter(student=student).exists():
+#         messages.error(request, "Cet étudiant a déjà effectué un paiement.")
+#         return redirect('paiement_liste')
 
-    if Paiement.objects.filter(student=student).exists():
-        messages.error(request, "Cet étudiant a déjà effectué un paiement.")
-        return redirect('paiement_liste')
+#     if request.method == 'POST':
+#         form = PaiementForm(request.POST)
+#         if form.is_valid():
+#             paiement = form.save(commit=False)
+#             paiement.student = student
+#             paiement.save()
+#             messages.success(request, f"Le paiement a été enregistré avec succès pour l'étudiant {student}.")
+#             return redirect('paiement_liste') 
+#     else:
+#         form = PaiementForm()
 
-    if request.method == 'POST':
-        form = PaiementForm(request.POST)
-        if form.is_valid():
-            paiement = form.save(commit=False)
-            paiement.student = student
-            paiement.save()
-            messages.success(request, f"Le paiement a été enregistré avec succès pour l'étudiant {student}.")
-            return redirect('paiement_liste') 
-    else:
-        form = PaiementForm()
+#     return render(request, 'paiement_etudiant.html', {'form': form, 'student': student})
 
-    return render(request, 'paiement_etudiant.html', {'form': form, 'student': student})
+# def valider_paiement(request, paiement_id):
+#     paiement = get_object_or_404(Paiement, id=paiement_id)
+#     if hasattr(request.user, 'comptable'): 
+#         paiement.est_paye = True
+#         paiement.comptable = request.user.comptable
+#         paiement.save()
+#         messages.success(request, f"Le paiement de {paiement.student} a été validé.")
+#         return redirect('paiement_liste')
+#     else:
+#         messages.error(request, "Vous n'êtes pas autorisé à valider les paiements.")
+#         return redirect('home')
 
-def valider_paiement(request, paiement_id):
-    paiement = get_object_or_404(Paiement, id=paiement_id)
-    if hasattr(request.user, 'comptable'): 
-        paiement.est_paye = True
-        paiement.comptable = request.user.comptable
-        paiement.save()
-        messages.success(request, f"Le paiement de {paiement.student} a été validé.")
-        return redirect('paiement_liste')
-    else:
-        messages.error(request, "Vous n'êtes pas autorisé à valider les paiements.")
-        return redirect('home')
-
-def paiement_liste(request):
-    paiements = Paiement.objects.all()
-    return render(request, 'paiement_liste.html', {'paiements': paiements})
+# def paiement_liste(request):
+#     paiements = Paiement.objects.all()
+#     return render(request, 'paiement_liste.html', {'paiements': paiements})
 
 def ajouter_notes(request, teacher_id):
     teacher = get_object_or_404(Teacher, id=teacher_id)
@@ -346,7 +350,7 @@ def ajouter_notes(request, teacher_id):
             existence_note = Note.objects.filter(student=note.student, matiere=note.matiere, teacher=teacher).first()
             
             if existence_note:
-                messages.error(request, f"Une note existe déjà pour {note.student} dans {note.matiere}.")
+                messages.error(request, f"Une note existe déjà pour {note.student} dans {note.matiere}. Accerder a liste pour modifier")
                 return redirect('ajouter_notes', teacher_id=teacher_id)   
                  
             note.teacher = teacher
@@ -492,76 +496,76 @@ def supprimer_salle(request, id):
     
     return render(request, 'supprimer_salle.html', {'salle': salle})
 
-def is_admin(user):
-    return user.is_staff 
+# def is_admin(user):
+#     return user.is_staff 
 
-def comptable_view(request):
-    if request.method == 'POST':
-        form = ComptableForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('comptable_detail')
-    else:
-        form = ComptableForm()
+# def comptable_view(request):
+#     if request.method == 'POST':
+#         form = ComptableForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('comptable_detail')
+#     else:
+#         form = ComptableForm()
 
-    return render(request, 'comptable_form.html', {'form': form})
+#     return render(request, 'comptable_form.html', {'form': form})
 
-def comptable_list(request):
-    comptables = Comptable.objects.all()
-    return render(request, 'comptable_list.html', {'comptables': comptables})
+# def comptable_list(request):
+#     comptables = Comptable.objects.all()
+#     return render(request, 'comptable_list.html', {'comptables': comptables})
 
-def comptable_detail(request, id):
-    comptable = get_object_or_404(Comptable, id=id)
-    return render(request, 'comptable_detail.html', {'comptable': comptable})
+# def comptable_detail(request, id):
+#     comptable = get_object_or_404(Comptable, id=id)
+#     return render(request, 'comptable_detail.html', {'comptable': comptable})
 
-def comptable_edit(request, id):
-    comptable = get_object_or_404(Comptable, id=id)
-    return render(request, 'comptable_edit.html', {'comptable': comptable})
+# def comptable_edit(request, id):
+#     comptable = get_object_or_404(Comptable, id=id)
+#     return render(request, 'comptable_edit.html', {'comptable': comptable})
 
-def comptable_delete(request, id):
-    comptable = get_object_or_404(Comptable, id=id)
-    return redirect('comptable_list', {'comptable': comptable})
+# def comptable_delete(request, id):
+#     comptable = get_object_or_404(Comptable, id=id)
+#     return redirect('comptable_list', {'comptable': comptable})
 
 
-def initialize_teacher_payments():
-    teachers = Teacher.objects.all()
-    for teacher in teachers:
-        if not TeacherPayment.objects.filter(teacher=teacher).exists():
-            TeacherPayment.objects.create(teacher=teacher, amount=300.000)
+# def initialize_teacher_payments():
+#     teachers = Teacher.objects.all()
+#     for teacher in teachers:
+#         if not TeacherPayment.objects.filter(teacher=teacher).exists():
+#             TeacherPayment.objects.create(teacher=teacher, amount=300.000)
 
-def view_teacher_payments(request):
-    initialize_teacher_payments()
+# def view_teacher_payments(request):
+#     initialize_teacher_payments()
 
-    payments = TeacherPayment.objects.all()
+#     payments = TeacherPayment.objects.all()
 
-    if request.method == 'POST':
-        payment_id = request.POST.get('payment_id')
-        payment = get_object_or_404(TeacherPayment, id=payment_id)
-        payment.mark_as_paid()
-        return redirect('view_teacher_payments')
+#     if request.method == 'POST':
+#         payment_id = request.POST.get('payment_id')
+#         payment = get_object_or_404(TeacherPayment, id=payment_id)
+#         payment.mark_as_paid()
+#         return redirect('view_teacher_payments')
 
-    return render(request, 'teacher_payments.html', {'payments': payments})
+#     return render(request, 'teacher_payments.html', {'payments': payments})
 
-def manage_payments(request):
-    if request.method == 'POST':
-        form = TeacherPaymentForm(request.POST)
-        if form.is_valid():
-            amount = form.cleaned_data['amount']
-            teacher_id = request.POST.get('teacher_id')
-            teacher = get_object_or_404(Teacher, id=teacher_id)
-            payment, created = TeacherPayment.objects.get_or_create(teacher=teacher)
-            payment.amount = amount
-            payment.save()
-            return redirect('payment_list')
-    else:
-        form = TeacherPaymentForm()
+# def manage_payments(request):
+#     if request.method == 'POST':
+#         form = TeacherPaymentForm(request.POST)
+#         if form.is_valid():
+#             amount = form.cleaned_data['amount']
+#             teacher_id = request.POST.get('teacher_id')
+#             teacher = get_object_or_404(Teacher, id=teacher_id)
+#             payment, created = TeacherPayment.objects.get_or_create(teacher=teacher)
+#             payment.amount = amount
+#             payment.save()
+#             return redirect('payment_list')
+#     else:
+#         form = TeacherPaymentForm()
 
-    teachers = Teacher.objects.all()
-    return render(request, 'manage_payments.html', {'form': form, 'teachers': teachers})
+#     teachers = Teacher.objects.all()
+#     return render(request, 'manage_payments.html', {'form': form, 'teachers': teachers})
 
-def payment_list(request):
-    payments = TeacherPayment.objects.all().order_by('-payment_date')  # Tri des paiements par date
-    return render(request, 'payment_list.html', {'payments': payments})
+# def payment_list(request):
+#     payments = TeacherPayment.objects.all().order_by('-payment_date')
+#     return render(request, 'payment_list.html', {'payments': payments})
 
 def class_info(request):
     classes = Classe.objects.all()
@@ -636,16 +640,13 @@ def liste_classe(request):
 
 def remplir_cahier(request, teacher_id):
     teacher = get_object_or_404(Teacher, id=teacher_id)
-    
-    # Filtrer les classes associées à l'enseignant
     classes = Classe.objects.filter(teacher=teacher)
     
     if request.method == 'POST':
         form = CahierDeCoursForm(request.POST)
         if form.is_valid():
             date = form.cleaned_data['date']
-            
-            # Vérifier si un cahier a déjà été rempli à cette date pour cet enseignant
+
             if CahierDeCours.objects.filter(teacher=teacher, date=date).exists():
                 form.add_error(None, "Vous avez déjà rempli un cahier de cours à cette date.")
             else:
@@ -658,7 +659,6 @@ def remplir_cahier(request, teacher_id):
     else:
         form = CahierDeCoursForm()
 
-    # Passer la classe associée à l'enseignant au template
     return render(request, 'remplir_cahier.html', {'form': form, 'teacher': teacher, 'classes': classes})
 
 def liste_cahiers(request, teacher_id):

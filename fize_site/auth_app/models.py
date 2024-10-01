@@ -24,10 +24,8 @@ class Salle(models.Model):
     numero = models.IntegerField(null=True, blank=True)
     name = models.CharField(max_length=255)
     
-
     def __str__(self):
         return f"{self.code} - {self.name}"
-
 
 class Teacher(models.Model):
     id = models.AutoField(primary_key=True)
@@ -51,9 +49,9 @@ class ResponsableFiliere(models.Model):
         return f'{self.first_name} {self.last_name}'
     
 class Filiere(models.Model):
-    code = models.CharField(max_length=20, unique=True)
+    id = models.AutoField(primary_key=True, unique=True)
     nom = models.CharField(max_length=100)
-    responsable = models.ForeignKey(ResponsableFiliere, on_delete=models.CASCADE, related_name='filieres')
+    responsable = models.ForeignKey(ResponsableFiliere, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.nom
@@ -67,7 +65,8 @@ class Matiere(models.Model):
     volume = models.CharField(max_length=5, default='0')
     semestre = models.CharField(max_length=10, default='semestre')
     filiere = models.ForeignKey(Filiere, on_delete=models.CASCADE, related_name='matieres', null=True)
-
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, null=True)
+    
     def __str__(self):
         return self.nom_matiere
 
@@ -102,6 +101,7 @@ class Note(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, null=True, related_name='notes')
     matiere = models.ForeignKey(Matiere, on_delete=models.CASCADE, null=True, related_name='matieres')
+    administrateur = models.ForeignKey(Administrateur, on_delete=models.CASCADE, null=True)
     note_eva1 = models.FloatField(default=0)
     note_eva2 = models.FloatField(default=0)
     integration = models.FloatField(default=0)
@@ -112,6 +112,9 @@ class Note(models.Model):
     def __str__(self):
         return f"{self.student} - {self.moyen_semes}"
 
+    def save(self, *args, **kwargs):
+        self.moyen_semes = (self.note_eva1 + self.note_eva2 + self.integration) / 3
+        super(Note, self).save(*args, **kwargs)
 
 class Enseigner(models.Model):
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
@@ -217,20 +220,19 @@ class Planning(models.Model):
     activite3 = models.CharField(max_length=100, default='Activite3')
     salle = models.ForeignKey(Salle, on_delete=models.CASCADE, default=1)
     professeur = models.ForeignKey(Teacher, on_delete=models.CASCADE, default=1)
-
+    administrateur = models.ForeignKey(Administrateur, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return f"{self.activite1} - {self.activite2} - {self.date} ({self.premiere_heure} - {self.deuxieme_heure} - {self.troisieme_heure})"
-    
 
-class TeacherPayment(models.Model):
-    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=10, decimal_places=2, default=120.00)  # Montant par défaut fixé à 120 euros
-    is_paid = models.BooleanField(default=False)
-    payment_date = models.DateField(null=True, blank=True)
-    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+# class TeacherPayment(models.Model):
+#     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+#     montant = models.DecimalField(max_digits=10, decimal_places=2, default=120.00)  # Montant par défaut fixé à 120 euros
+#     payee = models.BooleanField(default=False)
+#     payment_date = models.DateField(null=True, blank=True)
+#     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 
-    def mark_as_paid(self):
-        self.is_paid = True
-        self.payment_date = timezone.now()
-        self.save()
+#     def mark_payee(self):
+#         self.payee = True
+#         self.payment_date = timezone.now()
+#         self.save()

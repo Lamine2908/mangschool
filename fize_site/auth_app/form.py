@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import Student, TeacherPayment, Note, Paiement, CahierDeCours, Classe, Salle, Comptable, Teacher, Planning,ResponsableClasse, ResponsableFiliere, CahierDeCours
+from .models import Student, Note, Paiement, CahierDeCours, Classe, Salle, Comptable, Teacher, Planning,ResponsableClasse, ResponsableFiliere, CahierDeCours
 from django.contrib.auth import get_user_model
 
 
@@ -12,7 +12,7 @@ class CustomUserCreationForm(UserCreationForm):
 class ConnexionForm(forms.Form):
     first_name = forms.CharField(
         label="Prénom", 
-        max_length=100, 
+        max_length=15, 
         widget=forms.TextInput(attrs={
             'class': 'form-control',
             'placeholder': 'Entrez votre prénom'
@@ -20,7 +20,7 @@ class ConnexionForm(forms.Form):
     )
     last_name = forms.CharField(
         label="Nom de famille", 
-        max_length=100, 
+        max_length=15, 
         widget=forms.TextInput(attrs={
             'class': 'form-control',
             'placeholder': 'Entrez votre nom de famille'
@@ -51,11 +51,12 @@ from .models import Student, Filiere
 class StudentForm(forms.ModelForm):
     class Meta:
         model = Student
-        fields = ['id', 'first_name', 'last_name', 'filiere', 'metier', 'email']
+        fields = ['id', 'first_name', 'last_name', 'filiere', 'classe', 'metier', 'email']
         widgets = {
             'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Entrez le prénom'}),
             'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Entrez le nom de famille'}),
             'filiere': forms.Select(attrs={'class': 'form-control'}),
+            'classe': forms.Select(attrs={'class': 'form-control'}),
             'metier': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Entrez le métier'}),
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Entrez l\'email'}),
         }
@@ -63,6 +64,7 @@ class StudentForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(StudentForm, self).__init__(*args, **kwargs)
         self.fields['filiere'].queryset = Filiere.objects.all()
+        self.fields['classe'].queryset = Classe.objects.all()
         
 class ResponsableFiliereForm(forms.ModelForm):
     class Meta:
@@ -222,19 +224,19 @@ class ComptableForm(forms.ModelForm):
         model = Comptable
         fields = ['first_name', 'last_name', 'email', 'teachers', 'students']
         
-class ValidatePaymentForm(forms.ModelForm):
-    class Meta:
-        model = TeacherPayment
-        fields = ['is_paid']
+# class ValidatePaymentForm(forms.ModelForm):
+#     class Meta:
+#         model = TeacherPayment
+#         fields = ']
         
-class TeacherPaymentForm(forms.ModelForm):
-    class Meta:
-        model = TeacherPayment
-        fields = ['amount']
+# class TeacherPaymentForm(forms.ModelForm):
+#     class Meta:
+#         model = TeacherPayment
+#         fields = ['amount']
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['amount'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Entrez le montant'})
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#         self.fields['amount'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Entrez le montant'})
 
 class AddStudentToClassForm(forms.Form):
     classe = forms.ModelChoiceField(queryset=Classe.objects.all(), label="Classe")
@@ -290,4 +292,4 @@ from .models import Matiere
 class MatiereForm(forms.ModelForm):
     class Meta:
         model = Matiere
-        fields = ['code_matiere', 'nom_matiere', 'ue', 'credit', 'volume', 'semestre', 'filiere']
+        fields = ['code_matiere', 'nom_matiere', 'ue', 'credit', 'volume', 'semestre', 'filiere', 'teacher']

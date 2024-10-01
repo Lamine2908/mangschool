@@ -151,7 +151,6 @@
                     <td>{{ student.metier }}</td>
                     <td>{{ student.email }}</td>
                     <td>
-                        <a href="{% url 'Affecter_eleve' student.id %}" class="btn btn-primary btn-sm">Affecter à une Classe</a>
                         <a href="{% url 'update_student' student.id %}" class="btn btn-warning btn-sm">Modifier</a>
                         <a href="{% url 'delete_student_by_id' student.id %}" class="btn btn-danger btn-sm">Supprimer</a>
                     </td>

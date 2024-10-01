@@ -109,7 +109,7 @@
                     <a class="nav-link active" aria-current="page" href="#">Espace Responsable</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'index' %}">Déconnexion</a>
+                    <a class="nav-link" href="{% url 'connexion' %}">Déconnexion</a>
                 </li>
             </ul>
         </div>
@@ -196,7 +196,7 @@
                         <i class="bi bi-gear section-icon"></i>
                         <h5 class="card-title">Paramètres de la Filière</h5>
                         <p class="card-text">Configurez les paramètres spécifiques à votre filière.</p>
-                        <a href="#" class="btn btn-primary">Voir les Paramètres</a>
+                        <a href="{% url 'parametre_filiere' responsable.id %}" class="btn btn-primary">Voir les Paramètres</a>                    
                     </div>
                 </div>
             </div>

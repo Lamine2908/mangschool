@@ -14,6 +14,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django import views
 from django.contrib import admin
 from django.urls import path
@@ -42,10 +43,10 @@ urlpatterns = [
     path('suprof/<int:id>/', views.delete_teacher_by_id, name='delete_teacher_by_id'),
     path('supeleve/<int:student_id>/', views.delete_student_by_id, name='delete_student_by_id'),
     path('comptable/', views.comptable, name='comptable'),
-    path('comptable_view/', views.comptable_view, name='comptable_view'),
+    # path('comptable_view/', views.comptable_view, name='comptable_view'),
     path('create_planning/', views.create_planning, name='create_planning'),
     # path('planning_etudiant/', views.planning_student, name='planning_student'),
-    path('success/', views.success_page, name='success_page'),
+    path('parametre_filiere/<int:responsable_id>/', views.parametre_filiere, name='parametre_filiere'),    
     path('espaceeleve/<int:student_id>/', views.espaceeleve, name='espaceeleve'),
     path('espaceeleves/', views.espaceseleves, name='espaceseleves'),
     path('espaceprof/<int:teacher_id>/', views.espaceprof, name='espaceprof'),
@@ -54,10 +55,10 @@ urlpatterns = [
     path('responsableclasse/', views.espaceresponsableclasse, name='espaceresponsableclasse'),
     path('responsables_filieres/', views.responsables_filieres, name='responsables_filieres'),
     path('responsable_filiere/<int:responsable_id>', views.responsable_filiere, name='responsable_filiere'),
-    path('paiement/<int:student_id>/', views.paiement_etudiant, name='paiement_etudiant'),
-    path('paiement_liste/', views.paiement_liste, name='paiement_liste'),
-    path('valider-paiement/<int:paiement_id>/', views.valider_paiement, name='valider_paiement'),
-    path('liste-paiements/', views.paiement_liste, name='paiement_liste'),
+    # path('paiement/<int:student_id>/', views.paiement_etudiant, name='paiement_etudiant'),
+    # path('paiement_liste/', views.paiement_liste, name='paiement_liste'),
+    # path('valider-paiement/<int:paiement_id>/', views.valider_paiement, name='valider_paiement'),
+    # path('liste-paiements/', views.paiement_liste, name='paiement_liste'),
     path('ajouter_classe/', views.ajouter_classe, name='ajouter_classe'),
     path('liste_classes/', views.liste_classes, name='liste_classes'),
     path('teacher/<int:teacher_id>/', views.prof_etudiant_list, name='prof_etudiant_list'),
@@ -76,14 +77,14 @@ urlpatterns = [
     path('planning/', views.planning_list, name='planning_list'),
     path('planning/delete/<int:pk>/', views.delete_planning, name='delete_planning'),
     path('planning/edit/<int:pk>/', views.edit_planning, name='edit_planning'),
-    path('comptable/', views.comptable_list, name='comptable_list'),
+    # path('comptable/', views.comptable_list, name='comptable_list'),
     path('comptable/<int:id>/', views.espacecomptable, name='espacecomptable'),
-    path('comptable_detail/<int:id>/', views.comptable_detail, name='comptable_detail'),
-    path('comptable/<int:id>/edit/', views.comptable_edit, name='comptable_edit'),
-    path('comptable/<int:id>/delete/', views.comptable_delete, name='comptable_delete'),
-    path('paiements/', views.view_teacher_payments, name='view_teacher_payments'),
-    path('manage_payments/', views.manage_payments, name='manage_payments'),
-    path('payment_list/', views.payment_list, name='payment_list'),
+    # path('comptable_detail/<int:id>/', views.comptable_detail, name='comptable_detail'),
+    # path('comptable/<int:id>/edit/', views.comptable_edit, name='comptable_edit'),
+    # path('comptable/<int:id>/delete/', views.comptable_delete, name='comptable_delete'),
+    # path('paiements/', views.view_teacher_payments, name='view_teacher_payments'),
+    # path('manage_payments/', views.manage_payments, name='manage_payments'),
+    # path('payment_list/', views.payment_list, name='payment_list'),
     path('affecter_prof/<int:teacher_id>/', views.assign_teacher_to_classes, name='assign_teacher_to_classes'),
     path('teacher_class/', views.teacher_class, name='teacher_class'),   
     path('affecter_eleve/<int:student_id>/', views.Affecter_eleve, name='Affecter_eleve'),
@@ -98,4 +99,5 @@ urlpatterns = [
     path('modifier_matiere/<int:matiere_id>/', views.modifier_matiere, name='modifier_matiere'),
     path('supprimer_matiere/<int:matiere_id>/', views.supprimer_matiere, name='supprimer_matiere'),
     path('liste_matieres/', views.liste_matieres, name='liste_matieres'),
+    
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
