@@ -220,7 +220,7 @@ class Planning(models.Model):
     activite3 = models.CharField(max_length=100, default='Activite3')
     salle = models.ForeignKey(Salle, on_delete=models.CASCADE, default=1)
     professeur = models.ForeignKey(Teacher, on_delete=models.CASCADE, default=1)
-    administrateur = models.ForeignKey(Administrateur, on_delete=models.CASCADE, null=True)
+    responsable = models.ForeignKey(ResponsableFiliere, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return f"{self.activite1} - {self.activite2} - {self.date} ({self.premiere_heure} - {self.deuxieme_heure} - {self.troisieme_heure})"

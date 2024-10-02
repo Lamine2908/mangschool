@@ -264,7 +264,6 @@ def ajouter_matiere(request):
 
     return render(request, 'ajouter_matiere.html', {'form': form})
 
-
 def modifier_matiere(request, matiere_id):
     matiere = get_object_or_404(Matiere, id=matiere_id)
     if request.method == 'POST':
@@ -276,7 +275,6 @@ def modifier_matiere(request, matiere_id):
         form = MatiereForm(instance=matiere)
 
     return render(request, 'modifier_matiere.html', {'form': form})
-
 
 def liste_matieres(request):
     matieres = Matiere.objects.all()
@@ -679,7 +677,8 @@ def liste_cahiers(request, teacher_id):
     }
     return render(request, 'liste_cahier.html', context)
 
-def create_planning(request):
+def create_planning(request, responsable_fil_id):
+    resp = get_object_or_404(ResponsableFiliere, id=responsable_fil_id)
     if request.method == 'POST':
         form = PlanningForm(request.POST)
         if form.is_valid():
@@ -698,7 +697,7 @@ def create_planning(request):
             return redirect('planning_list') 
     else:
         form = PlanningForm()
-    return render(request, 'create_planning.html', {'form': form})
+    return render(request, 'create_planning.html', {'form': form, 'resp':resp})
 
 def planning_list(request):
     planning = Planning.objects.all()

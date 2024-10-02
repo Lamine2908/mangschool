@@ -141,7 +141,7 @@
                         <i class="bi bi-calendar-check section-icon"></i>
                         <h5 class="card-title">Planification des Cours</h5>
                         <p class="card-text">Gérez l'emploi du temps des cours et des examens.</p>
-                        <a href="#" class="btn btn-primary">Gérer les Cours</a>
+                        <a href="{% url 'create_planning' responsableFiliere.id %}" class="btn btn-primary">Gérer les plannings</a>
                     </div>
                 </div>
             </div>
@@ -167,7 +167,7 @@
                     </div>
                 </div>
             </div>
-
+{% comment %} 
             <div class="col-md-4 mb-4">
                 <div class="card section-card">
                     <div class="card-body">
@@ -177,8 +177,8 @@
                         <a href="#" class="btn btn-primary">Voir les Rapports</a>
                     </div>
                 </div>
-            </div>
-
+            </div> {% endcomment %}
+{% comment %} 
             <div class="col-md-4 mb-4">
                 <div class="card section-card">
                     <div class="card-body">
@@ -188,7 +188,7 @@
                         <a href="" class="btn btn-primary">Voir les Dossiers</a>
                     </div>
                 </div>
-            </div>
+            </div> {% endcomment %}
 
             <div class="col-md-4 mb-4">
                 <div class="card section-card">
@@ -196,7 +196,7 @@
                         <i class="bi bi-gear section-icon"></i>
                         <h5 class="card-title">Paramètres de la Filière</h5>
                         <p class="card-text">Configurez les paramètres spécifiques à votre filière.</p>
-                        <a href="{% url 'parametre_filiere' responsable.id %}" class="btn btn-primary">Voir les Paramètres</a>                    
+                        <a href="#" class="btn btn-primary">Voir les Paramètres</a>                    
                     </div>
                 </div>
             </div>
