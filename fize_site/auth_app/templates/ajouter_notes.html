@@ -50,7 +50,7 @@
 <body>
 
 <div class="container mt-5">
-    <h2>Ajouter une Note {{classe.code}}</h2>
+    <h2>Ajouter une Note</h2>
     <form method="post" class="needs-validation" novalidate>
         {% csrf_token %}
         
@@ -61,12 +61,13 @@
             {% endfor %}
         </div>
         {% endif %}
-
+        
         <div class="mb-3">
-            <label for="teacher" class="form-label">Professeur</label>
-            <select name="teacher" id="teacher" class="form-select" required>
-                {% for teacher in teachers %}
-                    <option value="{{ teacher.id }}" readonly>{{ teacher.first_name }} {{ teacher.last_name }}</option>
+            <label for="classe" class="form-label">Classe</label>
+            <select name="classe" id="classe" class="form-select">
+                <option value="">Sélectionnez une classe</option>
+                {% for classe in classes %}
+                    <option value="{{ classe.id }}">{{ classe.name }}</option>
                 {% endfor %}
             </select>
         </div>
@@ -74,12 +75,12 @@
         <div class="mb-3">
             <label for="student" class="form-label">Étudiant</label>
             <select name="student" id="student" class="form-select" required>
+                <option value="">Sélectionnez un étudiant</option>
                 {% for student in students %}
                     <option value="{{ student.id }}">{{ student.first_name }} {{ student.last_name }}</option>
                 {% endfor %}
             </select>
         </div>
-
 
         <div class="mb-3">
             <label for="matiere" class="form-label">{{ form.matiere.label }}</label>
@@ -116,10 +117,8 @@
             {{ form.appreciation }}
         </div>
 
-
         <button type="submit" class="btn">Ajouter la note</button>
     </form>
 </div>
-
 </body>
 </html>

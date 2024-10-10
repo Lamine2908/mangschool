@@ -4,58 +4,106 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ajouter une Matière</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            background-color: #f8f9fa;
         }
-        .container {
+        .form-container {
             background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
+            border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 500px;
+            padding: 30px;
+            margin-top: 50px;
         }
-        h1 {
-            text-align: center;
-            color: #333;
+        .form-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
         }
-        form {
-            display: flex;
-            flex-direction: column;
+        .form-label {
+            font-weight: bold;
         }
-        form input, form button {
-            margin-bottom: 15px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        form button {
+        .btn-custom {
             background-color: #007bff;
             color: #fff;
-            border: none;
-            cursor: pointer;
         }
-        form button:hover {
+        .btn-custom:hover {
             background-color: #0056b3;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Ajouter une Matière</h1>
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Ajouter</button>
-        </form>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="form-container">
+                <h2 class="form-title mb-4">Ajouter une nouvelle matière</h2>
+                <form method="post" novalidate>
+                    {% csrf_token %}
+    
+                    {% if messages %}
+                        <div class="mb-3">
+                            {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }}">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    
+                    <!-- Formulaire -->
+                    <div class="form-group">
+                        <label for="id_code_matiere" class="form-label">Code de la matière</label>
+                        {{ form.code_matiere }}
+                    </div>
+                    <div class="form-group">
+                        <label for="id_nom_matiere" class="form-label">Nom de la matière</label>
+                        {{ form.nom_matiere }}
+                    </div>
+                    <div class="form-group">
+                        <label for="id_ue" class="form-label">Unité d'enseignement</label>
+                        {{ form.ue }}
+                    </div>
+                    <div class="form-group">
+                        <label for="id_credit" class="form-label">Crédits</label>
+                        {{ form.credit }}
+                    </div>
+                    <div class="form-group">
+                        <label for="id_volume" class="form-label">Volume horaire</label>
+                        {{ form.volume }}
+                    </div>
+                    <div class="form-group">
+                        <label for="id_semestre" class="form-label">Semestre</label>
+                        {{ form.semestre }}
+                    </div>
+                    <div class="form-group">
+                        <label for="id_filiere" class="form-label">Filière</label>
+                        {{ form.filiere }}
+                    </div>
+                    <div class="form-group">
+                        <label for="id_teacher" class="form-label">Professeur</label>
+                        {{ form.teacher }}
+                    </div>
+                    <div class="form-group">
+                        <label for="id_responsable" class="form-label">Responsable</label>
+                        {{ form.responsable }}
+                    </div>
+                    <div class="form-group">
+                        <label for="id_classes" class="form-label">Classes</label>
+                        {{ form.classes }}
+                    </div>
+                    
+                    <button type="submit" class="btn btn-custom btn-block">Ajouter la matière</button>
+                </form>
+            </div>
+        </div>
     </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

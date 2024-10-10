@@ -140,5 +140,5 @@ EMAIL_HOST = 'l.fall4@isepdiamniadio.edu.sn'
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'laminfal29@gmail.com.com'
+EMAIL_HOST_USER = 'l.com.com'
 EMAIL_HOST_PASSWORD = ''

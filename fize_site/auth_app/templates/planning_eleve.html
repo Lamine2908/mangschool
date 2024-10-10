@@ -23,7 +23,7 @@
 <body>
     <div class="container">
         <h1 class="text-center my-4">Liste des Plannings</h1>
-        <form method="post" action="{% url 'send_planning' %}">
+        <form method="post" action="">
             {% csrf_token %}
             <div class="table-responsive">
                 <table class="table table-bordered">
@@ -38,7 +38,6 @@
                             <th>Activité 3</th>
                             <th>Salle</th>
                             <th>Formateur</th>
-                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -53,10 +52,7 @@
                             <td>{{ planning.activite3 }}</td>
                             <td>{{ planning.salle }}</td>
                             <td>{{ planning.professeur }}</td>
-                            <td>
-                                <a href="{% url 'edit_planning' planning.pk %}" class="btn btn-sm btn-warning">Modifier</a>
-                                <a href="{% url 'delete_planning' planning.pk %}" class="btn btn-sm btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce planning ?');">Supprimer</a>
-                            </td>
+                        
                         </tr>
                         {% empty %}
                         <tr>

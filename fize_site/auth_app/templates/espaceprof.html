@@ -138,7 +138,7 @@
                 </div>
             </div>
 
-            <div class="col-md-4 mb-4">
+            {% comment %} <div class="col-md-4 mb-4">
                 <div class="card section-card">
                     <div class="card-body">
                         <i class="bi bi-file-earmark-text section-icon"></i>
@@ -147,13 +147,13 @@
                         <a href="{% url 'ajouter_notes' teacher.id%}" class="btn btn-primary">Voir les Notes</a>
                     </div>
                 </div>
-            </div>
+            </div> {% endcomment %}
 
             <div class="col-md-4 mb-4">
                 <div class="card section-card">
                     <div class="card-body">
                         <i class="bi bi-file-earmark-text section-icon"></i>
-                        <h5 class="card-title">Afficher les Notes</h5>
+                        <h5 class="card-title">Suivi des notes</h5>
                         <p class="card-text">Consultez les notes des élèves.</p>
                         <a href="{% url 'afficher_notes' teacher.id%}" class="btn btn-primary">Voir les Notes</a>
                     </div>
@@ -175,7 +175,18 @@
                 <div class="card section-card">
                     <div class="card-body">
                         <i class="bi bi-people section-icon"></i>
-                        <h5 class="card-title">Gestion des Classes</h5>
+                        <h5 class="card-title">Pointer les eleves</h5>
+                        <p class="card-text">Gérez les informations et les présences des élèves.</p>
+                        <a href="{% url 'pointage' teacher.id %}" class="btn btn-primary">Voir plus</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card section-card">
+                    <div class="card-body">
+                        <i class="bi bi-people section-icon"></i>
+                        <h5 class="card-title">Voir les pointages</h5>
                         <p class="card-text">Gérez les informations et les présences des élèves.</p>
                         <a href="#" class="btn btn-primary">Voir les Classes</a>
                     </div>

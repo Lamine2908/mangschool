@@ -128,7 +128,7 @@
                         <i class="bi bi-trophy section-icon"></i>
                         <h5 class="card-title">Consulter les Résultats</h5>
                         <p class="card-text">Accédez à vos notes et résultats académiques en ligne.</p>
-                        <a href="#" class="btn btn-primary">Voir les Résultats</a>
+                        <a href="{% url 'note_eleve' student.id %}" class="btn btn-primary">Voir les Résultats</a>
                     </div>
                 </div>
             </div>
@@ -161,7 +161,7 @@
                         <i class="bi bi-calendar section-icon"></i>
                         <h5 class="card-title">Consulter l'Emploi du Temps</h5>
                         <p class="card-text">Consultez votre emploi du temps et les horaires des cours.</p>
-                        <a href="{% url 'planning_list' %}" class="btn btn-primary">Voir l'Emploi du Temps</a>
+                        <a href="{% url 'planning_eleve' %}" class="btn btn-primary">Voir l'Emploi du Temps</a>
                     </div>
                 </div>
             </div>

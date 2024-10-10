@@ -57,43 +57,24 @@
     <form method="POST">
         {% csrf_token %}
         
-        <!-- Student Field -->
         <label for="student">Étudiant</label>
         {{ form.student }}
 
-        <!-- Teacher Field -->
-        <label for="teacher">Enseignant</label>
-        {{ form.teacher }}
+        <label for="classe">Classe</label>
+        {{ form.classe }}
 
-        <!-- Matiere Field -->
         <label for="matiere">Matière</label>
         {{ form.matiere }}
 
-        <!-- Note Évaluation 1 Field -->
         <label for="note_eva1">Note Évaluation 1</label>
         {{ form.note_eva1 }}
 
-        <!-- Note Évaluation 2 Field -->
         <label for="note_eva2">Note Évaluation 2</label>
         {{ form.note_eva2 }}
 
-        <!-- Integration Field -->
         <label for="integration">Note d'Intégration</label>
         {{ form.integration }}
 
-        <!-- Moyenne Semestrielle Field -->
-        <label for="moyen_semes">Moyenne Semestrielle</label>
-        {{ form.moyen_semes }}
-
-        <!-- Moyenne Annuelle Field -->
-        <label for="moyen_annuel">Moyenne Annuelle</label>
-        {{ form.moyen_annuel }}
-
-        <!-- Appreciation Field -->
-        <label for="appreciation">Appréciation</label>
-        {{ form.appreciation }}
-
-        <!-- Submit Button -->
         <button type="submit" class="btn">Enregistrer les modifications</button>
     </form>
 </div>

@@ -5,6 +5,7 @@ from django import forms
 import qrcode
 from io import BytesIO
 from django.core.files import File
+from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 
 class Administrateur(models.Model):
@@ -17,37 +18,42 @@ class Administrateur(models.Model):
     email = models.EmailField(unique=True, null=False, blank=False)
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name} {self.email}"
+        return f"{self.first_name} {self.last_name}"
 
 class Salle(models.Model):
     code = models.CharField(max_length=10, unique=True, null=True, blank=True)  
     numero = models.IntegerField(null=True, blank=True)
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, null=True)
     
     def __str__(self):
-        return f"{self.code} - {self.name}"
+        return f"{self.numero}"
 
+class ResponsableFiliere(models.Model):
+    id = models.AutoField(primary_key=True)
+    matricule = models.CharField(max_length=20, default='modifier')
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    profession = models.CharField(max_length=100, blank=True, null=True)
+    email = models.EmailField(unique=True, null=True, blank=True)
+
+    def __str__(self):
+        return f'{self.first_name} {self.last_name}'
+    
 class Teacher(models.Model):
     id = models.AutoField(primary_key=True)
+    matricule = models.CharField(max_length=20, default='modifier')
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     profession = models.CharField(max_length=100, blank=True, null=True)
     email = models.EmailField(unique=True, null=True, blank=True)
     classes = models.ManyToManyField('Classe', related_name='teachers')
-    matieres = models.ManyToManyField('Matiere', related_name='matiere')
-    def __str__(self):
-        return f'{self.first_name} {self.last_name}'
-
-class ResponsableFiliere(models.Model):
-    id = models.AutoField(primary_key=True)
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    profession = models.CharField(max_length=100, blank=True, null=True)
-    email = models.EmailField(unique=True, null=True, blank=True)
-
-    def __str__(self):
-        return f'{self.first_name} {self.last_name}'
+    matieres = models.ManyToManyField('Matiere', related_name='teachers')
+    responsable = models.ForeignKey(ResponsableFiliere, on_delete=models.CASCADE, null=True)
+    filiere = models.ForeignKey('Filiere', on_delete=models.CASCADE, null=True)
     
+    def __str__(self):
+        return f'{self.first_name} {self.last_name}'
+
 class Filiere(models.Model):
     id = models.AutoField(primary_key=True, unique=True)
     nom = models.CharField(max_length=100)
@@ -65,55 +71,91 @@ class Matiere(models.Model):
     volume = models.CharField(max_length=5, default='0')
     semestre = models.CharField(max_length=10, default='semestre')
     filiere = models.ForeignKey(Filiere, on_delete=models.CASCADE, related_name='matieres', null=True)
-    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, null=True)
+    teacher = models.ManyToManyField(Teacher, null=True)
+    responsable = models.ForeignKey(ResponsableFiliere, on_delete=models.CASCADE, null=True)
+    student = models.ManyToManyField('Student', related_name='students')
+    classes = models.ManyToManyField('Classe', related_name='classe_matiere')
     
     def __str__(self):
-        return self.nom_matiere
-
-class Student(models.Model):
-    id = models.AutoField(primary_key=True)
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    filiere = models.ForeignKey(Filiere, on_delete=models.SET_NULL, null=True, blank=True)
-    matiere = models.ManyToManyField(Matiere, related_name='students')
-    metier = models.CharField(max_length=100, blank=True, null=True)
-    email = models.EmailField(unique=True, null=True, blank=True)
-    classe = models.ForeignKey('Classe', related_name='students_in', on_delete=models.SET_NULL, null=True, blank=True)
-    def __str__(self):
-        return f'{self.first_name} {self.last_name}'
+        return f'{self.nom_matiere}'
 
 class Classe(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
+    promo = models.IntegerField(null=True)
     description = models.TextField(null=True, blank=True)
     salle = models.ManyToManyField(Salle, related_name='classes')
-    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
-    students = models.ManyToManyField(Student, related_name='classes')
-    matiere = models.ManyToManyField(Matiere, related_name='classes')
-    filiere = models.ForeignKey(Filiere, on_delete=models.CASCADE, related_name='classes', null=True)
-
-
+    teacher = models.ManyToManyField(Teacher, null=True)
+    filiere = models.ForeignKey(Filiere, on_delete=models.CASCADE, null=True)
+    matiere = models.ManyToManyField(Matiere, related_name='matiere_classe')
+    
     def __str__(self):
         return self.name
 
+class Student(models.Model):
+    id = models.AutoField(primary_key=True)
+    matricule = models.CharField(max_length=20, default='modifier')
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    filiere = models.ForeignKey(Filiere, on_delete=models.SET_NULL, null=True, blank=True)
+    metier = models.CharField(max_length=100, blank=True, null=True)
+    email = models.EmailField(unique=True, null=True, blank=True)
+    classe = models.ForeignKey(Classe, on_delete=models.CASCADE, null=True)
+    matiere = models.ManyToManyField(Matiere, related_name='students_matiere')
+    
+    def __str__(self):
+        return f'{self.first_name} {self.last_name}'
+
+class Pointage(models.Model):    
+    id = models.AutoField(primary_key=True, unique=True)
+    date = models.DateField(default=timezone.now)
+    arrivee = models.TimeField(default=timezone.now)
+    sortie = models.TimeField(default=timezone.now)
+    total = models.IntegerField(default=0, null=True)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return f'{self.total}'
 class Note(models.Model):
     id = models.AutoField(primary_key=True, unique=True)
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, null=True, related_name='notes')
-    matiere = models.ForeignKey(Matiere, on_delete=models.CASCADE, null=True, related_name='matieres')
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, null=True)
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, null=True)
+    matiere = models.ForeignKey(Matiere, on_delete=models.CASCADE, null=True)
+    classe = models.ForeignKey(Classe, on_delete=models.CASCADE, null=True)
     administrateur = models.ForeignKey(Administrateur, on_delete=models.CASCADE, null=True)
     note_eva1 = models.FloatField(default=0)
     note_eva2 = models.FloatField(default=0)
     integration = models.FloatField(default=0)
     moyen_semes = models.FloatField(default=0)
-    moyen_annuel = models.FloatField(default=0)
-    appreciation = models.CharField(max_length=15, default='pas encore', blank=True)
-    
+
     def __str__(self):
-        return f"{self.student} - {self.moyen_semes}"
+        return f"{self.student} - {self.matiere}"
 
     def save(self, *args, **kwargs):
-        self.moyen_semes = (self.note_eva1 + self.note_eva2 + self.integration) / 3
+        if self.matiere not in self.teacher.matieres.all():
+            raise ValidationError("Le professeur ne peut pas saisir de note pour cette matière.")
+        
+        self.moyen_semes = round((self.note_eva1 + self.note_eva2 + self.integration) / 3, 2)
+        super(Note, self).save(*args, **kwargs)
+
+class Bulletin(models.Model):
+    id = models.AutoField(primary_key=True, unique=True)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, null=True)
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, null=True)
+    matiere = models.ForeignKey(Matiere, on_delete=models.CASCADE, null=True)
+    moyen_semes1 = models.FloatField(default=0)
+    moyen_semes2 = models.FloatField(default=0)
+    moyen_semes3 = models.FloatField(default=0)
+    moyen_semes4 = models.FloatField(default=0)
+    moyen_annuel = models.FloatField(default=0)
+    
+    def __str__(self):
+        return f'{self.student}'
+    
+    
+    def save(self, *args, **kwargs):
+        self.moyen_annuel=(self.moyen_semes1 + self.moyen_semes2 + self.moyen_semes3 + self.moyen_semes4)/4
         super(Note, self).save(*args, **kwargs)
 
 class Enseigner(models.Model):
@@ -149,11 +191,12 @@ class Paiement(models.Model):
     est_paye = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"Paiement de {self.student} pour {self.montant} €"
+        return f"Paiement de {self.student} pour {self.montant} F CFA"
 
 
 class Comptable(models.Model):
     id = models.AutoField(primary_key=True)
+    matricule = models.CharField(max_length=20, default='modifier')
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.EmailField(unique=True)
@@ -165,6 +208,7 @@ class Comptable(models.Model):
 
 class ResponsableClasse(models.Model):
     id = models.AutoField(primary_key=True)
+    matricule = models.CharField(max_length=20, default='modifier')
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.EmailField(unique=True, null=True, blank=True)
@@ -174,13 +218,13 @@ class ResponsableClasse(models.Model):
 
 class AdjointClasse(models.Model):
     id = models.AutoField(primary_key=True)
+    matricule = models.CharField(max_length=20, default='modifier')
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.EmailField(unique=True, null=True, blank=True)
 
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
-
 
 class CahierDeCours(models.Model):
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, null=True, related_name='cahiers')
@@ -209,16 +253,17 @@ class CahierDeCours(models.Model):
         return f'Cahier de {self.teacher} pour la classe {self.classe} le {self.date}'
 
 class Planning(models.Model):
-    id = models.AutoField(primary_key=True)
+    id = models.AutoField(primary_key=True, unique=True)
     student = models.ForeignKey(Student, on_delete=models.CASCADE, default=1)
     date = models.DateField(default=timezone.now)
-    premiere_heure = models.TimeField()
-    deuxieme_heure = models.TimeField()
+    premiere_heure = models.TimeField(default='00:00')
+    deuxieme_heure = models.TimeField(default='00:00')
     troisieme_heure = models.TimeField(default='00:00')
     activite1 = models.CharField(max_length=100)
     activite2 = models.CharField(max_length=100, default='Activite2')
     activite3 = models.CharField(max_length=100, default='Activite3')
     salle = models.ForeignKey(Salle, on_delete=models.CASCADE, default=1)
+    classe = models.ForeignKey(Classe, on_delete=models.CASCADE, null=True)
     professeur = models.ForeignKey(Teacher, on_delete=models.CASCADE, default=1)
     responsable = models.ForeignKey(ResponsableFiliere, on_delete=models.CASCADE, null=True)
 

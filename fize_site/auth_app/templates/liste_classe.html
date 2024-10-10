@@ -8,13 +8,15 @@
 </head>
 <body>
   <div class="container mt-5">
-    <h2>Liste des classes</h2>
-    <table class="table table-striped">
-        <thead>
+    <h2 class="mb-4">Liste des Classes et leurs Étudiants</h2>
+
+    <table class="table table-striped table-bordered">
+        <thead class="table-dark">
             <tr>
                 <th>Nom de la classe</th>
                 <th>Description</th>
                 <th>Nombre d'étudiants</th>
+                <th>Liste des étudiants</th>
             </tr>
         </thead>
         <tbody>
@@ -22,22 +24,32 @@
                 <tr>
                     <td>{{ classe.name }}</td>
                     <td>{{ classe.description }}</td>
-                    <td>{{ classe.students.count }}</td>
+                    <td>{{ classe.student_set.count }}</td>
+                    <td>
+                        {% if classe.student_set.count > 0 %}
+                            <ul>
+                                {% for student in classe.student_set.all %}
+                                    <li>{{ student.first_name }} {{ student.last_name }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            Aucun étudiant
+                        {% endif %}
+                    </td>
                 </tr>
             {% empty %}
                 <tr>
-                    <td colspan="4">Aucune classe disponible</td>
+                    <td colspan="4" class="text-center">Aucune classe disponible</td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
-</div>
-    {% comment %} <div class="container mt-5">
-        <h1>Liste des élèves affectés à une classe</h1>
-  
+
+    {% comment %} <div class="mt-5">
+        <h3>Liste des Étudiants affectés à une classe</h3>
         {% if students %}
-          <table>
-            <thead>
+        <table class="table table-bordered">
+            <thead class="table-dark">
               <tr>
                 <th>Prénom</th>
                 <th>Nom</th>
@@ -58,5 +70,9 @@
           <p>Aucun élève n'a été affecté à une classe pour le moment.</p>
         {% endif %}
     </div> {% endcomment %}
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

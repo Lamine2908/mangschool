@@ -23,8 +23,8 @@
 <body>
     <div class="container">
         <h1 class="text-center my-4">Liste des Plannings</h1>
-        {% comment %} <a href="{% url 'add_planning' %}" class="btn btn-primary mb-3">Ajouter une Nouvelle Activité</a> {% endcomment %}
-        <form method="post" action="{% url 'send_planning' %}">
+        {% comment %} <a href="{% url 'create_planning' responsableFiliere.id %}" class="btn btn-primary mb-3">Ajouter une Nouvelle Activité</a> {% endcomment %}
+        <form method="post" action="">
             {% csrf_token %}
             <div class="table-responsive">
                 <table class="table table-bordered">
@@ -38,11 +38,13 @@
                             <th>Activité 2</th>
                             <th>Activité 3</th>
                             <th>Salle</th>
+                            <th>Classe</th>
                             <th>Formateur</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
+                        {% if plannings %}
                         {% for planning in plannings %}
                         <tr>
                             <td>{{ planning.date|date:"d F Y" }}</td>
@@ -53,25 +55,27 @@
                             <td>{{ planning.activite2 }}</td>
                             <td>{{ planning.activite3 }}</td>
                             <td>{{ planning.salle }}</td>
+                            <td>{{ planning.classe }}</td>
                             <td>{{ planning.professeur }}</td>
                             <td>
-                                <a href="{% url 'edit_planning' planning.pk %}" class="btn btn-sm btn-warning">Modifier</a>
-                                <a href="{% url 'delete_planning' planning.pk %}" class="btn btn-sm btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce planning ?');">Supprimer</a>
-                                {% comment %} <a href="#" class="btn btn-sm btn-primary">Envoyer</a> {% endcomment %}
+                                <a href="{% url 'edit_planning' planning.id %}" class="btn btn-sm btn-warning">Modifier</a>
+                                <a href="{% url 'delete_planning' planning.id %}" class="btn btn-sm btn-danger">Supprimer</a>
                             </td>
                         </tr>
-                        {% empty %}
+                        {% endfor %}
+                        {% else %}
                         <tr>
                             <td colspan="10" class="text-center">Aucune activité ajoutée pour le moment.</td>
                         </tr>
-                        {% endfor %}
+                        {% endif %}
                     </tbody>
                 </table>
             </div>
-            {% comment %} <button type="submit" class="btn btn-primary">Envoyer</button> {% endcomment %}
         </form>
-        <a href="#" class="btn btn-primary">ACCEUIL</a>
-    </div>
+        {% if responsableFiliere %}
+        <a href="{% url 'responsable_filiere' responsableFiliere.id %}" class="btn btn-primary">Accueil</a>
+        {% endif %}
+        </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

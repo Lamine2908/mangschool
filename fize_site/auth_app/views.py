@@ -2,9 +2,11 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
-from .models import Student, Teacher, Classe, Salle, Note, Matiere, CahierDeCours, Comptable, Administrateur, Planning, ResponsableFiliere, ResponsableClasse
-from .form import StudentForm, NoteForm, MatiereForm, CahierDeCoursForm, AssignClassToTeacherForm, AddStudentToClassForm, ClasseForm, SalleForm, TeacherForm, PlanningForm , CustomUserCreationForm, ConnexionForm, TeacherUpdateForm, StudentUpdateForm
+from .models import Student, Teacher, Classe, Salle, Pointage, Note, Matiere, CahierDeCours, Comptable, Administrateur, Planning, ResponsableFiliere, ResponsableClasse
+from .form import StudentForm, NoteForm, MatiereForm, CahierDeCoursForm, PointageForm, AffecterProfForm, AffecterEleveForm, ClasseForm, SalleForm, TeacherForm, PlanningForm , CustomUserCreationForm, ConnexionForm, TeacherUpdateForm, StudentUpdateForm
 from django.core.mail import send_mail
+from django.core.exceptions import ValidationError
+
 from django.utils import timezone
 
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -40,6 +42,8 @@ def espaceprof(request, teacher_id):
     teacher = get_object_or_404(Teacher, id=teacher_id)
     return render(request, 'espaceprof.html', {'teacher': teacher})
 
+
+
 def inscription(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
@@ -63,58 +67,55 @@ def responsableclasse(request, responsable_id):
 def espacecomptable(request, comptable_id):
     comptables = get_object_or_404(Comptable, id=comptable_id)
     return render(request, 'espacecomptable.html', {'comptables': comptables})
+from django.contrib import messages
+from django.shortcuts import render, redirect, get_object_or_404
 
 def connexion(request):
     if request.method == 'POST':
         form = ConnexionForm(request.POST)
 
         if form.is_valid():
-            first_name = form.cleaned_data.get('first_name')
-            last_name = form.cleaned_data.get('last_name')
+            matricule = form.cleaned_data.get('matricule')
             email = form.cleaned_data.get('email')
-
+            
             try:
-                student = Student.objects.get(first_name=first_name, last_name=last_name, email=email)
+                student = Student.objects.get(matricule=matricule, email=email)
                 return redirect('espaceeleve', student_id=student.id)
             except Student.DoesNotExist:
                 pass
 
             try:
-                teacher = Teacher.objects.get(first_name=first_name, last_name=last_name, email=email)
+                teacher = Teacher.objects.get(matricule=matricule, email=email)
                 return redirect('espaceprof', teacher_id=teacher.id)
             except Teacher.DoesNotExist:
                 pass
-            
+
             try:
-                administrateur = Administrateur.objects.get(first_name=first_name, last_name=last_name, email=email)
+                administrateur = Administrateur.objects.get(matricule=matricule, email=email)
                 return redirect('espaceadmin', admin_id=administrateur.id)
             except Administrateur.DoesNotExist:
                 pass
-            
+
             try:
-                responsableFiliere = ResponsableFiliere.objects.get(first_name=first_name, last_name=last_name, email=email)
+                responsableFiliere = ResponsableFiliere.objects.get(matricule=matricule, email=email)
                 return redirect('responsable_filiere', responsable_id=responsableFiliere.id)
             except ResponsableFiliere.DoesNotExist:
                 pass
-            
+
             try:
-                comptable = Comptable.objects.get(first_name=first_name, last_name=last_name, email=email)
+                comptable = Comptable.objects.get(matricule=matricule, email=email)
                 return redirect('espacecomptable', comptable_id=comptable.id)
             except Comptable.DoesNotExist:
                 pass
-            
-            try:
-                responsableclasse = ResponsableClasse.objects.get(first_name=first_name, last_name=last_name, email=email)
-                return redirect('responsableclasse', responsable_id=responsableclasse.id)
-            except ResponsableFiliere.DoesNotExist:
-                pass
-            
-            messages.error(request, "L'utilisateur n'existe pas.")
 
+            messages.error(request, "Informations Incorrectes .")
+        else:
+            messages.error(request, "Formulaire invalide, veuillez vérifier les informations.")
     else:
         form = ConnexionForm()
 
     return render(request, 'connexion.html', {'form': form})
+
 
 def index(request):
     return render(request, 'index.html')
@@ -258,10 +259,13 @@ def ajouter_matiere(request):
         form = MatiereForm(request.POST)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Matière ajoutée avec succès.')
             return redirect('liste_matieres')
+        else:
+            messages.error(request, 'Erreur lors de l\'ajout de la matière. Veuillez vérifier les informations.')
     else:
         form = MatiereForm()
-
+    
     return render(request, 'ajouter_matiere.html', {'form': form})
 
 def modifier_matiere(request, matiere_id):
@@ -333,35 +337,45 @@ def parametre_filiere(request, responsable_id):
 #     paiements = Paiement.objects.all()
 #     return render(request, 'paiement_liste.html', {'paiements': paiements})
 
+
 def ajouter_notes(request, teacher_id):
     teacher = get_object_or_404(Teacher, id=teacher_id)
-   
     classes = Classe.objects.filter(teacher=teacher)
-    students = Student.objects.filter(classe__in=classes).distinct()
-    matieres = Matiere.objects.filter(classes__in=classes).distinct()
-    teachers = Teacher.objects.filter(classe__in=classes).distinct()
-    
+    students = Student.objects.filter(classe__in=classes)
+    matieres = Matiere.objects.filter(classes__in=classes)
+
     if request.method == 'POST':
         form = NoteForm(request.POST)
+        
         if form.is_valid():
             note = form.save(commit=False)
+            
             existence_note = Note.objects.filter(student=note.student, matiere=note.matiere, teacher=teacher).first()
             
             if existence_note:
-                messages.error(request, f"Une note existe déjà pour {note.student} dans {note.matiere}. Accerder a liste pour modifier")
-                return redirect('ajouter_notes', teacher_id=teacher_id)   
-                 
+                messages.error(request, f"Une note existe déjà pour {note.student} dans {note.matiere}. Veuillez accéder à la liste pour la modifier.")
+                return redirect('ajouter_notes', teacher_id=teacher_id)         
+        try:
             note.teacher = teacher
             note.save()
+            
+            messages.success(request, 'Note ajoutée avec succès.')
             return redirect('afficher_notes', teacher_id=teacher_id)
+        
+        except ValidationError as e:
+            messages.error(request, e.messages[0]) 
+        else:
+            messages.error(request, 'Erreur lors de l\'ajout de la note. Veuillez vérifier les informations.')
     else:
         form = NoteForm()
+        form.fields['student'].queryset = students
+        form.fields['matiere'].queryset = matieres
+
     context = {
         'teacher': teacher,
         'classes': classes,
         'matieres': matieres,
         'students': students,
-        'teachers':teachers,
         'form': form,
     }
     
@@ -369,9 +383,11 @@ def ajouter_notes(request, teacher_id):
 
 def afficher_notes(request, teacher_id):
     teacher = get_object_or_404(Teacher, id=teacher_id)
+    
     classes = Classe.objects.filter(teacher=teacher)
     students = Student.objects.filter(classe__in=classes).distinct()
-    notes = Note.objects.filter(student__in=students)
+    notes = Note.objects.filter(student__in=students, teacher=teacher)
+
     context = {
         'teacher': teacher,
         'classes': classes,
@@ -380,6 +396,36 @@ def afficher_notes(request, teacher_id):
     }
     
     return render(request, 'afficher_notes.html', context)
+
+def filtrer_notes(request, teacher_id):
+    teacher = get_object_or_404(Teacher, id=teacher_id)
+    
+    notes = Note.objects.filter(teacher=teacher)
+
+    student_id = request.GET.get('student_id')
+    first_name = request.GET.get('first_name')
+    last_name = request.GET.get('last_name')
+
+    if student_id:
+        notes = notes.filter(student__id=student_id)
+    elif first_name:
+        notes = notes.filter(student__first_name__icontains=first_name)
+    elif last_name:
+        notes = notes.filter(student__last_name__icontains=last_name)
+
+    context = {
+        'notes': notes,
+        'teacher': teacher,
+    }
+    
+    return render(request, 'filtrer_notes.html', context)
+
+def note_eleve(request, student_id):
+    student = get_object_or_404(Student, id=student_id)
+    notes = Note.objects.filter(student=student)
+    context = {'student':student, 'notes':notes}
+    
+    return render(request, 'note_eleve.html', context)
 
 def modifier_notes(request, note_id):
     note = get_object_or_404(Note, id=note_id)
@@ -390,26 +436,33 @@ def modifier_notes(request, note_id):
             form.save()
             return redirect('afficher_notes', teacher_id=note.teacher.id)
     else:
+        # Pré-remplir le formulaire avec l'instance de la note
         form = NoteForm(instance=note)
     
     context = {
         'form': form,
         'note': note,
+        'student_name': note.student.first_name + " " + note.student.last_name,
+        'matiere_name': note.matiere.nom_matiere,
+        'classe_name':note.student.classe
     }
 
     return render(request, 'modifier_notes.html', context)
 
-
-def ajouter_classe(request):
+def ajouter_classe(request, administrateur_id):
+    administrateur = get_object_or_404(Administrateur, id=administrateur_id)
+    
     if request.method == 'POST':
         form = ClasseForm(request.POST)
         if form.is_valid():
-            form.save()
+            classe = form.save(commit=False)
+            classe.administrateur = administrateur
+            classe.save()
             return redirect('liste_classes') 
     else:
         form = ClasseForm()  
 
-    return render(request, 'ajouter_classe.html', {'form': form})
+    return render(request, 'ajouter_classe.html', {'form': form, 'administrateur': administrateur})
 
 def liste_classes(request):
     classes = Classe.objects.all()
@@ -579,47 +632,31 @@ def class_list(request):
     classes = Classe.objects.all()
     return render(request, 'class_info.html', {'classes': classes})
 
-def assign_teacher_to_classes(request, teacher_id):
-    teacher = get_object_or_404(Teacher, id=teacher_id)
+def affecter_prof(request, responsable_id):
+    responsable = get_object_or_404(ResponsableFiliere, id=responsable_id)
     
     if request.method == 'POST':
-        form = AssignClassToTeacherForm(request.POST, instance=teacher)
+        form = AffecterProfForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect('teacher_class') 
     else:
 
-        form = AssignClassToTeacherForm(instance=teacher)
+        form = AffecterProfForm()
     
-    return render(request, 'affecter_prof.html', {'form': form, 'teacher': teacher})
+    return render(request, 'affecter_prof.html', {'form': form, 'responsable': responsable})
 
 def teacher_class(request):
 
     teachers = Teacher.objects.prefetch_related('classes').all()
     return render(request, 'teacher_classe.html', {'teachers': teachers})
 
-# def assign_student_to_class(request, student_id):
-#     student = get_object_or_404(Student, id=student_id)
-    
-#     if request.method == 'POST':
-#         form = AssignStudentToClassForm(request.POST, instance=student)
-#         if form.is_valid():
-#             if student.classe is not None:
-#                 messages.error(request, "Cet étudiant est déjà affecté à une classe.")
-#             else:
-#                 form.save()
-#                 messages.success(request, "L'étudiant a été affecté à la classe avec succès.")
-#                 return redirect('class_student_list') 
-#     else:
-#         form = AssignStudentToClassForm(instance=student)
-    
-#     return render(request, 'assign_student_to_class.html', {'form': form, 'student': student})
 
 def Affecter_eleve(request, student_id):
     student = get_object_or_404(Student, id=student_id)
     
     if request.method == 'POST':
-        form = AddStudentToClassForm(request.POST, instance=student)
+        form = AffecterEleveForm(request.POST)
         if form.is_valid():
             if student.classe is not None:
                 return redirect('liste_classe')
@@ -627,13 +664,13 @@ def Affecter_eleve(request, student_id):
                 form.save()
                 return redirect('liste_classe')
     else:
-        form = AddStudentToClassForm(instance=student)
+        form = AffecterEleveForm()
         
     return render(request, 'affecter_eleve.html', {'form':form, 'student':student})
 
 def liste_classe(request):
     students = Student.objects.filter(classe__isnull=False)
-    classes = Classe.objects.prefetch_related('students_in').all()
+    classes = Classe.objects.prefetch_related('student_set').all()
     return render(request, 'liste_classe.html', {'students': students, 'classes':classes})
 
 def remplir_cahier(request, teacher_id):
@@ -677,8 +714,8 @@ def liste_cahiers(request, teacher_id):
     }
     return render(request, 'liste_cahier.html', context)
 
-def create_planning(request, responsable_fil_id):
-    resp = get_object_or_404(ResponsableFiliere, id=responsable_fil_id)
+def create_planning(request):
+    resp = ResponsableFiliere.objects.all()
     if request.method == 'POST':
         form = PlanningForm(request.POST)
         if form.is_valid():
@@ -700,59 +737,39 @@ def create_planning(request, responsable_fil_id):
     return render(request, 'create_planning.html', {'form': form, 'resp':resp})
 
 def planning_list(request):
-    planning = Planning.objects.all()
-    return render(request, 'planning_list.html', {'planning': planning})
-
-def planning_student(request):
-    planning = Planning.objects.all()
-    return render(request, 'planning_etudiant.html', {'planning': planning})
-
-@login_required
-def send_planning(request):
-    if request.method == 'POST':
-        selected_plannings = request.POST.getlist('plannings')
-        
-        if not selected_plannings:
-            messages.error(request, 'Aucun planning sélectionné.')
-            return redirect('list_plannings')
-        
-        plannings = Planning.objects.filter(id__in=selected_plannings)
-
-        if 'envoyer' in request.POST:
-            return redirect('select_recipients', planning_ids=','.join(selected_plannings))
-        
-    return redirect('list_plannings')
-
-
-def env_planning(request):
+    responsable = ResponsableFiliere.objects.all()
     plannings = Planning.objects.all()
-    return render(request, 'list_plannings.html', {'plannings': plannings})
+    return render(request, 'planning_list.html', {
+        'plannings': plannings,
+        'responsable': responsable
+    })
+
+def planning_eleve(request):
+    plannings = Planning.objects.all()
+    return render(request, 'planning_eleve.html', {
+        'plannings': plannings,
+    })
 
 def edit_planning(request, pk):
-    planning = get_object_or_404(Planning, pk=pk)
+    planning = get_object_or_404(Planning, id=pk)
     if request.method == 'POST':
-        form = PlanningForm(request.POST, instance=planning)
+        form = PlanningForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect('planning_list')
     else:
-        form = PlanningForm(instance=planning)
-    return render(request, 'edit_planning.html', {'form': form})
+        form = PlanningForm()
+    return render(request, 'edit_planning.html', {'form': form, 'planning':planning})
 
 def delete_planning(request, pk):
-    planning = get_object_or_404(Planning, pk=pk)
+    planning = get_object_or_404(Planning, id=pk)
     if request.method == 'POST':
         planning.delete()
         return redirect('planning_list')
     return render(request, 'supprimer_planning.html', {'planning': planning})
 
-def planning_list(request):
-    plannings = Planning.objects.all()
-    return render(request, 'planning_list.html', {'plannings': plannings})
-
 def filter_planning(request):
     plannings = Planning.objects.all()
-    
     id = request.GET.get('id')
     date = request.GET.get('date')
     
@@ -761,3 +778,84 @@ def filter_planning(request):
     elif date:
         plannings = plannings.filter(date__icontains=date)
     return render(request, 'filter_planning.html' , {'plannings':plannings})
+
+def pointage(request, teacher_id):
+    teacher = get_object_or_404(Teacher, id=teacher_id)
+    
+    if request.method == 'POST':
+        form = PointageForm(request.POST)
+        if form.is_valid():
+            student = form.cleaned_data['student']
+            today = timezone.now().date()
+
+            pointage_existant = Pointage.objects.filter(student=student, teacher=teacher, date__date=today).exists()
+
+            if not pointage_existant:
+                pointage = form.save(commit=False)
+                pointage.teacher = teacher 
+                pointage.date = timezone.now()
+                
+                arrivee = pointage.arrivee
+                sortie = pointage.sortie
+                pointage.total = (sortie.hour * 60 + sortie.minute) - (arrivee.hour * 60 + arrivee.minute)
+      
+                pointage.save()
+
+                return redirect('success_page')
+            else:
+                form.add_error(None, "Le pointage pour cet élève a déjà été effectué aujourd'hui.")
+    else:
+        form = PointageForm()
+    return render(request, 'pointage.html', {'form': form, 'teacher': teacher})
+
+def success_page(request):
+    return render(request, 'pointe.html')
+
+def liste_pointages(request, teacher_id):
+    teacher = get_object_or_404(Teacher, id=teacher_id)
+    pointages = Pointage.objects.filter(teacher=teacher)
+    
+    pointages_par_etudiant = {}
+    for pointage in pointages:
+        student_id = pointage.student.id
+        if student_id not in pointages_par_etudiant:
+            pointages_par_etudiant[student_id] = {
+                'student': pointage.student,
+                'total_heures': 0
+            }
+            
+        pointages_par_etudiant[student_id]['total_heures'] += pointage.total
+
+    return render(request, 'liste_pointages.html', {
+        'pointages_par_etudiant': pointages_par_etudiant.values(), 
+        'teacher': teacher
+    })
+
+
+from django.shortcuts import render, redirect
+from PIL import Image
+from .form import ImageUploadForm  # Assume you have a form for image upload
+from django.conf import settings
+import os
+
+def upload_and_resize_image(request):
+    if request.method == 'POST':
+        form = ImageUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            image = form.cleaned_data['image']  # Getting the image from the form
+            img = Image.open(image)
+
+            # Resize the image to 600x600 pixels
+            img_resized = img.resize((600, 600))
+
+            # Save the resized image to the desired location
+            file_name = image.name
+            save_path = os.path.join(settings.MEDIA_ROOT, 'student_photos', file_name)
+            img_resized.save(save_path)
+
+            # Optionally, redirect to another page or render a success message
+            return redirect('success_page')  # Make sure you have this view and template
+    else:
+        form = ImageUploadForm()
+
+    return render(request, 'upload_image.html', {'form': form})

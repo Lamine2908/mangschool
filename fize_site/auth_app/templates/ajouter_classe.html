@@ -59,7 +59,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container">
-            <a class="navbar-brand" href="#">Mon Application</a>
+            <a class="navbar-brand" href="#">GeSchool</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -85,29 +85,30 @@
                 {{ form.name }}
             </div>
             <div class="mb-3">
+                <label for="promo" class="form-label">Promo</label>
+                {{ form.promo }}
+            </div>
+            <div class="mb-3">
                 <label for="description" class="form-label">Description</label>
                 {{ form.description }}
             </div>
             <div class="mb-3">
                 <label for="salle" class="form-label">Salle</label>
-                {{ form.salle }}
+                <div>
+                    {{ form.salle }}
+                </div>
             </div>
             <div class="mb-3">
-                <label for="teacher" class="form-label">Professeur</label>
-                <select id="teacher-select" name="teacher" class="form-select">
-                    <option value="" disabled selected>Sélectionnez un professeur</option>
-                    {% for teacher in form.teacher.field.queryset %}
-                        <option value="{{ teacher.id }}">{{ teacher.first_name }} {{ teacher.last_name }}</option>
-                    {% endfor %}
-                </select>
+                <label for="teacher" class="form-label">Professeur(s)</label>
+                <div>
+                    {{ form.teacher }}
+                </div>
             </div>
             <div class="mb-3">
-                <label for="students" class="form-label">Étudiants</label>
-                <select id="students-select" name="students" class="form-select" multiple>
-                    {% for student in form.students.field.queryset %}
-                        <option value="{{ student.id }}">{{ student.first_name }} {{ student.last_name }}</option>
-                    {% endfor %}
-                </select>
+                <label for="matiere" class="form-label">Matières</label>
+                <div>
+                    {{ form.matiere }}
+                </div>
             </div>
             <div class="d-grid gap-2">
                 <button type="submit" class="btn btn-primary btn-lg"><i class="fas fa-plus"></i> Ajouter la classe</button>
@@ -124,7 +125,9 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const teacherSelect = new Choices('#teacher-select');
+            const salleSelect = new Choices('#salle-select');
             const studentsSelect = new Choices('#students-select');
+            const matiereSelect = new Choices('#matiere-select');
         });
     </script>
 </body>

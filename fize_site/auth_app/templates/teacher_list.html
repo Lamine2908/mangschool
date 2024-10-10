@@ -144,7 +144,7 @@
                     <td>{{ teacher.profession }}</td>
                     <td>{{ teacher.email }}</td>
                     <td>
-                        <a href="{% url 'assign_teacher_to_classes' teacher.id %}" class="btn btn-primary btn-sm">Afeccter classe</a>
+                        {% comment %} <a href="{% url 'affecter_prof' administrateur.id %}" class="btn btn-primary btn-sm">Afeccter classe</a> {% endcomment %}
                         <a href="{% url 'update_teacher' teacher.id %}" class="btn btn-warning btn-sm">Modifier</a>
                         <a href="{% url 'delete_teacher_by_id' teacher.id %}" class="btn btn-danger btn-sm">Supprimer</a>
                     </td>

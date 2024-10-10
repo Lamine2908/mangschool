@@ -2,60 +2,101 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Modifier le Planning</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modifier Planning</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            background-color: #f7f7f7;
         }
         .container {
-            background-color: #fff;
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: white;
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 500px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
         h1 {
             text-align: center;
             color: #333;
+            margin-bottom: 30px;
         }
-        form {
-            display: flex;
-            flex-direction: column;
+        label {
+            font-weight: bold;
+            margin-top: 15px;
         }
-        form input, form button {
-            margin-bottom: 15px;
+        .form-control {
+            width: 100%;
             padding: 10px;
+            margin: 10px 0;
             border: 1px solid #ccc;
             border-radius: 4px;
+            box-sizing: border-box;
         }
-        form button {
-            background-color: #007bff;
-            color: #fff;
+        .btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #5cb85c;
+            color: white;
             border: none;
             cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
         }
-        form button:hover {
-            background-color: #0056b3;
+        .btn:hover {
+            background-color: #4cae4c;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Modifier le Planning</h1>
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="btn btn-primary">Enregistrer</button>
-            <a href="{% url 'planning_list' %}" class="btn btn-secondary">Annuler</a>
-        </form>
-    </div>
+
+<div class="container">
+    <h1>Modifier le planning</h1>
+    
+    <form method="POST">
+        {% csrf_token %}
+        
+        <label for="student">Date</label>
+        {{ form.date }}
+
+        <label for="classe">Horaire</label>
+        {{ form.horaire }}
+
+        <label for="premiere_heure">premiere_heure</label>
+        {{ form.premiere_heure }}
+
+        <label for="premiere_heure">deuxieme_heure</label>
+        {{ form.deuxieme_heure }}
+
+        <label for="troisieme_heure">troisieme_heure</label>
+        {{ form.troisieme_heure }}
+
+        <label for="activite1">Activite 1</label>
+        {{ form.activite1 }}
+
+        <label for="activite2">activite2</label>
+        {{ form.activite2 }}
+
+        <label for="activite3">Activite 3</label>
+        {{ form.activite3 }}
+
+        <label for="salle">Salle </label>
+        {{ form.salle }}
+
+        <label for="classe">Classe</label>
+        {{ form.classe }}
+
+        <label for="professeur">Prof</label>
+        {{ form.professeur }}
+
+        <label for="responsable">Prof</label>
+        {{ form.responsable }}
+
+
+        <button type="submit" class="btn">Enregistrer les modifications</button>
+    </form>
+</div>
+
 </body>
 </html>
