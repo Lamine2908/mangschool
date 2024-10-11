@@ -4,185 +4,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Filtrer les Cahiers de Cours</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f6f9;
-            margin: 0;
-            padding: 0;
-        }
-
-        h1 {
-            text-align: center;
-            margin-top: 20px;
-            color: #343a40;
-        }
-
-        .container {
-            width: 90%;
-            margin: 20px auto;
-            text-align: center;
-        }
-
-        form {
-            margin-bottom: 20px;
-        }
-
-        input[type="text"] {
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            margin-right: 10px;
-        }
-
-        button {
-            padding: 8px 12px;
-            border: none;
-            border-radius: 4px;
-            background-color: #007bff;
-            color: white;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: #ffffff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        th, td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-
-        th {
-            background-color: #007bff;
-            color: white;
-            text-transform: uppercase;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        tr:hover {
-            background-color: #f1f1f1;
-        }
-
-        td {
-            color: #343a40;
-        }
-
-        td[colspan="15"] {
-            text-align: center;
-            font-style: italic;
-        }
-
-        @media (max-width: 600px) {
-            table, th, td {
-                display: block;
-                width: 100%;
-            }
-
-            th, td {
-                box-sizing: border-box;
-                text-align: left;
-            }
-
-            th {
-                display: none;
-            }
-
-            tr {
-                margin-bottom: 20px;
-                border-bottom: 2px solid #ddd;
-            }
-
-            tr:nth-child(even) {
-                background-color: transparent;
-            }
-
-            td {
-                display: flex;
-                justify-content: space-between;
-                padding: 10px;
-                font-size: 0.9em;
-            }
-
-            td:before {
-                content: attr(data-label);
-                font-weight: bold;
-                color: #007bff;
-            }
-        }
-    </style>
+    <title>Filtrer les Cahiers de Texte</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 
 <body>
-    <div class="container">
-        <h1>Cahiers de Texte</h1>
-        <form method="get" action="{% url 'filtrer_cahier' %}">
-            <label for="date">Date:</label>
-            <input type="text" id="date" name="date" value="{{ request.GET.date }}">
-            <label for="competence">Compétence:</label>
-            <input type="text" id="competence" name="competence" value="{{ request.GET.competence }}">
-            <button type="submit">Filtrer</button>
+    <div class="container mt-4">
+        <h2 class="mb-4">Filtrer les Cahiers de Texte</h2>
+
+        <form method="GET" class="mb-4">
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Filtrer</button>
         </form>
-        <a href="{% url 'espaceprof' teacher.id %}" class="btn" style="background-color: #6c757d; color: white; padding: 8px 12px; border-radius: 4px; text-decoration: none;">Retour</a>
-        <table>
+
+        <h3 class="mt-4">Liste des Cahiers de Texte</h3>
+        <table class="table table-bordered">
             <thead>
                 <tr>
+                    <th>ID</th>
+                    <th>Classe</th>
                     <th>Date</th>
-                    <th>Compétence</th>
-                    <th>UEA</th>
-                    <th>Durée</th>
-                    <th>Horaire</th>
-                    <th>Durée Théorie</th>
-                    <th>Corpus Théorie</th>
-                    <th>Durée TD</th>
-                    <th>Corpus TD</th>
-                    <th>Durée TP</th>
-                    <th>Corpus TP</th>
-                    <th>Durée TPA</th>
-                    <th>Corpus TPA</th>
-                    <th>Durée Stage</th>
-                    <th>Corpus Stage</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 {% for cahier in cahiers %}
-                <tr>
-                    <td data-label="Date">{{ cahier.date }}</td>
-                    <td data-label="Compétence">{{ cahier.competence }}</td>
-                    <td data-label="UEA">{{ cahier.uea }}</td>
-                    <td data-label="Durée">{{ cahier.duree }}</td>
-                    <td data-label="Horaire">{{ cahier.horaire }}</td>
-                    <td data-label="Durée Théorie">{{ cahier.duree_theorie }}</td>
-                    <td data-label="Corpus Théorie">{{ cahier.corpus_theorie }}</td>
-                    <td data-label="Durée TD">{{ cahier.duree_td }}</td>
-                    <td data-label="Corpus TD">{{ cahier.corpus_td }}</td>
-                    <td data-label="Durée TP">{{ cahier.duree_tp }}</td>
-                    <td data-label="Corpus TP">{{ cahier.corpus_tp }}</td>
-                    <td data-label="Durée TPA">{{ cahier.duree_tpa }}</td>
-                    <td data-label="Corpus TPA">{{ cahier.corpus_tpa }}</td>
-                    <td data-label="Durée Stage">{{ cahier.duree_stage }}</td>
-                    <td data-label="Corpus Stage">{{ cahier.corpus_stage }}</td>
-                </tr>
+                    <tr>
+                        <td>{{ cahier.id }}</td>
+                        <td>{{ cahier.classe.name }}</td>
+                        <td>{{ cahier.date }}</td>
+                        <td>
+                            <a href="{% url 'listes_cahiers' %}" class="btn btn-info">Voir</a>
+                            <a href="#" class="btn btn-warning">Modifier</a>
+                            <a href="#" class="btn btn-danger">Supprimer</a>
+                        </td>
+                    </tr>
                 {% empty %}
-                <tr>
-                    <td colspan="15">Aucun cahier de cours disponible.</td>
-                </tr>
+                    <tr>
+                        <td colspan="4">Aucun cahier de texte trouvé.</td>
+                    </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 
 </html>

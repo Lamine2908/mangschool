@@ -7,6 +7,8 @@ from io import BytesIO
 from django.core.files import File
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
+from django.utils import timezone
+from datetime import time
 
 class Administrateur(models.Model):
     id = models.AutoField(primary_key=True)
@@ -40,7 +42,7 @@ class ResponsableFiliere(models.Model):
         return f'{self.first_name} {self.last_name}'
     
 class Teacher(models.Model):
-    id = models.AutoField(primary_key=True)
+    id = models.AutoField(primary_key=True, unique=True)
     matricule = models.CharField(max_length=20, default='modifier')
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
@@ -80,7 +82,7 @@ class Matiere(models.Model):
         return f'{self.nom_matiere}'
 
 class Classe(models.Model):
-    id = models.AutoField(primary_key=True)
+    id = models.AutoField(primary_key=True, unique=True)
     name = models.CharField(max_length=100)
     promo = models.IntegerField(null=True)
     description = models.TextField(null=True, blank=True)
@@ -93,7 +95,7 @@ class Classe(models.Model):
         return self.name
 
 class Student(models.Model):
-    id = models.AutoField(primary_key=True)
+    id = models.AutoField(primary_key=True, unique=True)
     matricule = models.CharField(max_length=20, default='modifier')
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
@@ -227,28 +229,26 @@ class AdjointClasse(models.Model):
         return f'{self.first_name} {self.last_name}'
 
 class CahierDeCours(models.Model):
-    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, null=True, related_name='cahiers')
-    classe = models.ForeignKey(Classe, on_delete=models.CASCADE, null=True, related_name='cahiers')
-    date = models.DateField()
-    horaire = models.CharField(max_length=20)
-    duree = models.CharField(max_length=50)
+    id = models.AutoField(primary_key=True, unique=True)
+    date = models.DateField(default=timezone.now)
+    horaire = models.CharField(max_length=5)
+    duree = models.CharField(max_length=5)
     competence = models.CharField(max_length=100)
-    uea = models.CharField(max_length=100)
-    elements_constituifs = models.TextField()
-    duree_theorie = models.CharField(max_length=50, blank=True, null=True)
+    uea = models.CharField(max_length=5)
+    elements_constituifs = models.TextField(max_length=50)
+    duree_theorie = models.CharField(max_length=5)
     corpus_theorie = models.TextField(blank=True, null=True)
-    duree_td = models.CharField(max_length=50, blank=True, null=True)
+    duree_td = models.CharField(max_length=5)
     corpus_td = models.TextField(blank=True, null=True)
-    duree_tp = models.CharField(max_length=50, blank=True, null=True)
+    duree_tp = models.CharField(max_length=5)
     corpus_tp = models.TextField(blank=True, null=True)
-    duree_tpa = models.CharField(max_length=50, blank=True, null=True)
+    duree_tpa = models.CharField(max_length=5)
     corpus_tpa = models.TextField(blank=True, null=True)
-    duree_stage = models.CharField(max_length=50, blank=True, null=True)
+    duree_stage = models.CharField(max_length=5)
     corpus_stage = models.TextField(blank=True, null=True)
-
-    class Meta:
-        unique_together = ('teacher', 'classe', 'date')
-
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, null=True)
+    classe = models.ForeignKey(Classe, on_delete=models.CASCADE, null=True)
+    
     def __str__(self):
         return f'Cahier de {self.teacher} pour la classe {self.classe} le {self.date}'
 

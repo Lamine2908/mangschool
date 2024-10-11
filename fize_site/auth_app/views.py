@@ -42,8 +42,6 @@ def espaceprof(request, teacher_id):
     teacher = get_object_or_404(Teacher, id=teacher_id)
     return render(request, 'espaceprof.html', {'teacher': teacher})
 
-
-
 def inscription(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
@@ -673,6 +671,7 @@ def liste_classe(request):
     classes = Classe.objects.prefetch_related('student_set').all()
     return render(request, 'liste_classe.html', {'students': students, 'classes':classes})
 
+
 def remplir_cahier(request, teacher_id):
     teacher = get_object_or_404(Teacher, id=teacher_id)
     classes = Classe.objects.filter(teacher=teacher)
@@ -681,9 +680,10 @@ def remplir_cahier(request, teacher_id):
         form = CahierDeCoursForm(request.POST)
         if form.is_valid():
             date = form.cleaned_data['date']
+            classe = form.cleaned_data['classe']
 
-            if CahierDeCours.objects.filter(teacher=teacher, date=date).exists():
-                form.add_error(None, "Vous avez déjà rempli un cahier de cours à cette date.")
+            if CahierDeCours.objects.filter(teacher=teacher, classe=classe, date=date).exists():
+                form.add_error(None, "Vous avez déjà rempli un cahier de cours pour cette classe à cette date.")
             else:
                 cahier = form.save(commit=False)
                 cahier.teacher = teacher
@@ -695,6 +695,7 @@ def remplir_cahier(request, teacher_id):
         form = CahierDeCoursForm()
 
     return render(request, 'remplir_cahier.html', {'form': form, 'teacher': teacher, 'classes': classes})
+
 
 def liste_cahiers(request, teacher_id):
     teacher = get_object_or_404(Teacher, id=teacher_id)
@@ -713,6 +714,29 @@ def liste_cahiers(request, teacher_id):
         'teacher': teacher
     }
     return render(request, 'liste_cahier.html', context)
+
+def listes_cahiers(request):
+    responsable = ResponsableFiliere.objects.all()
+    date_filter = request.GET.get('date', '')
+    competence_filter = request.GET.get('competence', '')
+    teacher_filter = request.GET.get('teacher', '')
+    cahiers = CahierDeCours.objects.all()
+    
+    if date_filter:
+        cahiers = cahiers.filter(date=date_filter)
+    
+    if competence_filter:
+        cahiers = cahiers.filter(competence__icontains=competence_filter)
+    
+    if teacher_filter:
+        cahiers = cahiers.filter(teacher__first_name__icontains=teacher_filter) | cahiers.filter(teacher__last_name__icontains=teacher_filter)
+    
+    context = {
+        'cahiers': cahiers,
+        'teacher': responsable
+    }
+    return render(request, 'cahiers_responsable.html', context)
+
 
 def create_planning(request):
     resp = ResponsableFiliere.objects.all()
@@ -859,3 +883,4 @@ def upload_and_resize_image(request):
         form = ImageUploadForm()
 
     return render(request, 'upload_image.html', {'form': form})
+

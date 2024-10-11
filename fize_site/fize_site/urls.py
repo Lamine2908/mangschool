@@ -94,8 +94,8 @@ urlpatterns = [
     path('class_info/', views.class_info, name='class_info'),
     path('remplir-cahier/<int:teacher_id>/', views.remplir_cahier, name='remplir_cahier'),
     path('liste_cahiers/<int:teacher_id>/',views.liste_cahiers, name='liste_cahiers'),
+    path('liste_cahier/',views.listes_cahiers, name='listes_cahiers'),
     path('planning_eleve/', views.planning_eleve, name='planning_eleve'),
-    # path('send_planning/', views.send_planning, name='send_planning'),
     # path('env_planning/', views.env_planning, name='env_planning'),
     path('filter_planning/', views.filter_planning, name='filter_planning'),
     path('ajouter_matiere/', views.ajouter_matiere, name='ajouter_matiere'),
@@ -104,4 +104,5 @@ urlpatterns = [
     path('liste_matieres/', views.liste_matieres, name='liste_matieres'),
     path('upload/', views.upload_and_resize_image, name='upload_image'),
     path('success/', views.success_page, name='success_page'), 
+    
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

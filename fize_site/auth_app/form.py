@@ -121,12 +121,13 @@ class TeacherUpdateForm(forms.ModelForm):
 class StudentUpdateForm(forms.ModelForm):
     class Meta:
         model = Student
-        fields = ['matricule', 'first_name', 'last_name', 'filiere', 'metier', 'email']
+        fields = ['matricule', 'first_name', 'last_name', 'filiere', 'metier', 'classe', 'email']
         widgets = {
             'matricule': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Entrez le matricule'}),                       
             'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Entrez le prénom de l\'élève'}),
             'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Entrez le nom de famille de l\'élève'}),
             'filiere': forms.Select(attrs={'class': 'form-control', 'placeholder': 'Sélectionnez la filière'}),
+            'classe': forms.Select(attrs={'class': 'form-control', 'placeholder': 'Entrez le classe'}),
             'metier': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Entrez le métier'}),
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Entrez l\'email de l\'élève'}),
         }
@@ -146,13 +147,39 @@ class StudentUpdateForm(forms.ModelForm):
 
         return cleaned_data
 
+
+
 class CahierDeCoursForm(forms.ModelForm):
+    classe = forms.ModelChoiceField(
+        queryset=Classe.objects.all(),
+        required=True,
+        label="Classe",
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+
     class Meta:
         model = CahierDeCours
-        fields = ['teacher', 'classe', 'date', 'horaire', 'duree', 'competence', 'uea', 'elements_constituifs',
-                'duree_theorie', 'corpus_theorie', 'duree_td', 'corpus_td', 'duree_tp',
-                'corpus_tp', 'duree_tpa', 'corpus_tpa', 'duree_stage', 'corpus_stage']
-    
+        fields = ['date', 'classe', 'horaire', 'duree', 'competence', 'uea', 'elements_constituifs', 
+                  'duree_theorie', 'corpus_theorie', 'duree_td', 'corpus_td', 
+                  'duree_tp', 'corpus_tp', 'duree_tpa', 'corpus_tpa']
+
+
+class CahierFilterForm(forms.Form):
+    classe = forms.ModelChoiceField(
+        queryset=Classe.objects.all(),
+        required=False,
+        label="Classe",
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+    date = forms.DateField(
+        required=False,
+        label="Date",
+        widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'})
+    )
+
+        
+
+        
 class PaiementForm(forms.ModelForm):
     class Meta:
         model = Paiement

@@ -128,14 +128,16 @@
 <body>
     <div class="container">
         <h1>Cahiers de Texte</h1>
-        <form method="get" action="{% url 'liste_cahiers' teacher.id %}">
+        <form method="get" action="{% url 'listes_cahiers' %}">
             <label for="date">Date:</label>
             <input type="date" id="date" name="date" value="{{ request.GET.date }}">
             <label for="competence">Compétence:</label>
             <input type="text" id="competence" name="competence" value="{{ request.GET.competence }}">
+            <label for="teacher">Prof:</label>
+            <input type="text" id="teacher" name="teacher" value="{{ request.GET.teacher }}">
             <button type="submit">Filtrer</button>
         </form>
-        <a href="{% url 'espaceprof' teacher.id %}">Retour</a>
+        <a href="{% url 'listes_cahiers' %}">Retour</a>
         <table>
             <thead>
                 <tr>
@@ -154,6 +156,7 @@
                     <th>Corpus TPA</th>
                     <th>Durée Stage</th>
                     <th>Corpus Stage</th>
+                    <th>Appreciation</th>
                 </tr>
             </thead>
             <tbody>
