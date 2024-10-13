@@ -152,7 +152,7 @@
                         <i class="bi bi-bar-chart section-icon"></i>
                         <h5 class="card-title">CLASSES_PROFESSEURS</h5>
                         <p class="card-text">Accedez a cette page pour plus d' informations</p>
-                        <a href="{% url 'teacher_class' %}" class="btn btn-primary">Voir plus</a>
+                        <a href="#" class="btn btn-primary">Voir plus</a>
                     </div>
                 </div>
             </div>
@@ -168,16 +168,16 @@
                 </div>
             </div>
 
-            <div class="col-md-4 mb-4">
+            {% comment %} <div class="col-md-4 mb-4">
                 <div class="card section-card">
                     <div class="card-body">
                         <i class="bi bi-bar-chart section-icon"></i>
                         <h5 class="card-title">Affecter les eleves</h5>
                         <p class="card-text">Accedez a cette page pour </p>
-                        <a href="#" class="btn btn-primary">Affecter Élève</a>
+                        <a href="{% url 'Affecter_eleve' administrateur.id%}" class="btn btn-primary">Affecter Élève</a>
                     </div>
                 </div>
-            </div>
+            </div> {% endcomment %}
 
             <div class="col-md-4 mb-4">
                 <div class="card section-card">
@@ -207,7 +207,7 @@
                         <i class="bi bi-calendar3 section-icon"></i>
                         <h5 class="card-title">VOIR LES PLANNINGS</h5>
                         <p class="card-text">Acceder les emplois du temps pour l'école.</p>
-                        <a href="{% url 'planning_list' %}" class="btn btn-primary">Voir les Emplois du Temps</a>
+                        <a href="#" class="btn btn-primary">Voir les Emplois du Temps</a>
                     </div>
                 </div>
             </div>

@@ -229,7 +229,7 @@ def update_teacher(request, teacher_id):
         teacher = get_object_or_404(Teacher, id=teacher_id)
         form = TeacherUpdateForm(instance=teacher)
     
-    return render(request, 'update_teacher.html', {'form': form, 'teacher': teacher})
+    return render(request, 'modifier_prof.html', {'form': form, 'teacher': teacher})
 
 def update_student(request, student_id):
     if request.method == 'POST':
@@ -381,11 +381,17 @@ def ajouter_notes(request, teacher_id):
 
 def afficher_notes(request, teacher_id):
     teacher = get_object_or_404(Teacher, id=teacher_id)
-    
     classes = Classe.objects.filter(teacher=teacher)
     students = Student.objects.filter(classe__in=classes).distinct()
     notes = Note.objects.filter(student__in=students, teacher=teacher)
 
+    filter_student = request.GET.get('student', '')
+    
+    
+    if filter_student:
+        students = notes.filter(note__student__first_name__icontains=filter_student)
+
+    
     context = {
         'teacher': teacher,
         'classes': classes,
@@ -464,7 +470,7 @@ def ajouter_classe(request, administrateur_id):
 
 def liste_classes(request):
     classes = Classe.objects.all()
-    return render(request, 'liste_classes.html', {'classes': classes})
+    return render(request, 'liste_classe.html', {'classes': classes})
 
 def prof_etudiant_list(request, teacher_id):
     teacher = get_object_or_404(Teacher, id=teacher_id)
@@ -619,7 +625,7 @@ def supprimer_salle(request, id):
 def class_info(request):
     classes = Classe.objects.all()
     teachers = Classe.objects.all()
-    students = Classe.objects.count()
+    students = Classe.objects.all()
     return render(request, 'class_info.html', {
         'classes': classes,
         'teachers': teachers,
@@ -650,21 +656,19 @@ def teacher_class(request):
     return render(request, 'teacher_classe.html', {'teachers': teachers})
 
 
-def Affecter_eleve(request, student_id):
-    student = get_object_or_404(Student, id=student_id)
-    
+def Affecter_eleve(request, admin_id):
+    administrateur = get_object_or_404(Administrateur, id=admin_id)
     if request.method == 'POST':
         form = AffecterEleveForm(request.POST)
         if form.is_valid():
-            if student.classe is not None:
-                return redirect('liste_classe')
-            else:
-                form.save()
-                return redirect('liste_classe')
+            return redirect('liste_classe')
+        else:
+            form.save()
+            return redirect('liste_classe')
     else:
         form = AffecterEleveForm()
         
-    return render(request, 'affecter_eleve.html', {'form':form, 'student':student})
+    return render(request, 'affecter_eleve.html', {'form':form, 'administrateur':administrateur})
 
 def liste_classe(request):
     students = Student.objects.filter(classe__isnull=False)
@@ -794,12 +798,9 @@ def delete_planning(request, pk):
 
 def filter_planning(request):
     plannings = Planning.objects.all()
-    id = request.GET.get('id')
     date = request.GET.get('date')
     
-    if id:
-        plannings = plannings.filter(id=id)
-    elif date:
+    if date:
         plannings = plannings.filter(date__icontains=date)
     return render(request, 'filter_planning.html' , {'plannings':plannings})
 

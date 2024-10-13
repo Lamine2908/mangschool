@@ -23,6 +23,7 @@
 <body>
     <div class="container">
         <h1 class="text-center my-4">Liste des Plannings</h1>
+        <a href="{% url 'filter_planning' %}">Filtre</a>
         <form method="post" action="">
             {% csrf_token %}
             <div class="table-responsive">

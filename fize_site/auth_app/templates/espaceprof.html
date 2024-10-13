@@ -155,7 +155,7 @@
                         <i class="bi bi-file-earmark-text section-icon"></i>
                         <h5 class="card-title">Suivi des notes</h5>
                         <p class="card-text">Consultez les notes des élèves.</p>
-                        <a href="{% url 'afficher_notes' teacher.id%}" class="btn btn-primary">Voir les Notes</a>
+                        <a href="{% url 'afficher_notes' teacher.id %}" class="btn btn-primary">Voir les Notes</a>
                     </div>
                 </div>
             </div>
@@ -166,7 +166,7 @@
                         <i class="bi bi-calendar-check section-icon"></i>
                         <h5 class="card-title">Emploi du Temps</h5>
                         <p class="card-text">Gérez et consultez votre emploi du temps.</p>
-                        <a href="#" class="btn btn-primary">Voir les plannings</a>
+                        <a href="{% url 'filter_planning' %}" class="btn btn-primary">Voir les plannings</a>
                     </div>
                 </div>
             </div>

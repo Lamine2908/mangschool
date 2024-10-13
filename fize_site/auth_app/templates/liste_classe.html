@@ -13,7 +13,8 @@
     <table class="table table-striped table-bordered">
         <thead class="table-dark">
             <tr>
-                <th>Nom de la classe</th>
+                <th>Nom de la classe </th>
+                <th>Promotion</th>
                 <th>Description</th>
                 <th>Nombre d'étudiants</th>
                 <th>Liste des étudiants</th>
@@ -23,6 +24,7 @@
             {% for classe in classes %}
                 <tr>
                     <td>{{ classe.name }}</td>
+                    <td> {{classe.promo}} </td>
                     <td>{{ classe.description }}</td>
                     <td>{{ classe.student_set.count }}</td>
                     <td>

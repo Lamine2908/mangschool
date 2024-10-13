@@ -60,6 +60,12 @@
 </head>
 <body>
     <h1>Notes des eleves</h1>
+    <h1>Cahiers de Texte</h1>
+    <form method="get" action="{% url 'afficher_notes' teacher.id %}">
+        <label for="student">Apprenant:</label>
+        <input type="student" id="student" name="student" value="{{ request.GET.student }}">
+        <button type="submit">Filtrer</button>
+    </form>
     <a href="{% url 'ajouter_notes' teacher.id %}" class="btn btn-warning btn-sm"> Ajouter un nouveau eleve</a>
     {% comment %} <a href="{% url 'filtrer_notes' teacher.id %}"><i class="fas fa-plus"></i> Filtrer eleve</a> {% endcomment %}
 
@@ -72,7 +78,6 @@
                 <th>Évaluation 2</th>
                 <th>Integration</th>
                 <th>Moyenne Semestrielle</th>
-                <th>Moyenne Annuelle</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -85,7 +90,6 @@
                     <td>{{ note.note_eva2 }}</td>
                     <td>{{ note.integration }}</td>
                     <td>{{ note.moyen_semes }}</td>
-                    <td>{{ note.moyen_annuel }}</td>
                     <td>
                         <a href="{% url 'modifier_notes' note.id %}" class="btn btn-warning btn-sm">Modifier</a>
                     </td>

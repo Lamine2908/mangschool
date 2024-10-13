@@ -13,7 +13,7 @@
                 <div class="card shadow">
                     <div class="card-header text-center">
                         <h2>Modifier
-                            <strong>{{student.first_name}} {{student.last_name}}</strong>
+                            <strong>{{ student.first_name }} {{ student.last_name }}</strong>
                         </h2>
                     </div>
                     <div class="card-body">
@@ -62,7 +62,12 @@
                                 <label for="email" class="form-label">Email</label>
                                 {{ form.email }}
                             </div>
-                
+
+                            <div class="mb-3">
+                                <label for="photo" class="form-label">Photo</label>
+                                <input type="file" class="form-control" id="photo" name="photo" accept="image/*">
+                                <small class="form-text text-muted">Téléchargez une image pour la photo de l'élève.</small>
+                            </div>
 
                             <div class="d-grid">
                                 <button type="submit" class="btn btn-primary">Sauvegarder</button>

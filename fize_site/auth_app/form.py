@@ -44,7 +44,7 @@ from .models import Student, Filiere
 class StudentForm(forms.ModelForm):
     class Meta:
         model = Student
-        fields = ['matricule', 'first_name', 'last_name', 'filiere', 'classe', 'metier', 'email']
+        fields = ['matricule', 'first_name', 'last_name', 'filiere', 'classe', 'metier', 'email', 'photo']
         widgets = {
             'matricule': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Entrez le matricule'}),            
             'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Entrez le prénom'}),
@@ -53,6 +53,7 @@ class StudentForm(forms.ModelForm):
             'classe': forms.Select(attrs={'class': 'form-control'}),
             'metier': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Entrez le métier'}),
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Entrez l\'email'}),
+            'photo': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -121,7 +122,7 @@ class TeacherUpdateForm(forms.ModelForm):
 class StudentUpdateForm(forms.ModelForm):
     class Meta:
         model = Student
-        fields = ['matricule', 'first_name', 'last_name', 'filiere', 'metier', 'classe', 'email']
+        fields = ['matricule', 'first_name', 'last_name', 'filiere', 'metier', 'classe', 'email', 'photo']
         widgets = {
             'matricule': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Entrez le matricule'}),                       
             'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Entrez le prénom de l\'élève'}),
@@ -130,6 +131,7 @@ class StudentUpdateForm(forms.ModelForm):
             'classe': forms.Select(attrs={'class': 'form-control', 'placeholder': 'Entrez le classe'}),
             'metier': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Entrez le métier'}),
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Entrez l\'email de l\'élève'}),
+            'photo': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
 
     def clean(self):
@@ -162,22 +164,6 @@ class CahierDeCoursForm(forms.ModelForm):
         fields = ['date', 'classe', 'horaire', 'duree', 'competence', 'uea', 'elements_constituifs', 
                   'duree_theorie', 'corpus_theorie', 'duree_td', 'corpus_td', 
                   'duree_tp', 'corpus_tp', 'duree_tpa', 'corpus_tpa']
-
-
-class CahierFilterForm(forms.Form):
-    classe = forms.ModelChoiceField(
-        queryset=Classe.objects.all(),
-        required=False,
-        label="Classe",
-        widget=forms.Select(attrs={'class': 'form-control'})
-    )
-    date = forms.DateField(
-        required=False,
-        label="Date",
-        widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'})
-    )
-
-        
 
         
 class PaiementForm(forms.ModelForm):
@@ -301,7 +287,7 @@ class AffecterEleveForm(forms.ModelForm):
 
     class Meta:
         model = Student
-        fields = ['classe']  # Spécifiez les champs de votre modèle
+        fields = ['classe'] 
     
     def save(self, commit=True):
         student = super().save(commit=False)

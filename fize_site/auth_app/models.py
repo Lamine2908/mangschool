@@ -18,10 +18,23 @@ class Administrateur(models.Model):
     adresse = models.CharField(max_length=100, default="adresse")
     telephone = models.IntegerField(unique=True, null=True)
     email = models.EmailField(unique=True, null=False, blank=False)
-
+    qr_code = models.ImageField(upload_to='qr_codes/students', blank=True, null=True)
+    photo = models.ImageField(upload_to='photos/admin', blank=True, null=True)  
+    
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"
+        return f'{self.first_name} {self.last_name}'
 
+    def save(self, *args, **kwargs):
+        if not self.qr_code:
+            qr_image = qrcode.make(self.generate_qr_code_data())
+            qr_offset = BytesIO()
+            qr_image.save(qr_offset, format='PNG')
+            self.qr_code.save(f'{self.first_name}_{self.last_name}_qr.png', File(qr_offset), save=False)
+        super().save(*args, **kwargs)
+            
+    def generate_qr_code_data(self):
+        return f'{self.id}-{self.first_name}-{self.last_name}'
+    
 class Salle(models.Model):
     code = models.CharField(max_length=10, unique=True, null=True, blank=True)  
     numero = models.IntegerField(null=True, blank=True)
@@ -37,9 +50,22 @@ class ResponsableFiliere(models.Model):
     last_name = models.CharField(max_length=50)
     profession = models.CharField(max_length=100, blank=True, null=True)
     email = models.EmailField(unique=True, null=True, blank=True)
-
+    qr_code = models.ImageField(upload_to='qr_codes/students', blank=True, null=True)
+    photo = models.ImageField(upload_to='photos/responsable', blank=True, null=True)  
+    
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
+
+    def save(self, *args, **kwargs):
+        if not self.qr_code:
+            qr_image = qrcode.make(self.generate_qr_code_data())
+            qr_offset = BytesIO()
+            qr_image.save(qr_offset, format='PNG')
+            self.qr_code.save(f'{self.first_name}_{self.last_name}_qr.png', File(qr_offset), save=False)
+        super().save(*args, **kwargs)
+            
+    def generate_qr_code_data(self):
+        return f'{self.id}-{self.first_name}-{self.last_name}'
     
 class Teacher(models.Model):
     id = models.AutoField(primary_key=True, unique=True)
@@ -48,14 +74,26 @@ class Teacher(models.Model):
     last_name = models.CharField(max_length=50)
     profession = models.CharField(max_length=100, blank=True, null=True)
     email = models.EmailField(unique=True, null=True, blank=True)
-    classes = models.ManyToManyField('Classe', related_name='teachers')
+    classe = models.ManyToManyField('Classe', related_name='classe')
     matieres = models.ManyToManyField('Matiere', related_name='teachers')
     responsable = models.ForeignKey(ResponsableFiliere, on_delete=models.CASCADE, null=True)
     filiere = models.ForeignKey('Filiere', on_delete=models.CASCADE, null=True)
+    qr_code = models.ImageField(upload_to='qr_codes/teacher', blank=True, null=True)
     
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
+     
+    def save(self, *args, **kwargs):
+        if not self.qr_code:
+            qr_image = qrcode.make(self.generate_qr_code_data())
+            qr_offset = BytesIO()
+            qr_image.save(qr_offset, format='PNG')
+            self.qr_code.save(f'{self.first_name}_{self.last_name}_qr.png', File(qr_offset), save=False)
+        super().save(*args, **kwargs)
 
+    def generate_qr_code_data(self):
+        return f'{self.id}-{self.first_name}-{self.last_name}'
+    
 class Filiere(models.Model):
     id = models.AutoField(primary_key=True, unique=True)
     nom = models.CharField(max_length=100)
@@ -73,9 +111,9 @@ class Matiere(models.Model):
     volume = models.CharField(max_length=5, default='0')
     semestre = models.CharField(max_length=10, default='semestre')
     filiere = models.ForeignKey(Filiere, on_delete=models.CASCADE, related_name='matieres', null=True)
-    teacher = models.ManyToManyField(Teacher, null=True)
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, null=True)
     responsable = models.ForeignKey(ResponsableFiliere, on_delete=models.CASCADE, null=True)
-    student = models.ManyToManyField('Student', related_name='students')
+    student = models.ManyToManyField('Student', related_name='students', null=True)
     classes = models.ManyToManyField('Classe', related_name='classe_matiere')
     
     def __str__(self):
@@ -87,12 +125,14 @@ class Classe(models.Model):
     promo = models.IntegerField(null=True)
     description = models.TextField(null=True, blank=True)
     salle = models.ManyToManyField(Salle, related_name='classes')
-    teacher = models.ManyToManyField(Teacher, null=True)
+    teacher = models.ManyToManyField(Teacher, related_name='teacher')
     filiere = models.ForeignKey(Filiere, on_delete=models.CASCADE, null=True)
+    students = models.ManyToManyField('Student', related_name='classes')
     matiere = models.ManyToManyField(Matiere, related_name='matiere_classe')
     
+    
     def __str__(self):
-        return self.name
+        return f'{self.name}-P{self.promo}'
 
 class Student(models.Model):
     id = models.AutoField(primary_key=True, unique=True)
@@ -104,10 +144,23 @@ class Student(models.Model):
     email = models.EmailField(unique=True, null=True, blank=True)
     classe = models.ForeignKey(Classe, on_delete=models.CASCADE, null=True)
     matiere = models.ManyToManyField(Matiere, related_name='students_matiere')
+    qr_code = models.ImageField(upload_to='qr_codes/students', blank=True, null=True)
+    photo = models.ImageField(upload_to='photos/', blank=True, null=True)  
     
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
 
+    def save(self, *args, **kwargs):
+        if not self.qr_code:
+            qr_image = qrcode.make(self.generate_qr_code_data())
+            qr_offset = BytesIO()
+            qr_image.save(qr_offset, format='PNG')
+            self.qr_code.save(f'{self.first_name}_{self.last_name}_qr.png', File(qr_offset), save=False)
+        super().save(*args, **kwargs)
+            
+    def generate_qr_code_data(self):
+        return f'{self.id}-{self.first_name}-{self.last_name}'
+    
 class Pointage(models.Model):    
     id = models.AutoField(primary_key=True, unique=True)
     date = models.DateField(default=timezone.now)
@@ -231,20 +284,20 @@ class AdjointClasse(models.Model):
 class CahierDeCours(models.Model):
     id = models.AutoField(primary_key=True, unique=True)
     date = models.DateField(default=timezone.now)
-    horaire = models.CharField(max_length=5)
-    duree = models.CharField(max_length=5)
+    horaire = models.CharField(max_length=35, null=True)
+    duree = models.CharField(max_length=5, null=True)
     competence = models.CharField(max_length=100)
-    uea = models.CharField(max_length=5)
+    uea = models.CharField(max_length=5, null=True)
     elements_constituifs = models.TextField(max_length=50)
-    duree_theorie = models.CharField(max_length=5)
+    duree_theorie = models.CharField(max_length=5, null=True)
     corpus_theorie = models.TextField(blank=True, null=True)
-    duree_td = models.CharField(max_length=5)
+    duree_td = models.CharField(max_length=5, null=True)
     corpus_td = models.TextField(blank=True, null=True)
-    duree_tp = models.CharField(max_length=5)
+    duree_tp = models.CharField(max_length=5, null=True)
     corpus_tp = models.TextField(blank=True, null=True)
-    duree_tpa = models.CharField(max_length=5)
+    duree_tpa = models.CharField(max_length=5, null=True)
     corpus_tpa = models.TextField(blank=True, null=True)
-    duree_stage = models.CharField(max_length=5)
+    duree_stage = models.CharField(max_length=5, null=True)
     corpus_stage = models.TextField(blank=True, null=True)
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, null=True)
     classe = models.ForeignKey(Classe, on_delete=models.CASCADE, null=True)

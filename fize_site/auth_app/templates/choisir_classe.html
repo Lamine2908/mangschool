@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choisir une Classe</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Écoute les clics sur les liens des classes
+            const links = document.querySelectorAll('.classe-link');
+
+            links.forEach(link => {
+                link.addEventListener('click', function(event) {
+                    event.preventDefault(); // Empêche le comportement par défaut du lien
+                    
+                    const classeId = this.dataset.classeId; // Récupère l'ID de la classe
+                    const teacherId = this.dataset.teacherId; // Récupère l'ID de l'enseignant
+                    
+                    // Redirige vers l'URL appropriée
+                    window.location.href = `{% url 'espaceprof' teacher.id %}?classe_name=${classeId}`;
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>Choisissez une Classe Monsieur {{teacher.last_name}}</h1>
+    <ul>
+        {% for classe in classes %}
+            <li>
+                <a href="#" class="classe-link" data-classe-id="{{ classe.id }}" data-teacher-id="{{ teacher.id }}">{{ classe.name }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

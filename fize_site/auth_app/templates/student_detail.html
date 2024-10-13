@@ -1,44 +1,128 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Détails de l'Étudiant</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        .student-info {
-            margin: 20px;
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
             padding: 20px;
+        }
+
+        .student-info {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
             border: 1px solid #ddd;
-            border-radius: 5px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease;
         }
+
+        .student-info:hover {
+            transform: scale(1.02);
+        }
+
         .student-info h1 {
-            font-size: 24px;
+            font-size: 28px;
             margin-bottom: 20px;
+            color: #4a90e2;
+            text-align: center;
         }
+
         .student-info p {
             font-size: 18px;
+            margin: 10px 0;
         }
+
         .student-photo {
             width: 150px;
             height: 150px;
             border-radius: 50%;
             object-fit: cover;
-            margin-bottom: 80px;
+            margin: 0 auto 20px auto;
+            display: block;
+            border: 2px solid #4a90e2;
+            transition: transform 0.3s ease;
+            cursor: pointer; /* Indique que c'est cliquable */
+        }
+
+        .student-photo:hover {
+            transform: scale(1.05);
+        }
+
+        .qr-code {
+            width: 100px;
+            height: 100px;
+            display: block;
+            margin: 20px auto;
+            transition: transform 0.3s ease;
+        }
+
+        .qr-code:hover {
+            transform: scale(1.1);
+        }
+
+        .info-label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Ajout d'animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        /* Masquer l'input de fichier */
+        .hidden-file-input {
+            display: none;
         }
     </style>
 </head>
+
 <body>
-    <div class="container">
-        <div class="student-info">
-            <h1>Détails de l'Étudiant</h1>
-            <img src="{{ student.photo_url }}" alt="{{ student.first_name }} {{ student.last_name }} " class="student-photo">
-            <p><strong>Prénom:</strong> {{ student.first_name }}</p>
-            <p><strong>Nom:</strong> {{ student.last_name }}</p>
-            <p><strong>Filière:</strong> {{ student.filiere }}</p>
-            <p><strong>Métier:</strong> {{ student.metier }}</p>
-            <p><strong>Classe:</strong> {{ student.classe }}</p>
-            <p><strong>Email:</strong> {{ student.email }}</p>
-        </div>
+    <div class="student-info fade-in">
+        <h1>Détails de l'Étudiant</h1>
+
+        <form action="#" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" name="photo" class="hidden-file-input" accept="image/*" required>
+            <label for="photo" style="cursor: pointer;">
+                <img src="#" alt="{{ student.first_name }} {{ student.last_name }}" class="student-photo">
+            </label>
+            <button type="submit" style="display: none;">Télécharger la photo</button>
+        </form>
+
+        <p><span class="info-label">Prénom:</span> {{ student.first_name }}</p>
+        <p><span class="info-label">Nom:</span> {{ student.last_name }}</p>
+        <p><span class="info-label">Filière:</span> {{ student.filiere }}</p>
+        <p><span class="info-label">Métier:</span> {{ student.metier }}</p>
+        <p><span class="info-label">Classe:</span> {{ student.classe }}</p>
+        <p><span class="info-label">Email:</span> {{ student.email }}</p>
+
+        {% if student.qr_code %}
+        <h2>Code QR</h2>
+        <img src="{{ student.qr_code.url }}" alt="Code QR pour {{ student.first_name }} {{ student.last_name }}" class="qr-code">
+        {% endif %}
     </div>
+
 </body>
+
 </html>
