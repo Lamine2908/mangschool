@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails de la classe - {{ classe.name }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 30px;
+        }
+        .class-card {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .class-card h2 {
+            color: #007bff;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="class-card">
+            <h2>Détails de la classe : {{ classe.name }}</h2>
+            <p>Description : {{ classe.description }}</p>
+
+            <h4>Liste des élèves :</h4>
+            <ul class="student-list">
+                {% for student in students %}
+                    <li>
+                        <strong>{{ student.first_name }} {{ student.last_name }}</strong>
+                        {% comment %} <span>Email : {{ student.email }}</span> {% endcomment %}
+                    </li>
+                {% empty %}
+                    <li>Aucun élève dans cette classe.</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% comment %} <a href="{% url 'prof_etudiant_list' teacher.id %}" class="btn btn-primary">Retour aux classes</a> {% endcomment %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

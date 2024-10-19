@@ -25,7 +25,7 @@
             background: url('https://images.ctfassets.net/63bmaubptoky/sZriYkvztFPUnfxy83p_SiPo-cUxTL2x5XzyC5FRwvs/e37799a95f714bd48891d63c91c930be/logiciel-de-gestion-etablissement-scolaire-FR-Capterra-Header.png?w=2200') no-repeat center center;
             background-size: cover;
             color: #ffffff;
-            padding: 120px 0;
+            padding: 30px 0;
             text-align: center;
             position: relative;
             overflow: hidden;
@@ -46,11 +46,14 @@
             font-size: 3.5rem;
             margin-bottom: 20px;
             z-index: 2;
+            color : yellow;
+            position: relative;
         }
 
         .hero p {
-            font-size: 1.5rem;
+            font-size: 2rem;
             z-index: 2;
+            {% comment %} color : r; {% endcomment %}
         }
 
         .section-icon {
@@ -117,7 +120,7 @@
 
     <header class="hero">
         <div class="container position-relative">
-            <h1>Bienvenue dans votre Espace Responsable de Filière</h1>
+            <h1>Bienvenue {{responsableFiliere.first_name}} {{responsableFiliere.last_name}}</h1>
             <p>Gérez et suivez les activités pédagogiques de votre filière.</p>
         </div>
     </header>
@@ -163,7 +166,7 @@
                         <i class="bi bi-person-check section-icon"></i>
                         <h5 class="card-title">Infos Professeurs</h5>
                         <p class="card-text">Accedez a cette page pour voir les professeurs et les clases gerees</p>
-                        <a href="{% url 'teacher_class' %}" class="btn btn-primary">Gérer les Enseignants</a>
+                        <a href="#" class="btn btn-primary">Gérer les Enseignants</a>
                     </div>
                 </div>
             </div>
@@ -178,7 +181,8 @@
                     </div>
                 </div>
             </div>
-{% comment %} 
+
+            {% comment %} 
             <div class="col-md-4 mb-4">
                 <div class="card section-card">
                     <div class="card-body">
@@ -196,7 +200,7 @@
                         <i class="bi bi-gear section-icon"></i>
                         <h5 class="card-title">Paramètres de la Filière</h5>
                         <p class="card-text">Configurez les paramètres spécifiques à votre filière.</p>
-                        <a href="#" class="btn btn-primary">Voir les Paramètres</a>                    
+                        <a href="{% url 'parametre_filiere' responsableFiliere.id %}" class="btn btn-primary">Voir les Paramètres</a>                    
                     </div>
                 </div>
             </div>

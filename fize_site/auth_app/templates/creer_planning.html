@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Créer un Planning</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #e0f7fa;
+            font-family: 'Arial', sans-serif;
+        }
+        .form-container {
+            max-width: 900px;
+            margin: 50px auto;
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 1s ease-in-out;
+        }
+        .form-title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #006064;
+            text-align: center;
+        }
+        .btn-custom {
+            background-color: #00796b;
+            color: white;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .btn-custom:hover {
+            background-color: #004d40;
+            transform: translateY(-3px);
+        }
+        .form-group {
+            transition: transform 0.3s ease;
+        }
+        .form-group:hover {
+            transform: scale(1.05);
+        }
+        .row {
+            display: flex;
+            justify-content: space-between;
+        }
+        .form-group-vertical {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            color: #004d40;
+            font-weight: bold;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container form-container">
+    <h2 class="form-title">Créer un Planning</h2>
+    <form method="POST" action="">
+        {% csrf_token %}
+        <div class="row">
+            <div class="form-group form-group-vertical">
+                <label for="id_date">Date :</label>
+                {{ form.date }}
+            </div>
+            <div class="form-group form-group-vertical">
+                <label for="id_salle">Salle :</label>
+                {{ form.salle }}
+            </div>
+            <div class="form-group form-group-vertical">
+                <label for="id_classe">Classe :</label>
+                {{ form.classe }}
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="form-group form-group-vertical">
+                <label for="id_premiere_heure">Première Heure :</label>
+                {{ form.premiere_heure }}
+            </div>
+            <div class="form-group form-group-vertical">
+                <label for="id_activite1">Activité 1 :</label>
+                {{ form.activite1 }}
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="form-group form-group-vertical">
+                <label for="id_deuxieme_heure">Deuxième Heure :</label>
+                {{ form.deuxieme_heure }}
+            </div>
+            <div class="form-group form-group-vertical">
+                <label for="id_activite2">Activité 2 :</label>
+                {{ form.activite2 }}
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="form-group form-group-vertical">
+                <label for="id_troisieme_heure">Troisième Heure :</label>
+                {{ form.troisieme_heure }}
+            </div>
+            <div class="form-group form-group-vertical">
+                <label for="id_activite3">Activité 3 :</label>
+                {{ form.activite3 }}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="id_professeur">Professeur :</label>
+            {{ form.professeur }}
+        </div>
+
+        
+        <div class="form-group">
+            <label for="id_responsable">Responsable Filiere :</label>
+            {{ form.responsable }}
+        </div>
+
+        <button type="submit" class="btn btn-custom btn-block">Enregistrer le Planning</button>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

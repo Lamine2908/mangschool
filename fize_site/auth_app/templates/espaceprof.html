@@ -42,19 +42,23 @@
             z-index: 1;
         }
 
-        .hero h1,
-        .hero p {
+        .hero h1 {
             position: relative;
             z-index: 2;
         }
 
+
         .hero h1 {
             font-size: 3.5rem;
             margin-bottom: 20px;
+            z-index: 2;
+            color : yellow;
         }
 
         .hero p {
-            font-size: 1.5rem;
+            font-size: 2rem;
+            z-index: 2;
+            color : white;
         }
 
         .section-icon {
@@ -211,6 +215,17 @@
                         <h5 class="card-title">Liste des Cahiers de Texte</h5>
                         <p class="card-text">Accédez à cette page pour voir les cahiers de texte.</p>
                         <a href="{% url 'liste_cahiers' teacher.id %}" class="btn btn-primary">Voir plus</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card section-card">
+                    <div class="card-body">
+                        <i class="bi bi-book section-icon"></i>
+                        <h5 class="card-title">Ajouter des Ressources</h5>
+                        <p class="card-text">Ajouter des matériaux pédagogiques et supports de cours.</p>
+                        <a href="{% url 'ajouter_ressource' teacher.id%}" class="btn btn-primary">Voir plus</a>
                     </div>
                 </div>
             </div>

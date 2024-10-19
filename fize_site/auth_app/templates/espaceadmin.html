@@ -45,11 +45,13 @@
             font-size: 3.5rem;
             margin-bottom: 20px;
             z-index: 2;
+            color : yellow;
         }
 
         .hero p {
-            font-size: 1.5rem;
+            font-size: 2rem;
             z-index: 2;
+            {% comment %} color : r; {% endcomment %}
         }
 
         .section-icon {
@@ -149,10 +151,32 @@
             <div class="col-md-4 mb-4">
                 <div class="card section-card">
                     <div class="card-body">
-                        <i class="bi bi-bar-chart section-icon"></i>
-                        <h5 class="card-title">CLASSES_PROFESSEURS</h5>
-                        <p class="card-text">Accedez a cette page pour plus d' informations</p>
-                        <a href="#" class="btn btn-primary">Voir plus</a>
+                        <i class="bi bi-person-check section-icon"></i>
+                        <h5 class="card-title">Gérer les Responsable Filieres</h5>
+                        <p class="card-text">Ajoutez, modifiez ou supprimez des informations des Responsable de filieres.</p>
+                        <a href="{% url 'ajouter_responsable' %}" class="btn btn-primary">Voir les Responsables de Filieres</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card section-card">
+                    <div class="card-body">
+                        <i class="bi bi-person-check section-icon"></i>
+                        <h5 class="card-title">Affectrer les Responsable Filieres</h5>
+                        <p class="card-text">Ajoutez, modifiez ou supprimez des informations les Responsables de Filieres.</p>
+                        <a href="#" class="btn btn-primary">Voir les Professeurs</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="card section-card">
+                    <div class="card-body">
+                        <i class="bi bi-person-check section-icon"></i>
+                        <h5 class="card-title">Gerer les filieres</h5>
+                        <p class="card-text">Ajoutez, modifiez ou supprimez des filieres.</p>
+                        <a href="{% url 'ajouter_filiere' %}" class="btn btn-primary">Voir les Professeurs</a>
                     </div>
                 </div>
             </div>
@@ -161,36 +185,36 @@
                 <div class="card section-card">
                     <div class="card-body">
                         <i class="bi bi-graph-up-arrow section-icon"></i>
-                        <h5 class="card-title">Gérer les Classes</h5>
+                        <h5 class="card-title">Ajouter des Classes</h5>
                         <p class="card-text">Accedez a cette page pour gerer les classses</p>
                         <a href="{% url 'ajouter_classe' administrateur.id %}" class="btn btn-primary">Voir plus</a>
                     </div>
                 </div>
             </div>
 
-            {% comment %} <div class="col-md-4 mb-4">
-                <div class="card section-card">
-                    <div class="card-body">
-                        <i class="bi bi-bar-chart section-icon"></i>
-                        <h5 class="card-title">Affecter les eleves</h5>
-                        <p class="card-text">Accedez a cette page pour </p>
-                        <a href="{% url 'Affecter_eleve' administrateur.id%}" class="btn btn-primary">Affecter Élève</a>
-                    </div>
-                </div>
-            </div> {% endcomment %}
-
             <div class="col-md-4 mb-4">
                 <div class="card section-card">
                     <div class="card-body">
-                        <i class="bi bi-clipboard-data section-icon"></i>
-                        <h5 class="card-title">Lister les classes</h5>
-                        <p class="card-text">Accedez a cette page pour lister les classes.</p>
-                        <a href="{% url 'class_info' %}" class="btn btn-primary">Voir les Classes</a>
+                        <i class="bi bi-bar-book section-icon"></i>
+                        <h5 class="card-title">Gestion Bibliothéque</h5>
+                        <p class="card-text">Accedez a cette page pour </p>
+                        <a href="#" class="btn btn-primary">Affecter Élève</a>
                     </div>
                 </div>
             </div>
 
             <div class="col-md-4 mb-4">
+                <div class="card section-card">
+                    <div class="card-body">
+                        <i class="bi bi-clipboard-data section-icon"></i>
+                        <h5 class="card-title">Lister les Filieres</h5>
+                        <p class="card-text">Accedez a cette page pour lister des filieres.</p>
+                        <a href="{% url 'liste_filieres' %}" class="btn btn-primary">Voir les filieres</a>
+                    </div>
+                </div>
+            </div>
+
+            {% comment %} <div class="col-md-4 mb-4">
                 <div class="card section-card">
                     <div class="card-body">
                         <i class="bi bi-clipboard-data section-icon"></i>
@@ -199,9 +223,9 @@
                         <a href="#" class="btn btn-primary">Voir les Cours</a>
                     </div>
                 </div>
-            </div>
+            </div> {% endcomment %}
 
-            <div class="col-md-4 mb-4">
+            {% comment %} <div class="col-md-4 mb-4">
                 <div class="card section-card">
                     <div class="card-body">
                         <i class="bi bi-calendar3 section-icon"></i>
@@ -210,7 +234,7 @@
                         <a href="#" class="btn btn-primary">Voir les Emplois du Temps</a>
                     </div>
                 </div>
-            </div>
+            </div> {% endcomment %}
 
             </div>
         </div>

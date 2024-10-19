@@ -4,40 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modifier Planning</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f7f7f7;
+            background-color: #e6f7ff;
         }
         .container {
-            max-width: 600px;
+            max-width: 800px;
             margin: 50px auto;
-            background-color: white;
+            background-color: #ffffff;
             padding: 20px;
-            border-radius: 8px;
+            border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
         h1 {
             text-align: center;
-            color: #333;
+            color: #007bff;
             margin-bottom: 30px;
         }
         label {
             font-weight: bold;
             margin-top: 15px;
+            color: #333333;
         }
         .form-control {
             width: 100%;
             padding: 10px;
             margin: 10px 0;
-            border: 1px solid #ccc;
+            border: 1px solid #d9d9d9;
             border-radius: 4px;
             box-sizing: border-box;
         }
         .btn {
             width: 100%;
             padding: 10px;
-            background-color: #5cb85c;
+            background-color: #007bff;
             color: white;
             border: none;
             cursor: pointer;
@@ -45,58 +47,83 @@
             margin-top: 20px;
         }
         .btn:hover {
-            background-color: #4cae4c;
+            background-color: #0056b3;
+        }
+        .icon {
+            margin-right: 8px;
+        }
+        .row {
+            margin-bottom: 15px;
         }
     </style>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
-
-<div class="container">
-    <h1>Modifier le planning</h1>
-    
-    <form method="POST">
-        {% csrf_token %}
-        
-        <label for="student">Date</label>
-        {{ form.date }}
-
-        <label for="classe">Horaire</label>
-        {{ form.horaire }}
-
-        <label for="premiere_heure">premiere_heure</label>
-        {{ form.premiere_heure }}
-
-        <label for="premiere_heure">deuxieme_heure</label>
-        {{ form.deuxieme_heure }}
-
-        <label for="troisieme_heure">troisieme_heure</label>
-        {{ form.troisieme_heure }}
-
-        <label for="activite1">Activite 1</label>
-        {{ form.activite1 }}
-
-        <label for="activite2">activite2</label>
-        {{ form.activite2 }}
-
-        <label for="activite3">Activite 3</label>
-        {{ form.activite3 }}
-
-        <label for="salle">Salle </label>
-        {{ form.salle }}
-
-        <label for="classe">Classe</label>
-        {{ form.classe }}
-
-        <label for="professeur">Prof</label>
-        {{ form.professeur }}
-
-        <label for="responsable">Prof</label>
-        {{ form.responsable }}
-
-
-        <button type="submit" class="btn">Enregistrer les modifications</button>
-    </form>
-</div>
-
+    <div class="container">
+        <h1>Modifier le planning</h1>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="date"><i class="fas fa-calendar-alt icon"></i>Date</label>
+                    {{ form.date }}
+                </div>
+                <div class="col-md-6">
+                    <label for="horaire"><i class="fas fa-clock icon"></i>Horaire</label>
+                    {{ form.horaire }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <label for="premiere_heure"><i class="fas fa-clock icon"></i>Première Heure</label>
+                    {{ form.premiere_heure }}
+                </div>
+                <div class="col-md-4">
+                    <label for="deuxieme_heure"><i class="fas fa-clock icon"></i>Deuxième Heure</label>
+                    {{ form.deuxieme_heure }}
+                </div>
+                <div class="col-md-4">
+                    <label for="troisieme_heure"><i class="fas fa-clock icon"></i>Troisième Heure</label>
+                    {{ form.troisieme_heure }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <label for="activite1"><i class="fas fa-tasks icon"></i>Activité 1</label>
+                    {{ form.activite1 }}
+                </div>
+                <div class="col-md-4">
+                    <label for="activite2"><i class="fas fa-tasks icon"></i>Activité 2</label>
+                    {{ form.activite2 }}
+                </div>
+                <div class="col-md-4">
+                    <label for="activite3"><i class="fas fa-tasks icon"></i>Activité 3</label>
+                    {{ form.activite3 }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="salle"><i class="fas fa-door-open icon"></i>Salle</label>
+                    {{ form.salle }}
+                </div>
+                <div class="col-md-6">
+                    <label for="classe"><i class="fas fa-chalkboard-teacher icon"></i>Classe</label>
+                    {{ form.classe }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="professeur"><i class="fas fa-user-tie icon"></i>Prof</label>
+                    {{ form.professeur }}
+                </div>
+                <div class="col-md-6">
+                    <label for="responsable"><i class="fas fa-user-tie icon"></i>Responsable</label>
+                    {{ form.responsable }}
+                </div>
+            </div>
+            <button type="submit" class="btn">Enregistrer les modifications</button>
+        </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

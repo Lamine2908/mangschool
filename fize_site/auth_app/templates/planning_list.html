@@ -23,7 +23,7 @@
 <body>
     <div class="container">
         <h1 class="text-center my-4">Liste des Plannings</h1>
-        {% comment %} <a href="{% url 'create_planning' responsableFiliere.id %}" class="btn btn-primary mb-3">Ajouter une Nouvelle Activité</a> {% endcomment %}
+        <a href="{% url 'filter_planning' %}" class="btn btn-primary mb-3">Filter planning</a>
         <form method="post" action="">
             {% csrf_token %}
             <div class="table-responsive">

@@ -112,11 +112,6 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'teacher_list' %}">Lister les profs</a>
                 </li>
-                {% comment %} {% for student in students %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'edit_student' student.id %}">Modifier {{ student.first_name }}</a>
-                </li>
-            {% endfor %} {% endcomment %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'connexion' %}">Déconnexion</a>
                 </li>
@@ -141,15 +136,6 @@
                     <button type="submit" class="btn btn-primary">Filtrer</button>
                     <a href="{% url 'teacher_list' %}" class="btn btn-secondary">Retour</a>
                 </div>
-                <!-- Les champs filière et métier sont actuellement commentés -->
-                {% comment %}
-                <div class="col-md-3">
-                    <input type="text" name="filiere" class="form-control" placeholder="Filière" value="{{ request.GET.filiere }}">
-                </div>
-                <div class="col-md-3">
-                    <input type="text" name="metier" class="form-control" placeholder="Métier" value="{{ request.GET.metier }}">
-                </div>
-                {% endcomment %}
             </div>
            
         </form>

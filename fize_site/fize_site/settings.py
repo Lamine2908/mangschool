@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'fize_site.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'django1',
+        'NAME': 'Projet',
         'USER': 'root',
         'PASSWORD':'Dj@ngo2024',
         'HOST':'127.0.0.1',
@@ -132,13 +132,3 @@ LOGIN_URL = '/connexion/'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-LANGUAGE_CODE = 'fr-fr'
-
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'l.fall4@isepdiamniadio.edu.sn'
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'l.com.com'
-EMAIL_HOST_PASSWORD = ''

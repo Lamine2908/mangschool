@@ -120,9 +120,9 @@
             <div class="col-md-4 mb-4">
                 <div class="section-card p-4">
                     <i class="bi bi-book section-icon"></i>
-                    <h3>Ajouter Programme</h3>
-                    <p>Ajoutez et gérez les programmes de votre filière.</p>
-                    <a href="#" class="btn btn-primary">Ajouter</a>
+                    <h3>Affecter les professeurs</h3>
+                    <p>Gerer les professeurs de votre filiere.</p>
+                    <a href="{% url 'affecter_professeur' responsableFiliere.id%}" class="btn btn-primary">Affectre</a>
                 </div>
             </div>
             <div class="col-md-4 mb-4">
@@ -130,7 +130,15 @@
                     <i class="bi bi-journal section-icon"></i>
                     <h3>Gestion des Matières</h3>
                     <p>Gérez les matières et les cours de votre filière.</p>
-                    <a href="{% url 'ajouter_matiere' %}" class="btn btn-primary">Gérer</a>
+                    <a href="{% url 'ajouter_matiere' %}" class="btn btn-primary">Ajouter</a>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="section-card p-4">
+                    <i class="bi bi-journal section-icon"></i>
+                    <h3>Liste des Matières</h3>
+                    <p>Lister les matières votre filière.</p>
+                    <a href="{% url 'liste_matieres' %}" class="btn btn-primary">Lister</a>
                 </div>
             </div>
             <div class="col-md-4 mb-4">

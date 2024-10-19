@@ -16,7 +16,7 @@
         }
 
         .student-info {
-            max-width: 600px;
+            max-width: 800px;
             margin: 20px auto;
             padding: 20px;
             background: #fff;
@@ -51,7 +51,7 @@
             display: block;
             border: 2px solid #4a90e2;
             transition: transform 0.3s ease;
-            cursor: pointer; /* Indique que c'est cliquable */
+            cursor: pointer;
         }
 
         .student-photo:hover {
@@ -59,10 +59,10 @@
         }
 
         .qr-code {
-            width: 100px;
-            height: 100px;
+            width: 150px;
+            height: 150px;
             display: block;
-            margin: 20px auto;
+            margin: 0 auto 20px auto;
             transition: transform 0.3s ease;
         }
 
@@ -75,7 +75,30 @@
             color: #333;
         }
 
-        /* Ajout d'animations */
+        .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start; /* Alignement du haut */
+            gap: 20px;
+        }
+
+        /* Masquer l'input de fichier */
+        .hidden-file-input {
+            display: none;
+        }
+
+        /* Style du label pour qu'il agisse comme un bouton de chargement */
+        label {
+            cursor: pointer;
+            display: inline-block;
+            text-align: center;
+        }
+
+        /* Style du bouton de soumission (caché) */
+        button {
+            display: none;
+        }
+
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -89,26 +112,26 @@
         .fade-in {
             animation: fadeIn 0.5s ease-in-out;
         }
-
-        /* Masquer l'input de fichier */
-        .hidden-file-input {
-            display: none;
-        }
     </style>
 </head>
 
 <body>
     <div class="student-info fade-in">
         <h1>Détails de l'Étudiant</h1>
-
-        <form action="#" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <input type="file" name="photo" class="hidden-file-input" accept="image/*" required>
-            <label for="photo" style="cursor: pointer;">
-                <img src="#" alt="{{ student.first_name }} {{ student.last_name }}" class="student-photo">
-            </label>
-            <button type="submit" style="display: none;">Télécharger la photo</button>
-        </form>
+        <div class="container">
+            <div>
+                {% if student.qr_code %}
+                <h2>Code QR</h2>
+                <img src="{{ student.qr_code.url }}" alt="Code QR pour {{ student.first_name }} {{ student.last_name }}" class="qr-code">
+                {% endif %}
+            </div>
+            <div>
+                <input type="file" name="photo" id="photo" class="hidden-file-input" accept="image/*" required>
+                <label for="photo">
+                    <img src="#" alt="{{ student.first_name }} {{ student.last_name }}" class="student-photo" id="student-photo-preview">
+                </label>
+            </div>
+        </div>
 
         <p><span class="info-label">Prénom:</span> {{ student.first_name }}</p>
         <p><span class="info-label">Nom:</span> {{ student.last_name }}</p>
@@ -116,13 +139,21 @@
         <p><span class="info-label">Métier:</span> {{ student.metier }}</p>
         <p><span class="info-label">Classe:</span> {{ student.classe }}</p>
         <p><span class="info-label">Email:</span> {{ student.email }}</p>
-
-        {% if student.qr_code %}
-        <h2>Code QR</h2>
-        <img src="{{ student.qr_code.url }}" alt="Code QR pour {{ student.first_name }} {{ student.last_name }}" class="qr-code">
-        {% endif %}
     </div>
 
+    <script>
+        // Prévisualisation de la photo sélectionnée
+        document.getElementById('photo').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('student-photo-preview').src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
 </body>
 
 </html>

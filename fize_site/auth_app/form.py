@@ -75,6 +75,39 @@ class TeacherForm(forms.ModelForm):
     class Meta:
         model = Teacher
         fields = ['matricule', 'first_name', 'last_name', 'profession', 'email']
+        
+class FiliereForm(forms.ModelForm):
+    class Meta:
+        model = Filiere
+        fields = ['nom', 'responsable']
+
+class ResponsableFiliereForm(forms.ModelForm):
+    class Meta:
+        model = ResponsableFiliere
+        fields = ['matricule', 'first_name', 'last_name', 'profession', 'email', 'num_tel', 'grade']
+
+
+class ResponsableUpdateForm(forms.ModelForm):
+    class Meta:
+        model = ResponsableFiliere
+        fields = ['matricule', 'first_name', 'last_name', 'profession', 'email', 'num_tel', 'grade']
+
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        matricule = cleaned_data.get('matricule')
+        first_name = cleaned_data.get('first_name')
+        last_name = cleaned_data.get('last_name')
+        profession = cleaned_data.get('profession')
+        grade = cleaned_data.get('grade')
+        email = cleaned_data.get('email')
+        num_tel = cleaned_data.get('num_tel')
+
+        if not matricule or not first_name or not last_name or not profession or not grade or not email or not num_tel:
+            raise forms.ValidationError("Tous les champs obligatoires doivent être remplis.")
+
+        return cleaned_data
 
 class TeacherUpdateForm(forms.ModelForm):
     class Meta:
@@ -184,12 +217,14 @@ class ClasseForm(forms.ModelForm):
         model = Classe
         fields = '__all__'
 
+from django import forms
+from django.core.exceptions import ValidationError
+
 class NoteForm(forms.ModelForm):
     class Meta:
         model = Note
-        fields = ['classe','student', 'matiere', 'note_eva1', 'note_eva2', 'integration']
+        fields = ['student', 'matiere', 'note_eva1', 'note_eva2', 'integration']
         widgets = {
-            'classe': forms.Select(attrs={'class': 'form-control'}),            
             'student': forms.Select(attrs={'class': 'form-control'}),
             'matiere': forms.Select(attrs={'class': 'form-control'}),
             'note_eva1': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Note évaluation 1'}),
@@ -197,12 +232,31 @@ class NoteForm(forms.ModelForm):
             'integration': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Intégration'}),
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, valid_classes=None, **kwargs):
         super(NoteForm, self).__init__(*args, **kwargs)
+        self.valid_classes = valid_classes  # Liste des classes valides
+
         for field in self.fields.values():
             field.widget.attrs.update({'class': 'form-control'})
+
+    def clean_student(self):
+        student = self.cleaned_data.get('student')
+        if self.valid_classes and student.classe not in self.valid_classes:
+            raise ValidationError(f"L'étudiant {student} ne fait pas partie de la classe sélectionnée.")
+
+        return student
+
+class ModifierNoteForm(forms.ModelForm):
+    class Meta:
+        model = Note
+        fields = ['note_eva1', 'note_eva2', 'integration']
+        widgets = {
             
-    
+            'note_eva1': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Note évaluation 1'}),
+            'note_eva2': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Note évaluation 2'}),
+            'integration': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Intégration'}),
+        }
+
     
 
 class BulletinForm(forms.Form):
@@ -218,9 +272,8 @@ class BulletinForm(forms.Form):
 class SalleForm(forms.ModelForm):
     class Meta:
         model = Salle
-        fields = ['code','numero', 'name']
+        fields = ['numero', 'name']
         widgets = {
-            'code': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Code de la salle'}),
             'numero': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Numéro de la salle'}),
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nom de la salle'}),
         }
@@ -255,8 +308,8 @@ class PlanningForm(forms.ModelForm):
             'activite3': forms.TextInput(attrs={'class': 'form-control'}),
             'salle': forms.Select(attrs={'class': 'form-control'}),
             'classe': forms.Select(attrs={'class': 'form-control'}),
-            'professeur': forms.TextInput(attrs={'class': 'form-control'}),
-            'responsable': forms.TextInput(attrs={'class': 'form-control'}),
+            'professeur': forms.Select(attrs={'class': 'form-control'}),
+            'responsable': forms.Select(attrs={'class': 'form-control'}),
         }
 
 class ComptableForm(forms.ModelForm):
@@ -296,6 +349,18 @@ class AffecterEleveForm(forms.ModelForm):
         if commit:
             student.save()
         return student
+
+from django import forms
+from .models import Enseigner, Classe, Matiere
+
+class AffecterProfesseurForm(forms.ModelForm):
+    classe = forms.ModelChoiceField(queryset=Classe.objects.all(), label="Classe")
+    matiere = forms.ModelChoiceField(queryset=Matiere.objects.all(), label="Matière")
+
+    class Meta:
+        model = Enseigner
+        fields = ['teacher', 'classe', 'matiere']
+
 
 class AssignClassForm(forms.ModelForm):
     class Meta:
@@ -340,7 +405,7 @@ from .models import Matiere
 class MatiereForm(forms.ModelForm):
     class Meta:
         model = Matiere
-        fields = ['code_matiere', 'nom_matiere', 'ue', 'credit', 'volume', 'semestre', 'filiere', 'teacher', 'responsable', 'classes']
+        fields = ['code_matiere', 'nom_matiere', 'ue', 'credit', 'volume', 'semestre', 'filiere', 'teacher', 'responsable']
         widgets = {
             'code_matiere': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Code de la matière'}),
             'nom_matiere': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nom de la matière'}),
@@ -351,7 +416,6 @@ class MatiereForm(forms.ModelForm):
             'filiere': forms.Select(attrs={'class': 'form-control'}),
             'teacher': forms.Select(attrs={'class': 'form-control'}),
             'responsable': forms.Select(attrs={'class': 'form-control'}),
-            'classes': forms.SelectMultiple(attrs={'class': 'form-control'}),
         }
     
     def __init__(self, *args, **kwargs):
@@ -363,3 +427,34 @@ class MatiereForm(forms.ModelForm):
 
 class ImageUploadForm(forms.Form):
     image = forms.ImageField()
+
+from django import forms
+from .models import Media, Enseigner, Classe, Matiere
+
+class MediaForm(forms.ModelForm):
+    class Meta:
+        model = Media
+        fields = ['title','file']
+
+    def __init__(self, *args, **kwargs):
+        teacher = kwargs.pop('teacher', None)  # On passe l'enseignant en paramètre
+        super(MediaForm, self).__init__(*args, **kwargs)
+        
+        if teacher:
+            # Filtrer les classes et matières en fonction de l'enseignant
+            enseignements = Enseigner.objects.filter(matiere__teacher=teacher)
+            
+            # Obtenir les classes et matières et les passer comme queryset aux champs ModelChoiceField
+            self.fields['classe'] = forms.ModelChoiceField(
+                queryset=Classe.objects.filter(id__in=enseignements.values_list('classe_id', flat=True)),
+                widget=forms.Select(attrs={'class': 'form-control'}),
+                label="Classe"
+            )
+            self.fields['matiere'] = forms.ModelChoiceField(
+                queryset=Matiere.objects.filter(id__in=enseignements.values_list('matiere_id', flat=True)),
+                widget=forms.Select(attrs={'class': 'form-control'}),
+                label="Matière"
+            )
+
+        for field in self.fields.values():
+            field.widget.attrs.update({'class': 'form-control'})

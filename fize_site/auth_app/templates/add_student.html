@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,90 +8,85 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
-            background-color: #f4f7fc;
-            font-family: 'Arial', sans-serif;
+            font-family: 'Roboto', sans-serif;
+            background-color: #f9fbfd;
+            color: #333;
             animation: fadeInBody 1s ease-in-out;
         }
 
         .form-container {
-            max-width: 600px;
-            margin: 50px auto;
+            max-width: 650px;
+            margin: 60px auto;
             background-color: #ffffff;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-            animation: slideIn 1s ease-in-out;
+            padding: 45px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-container:hover {
+            transform: scale(1.01);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
         }
 
         .form-title {
-            font-size: 26px;
+            font-size: 28px;
             font-weight: bold;
-            margin-bottom: 25px;
-            color: #004085;
+            margin-bottom: 30px;
+            color: #003366;
             text-align: center;
-            animation: fadeInTitle 1.2s ease-in-out;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .form-group {
-            opacity: 0;
-            animation: fadeInUp 1s ease-in-out forwards;
-        }
-
-        .form-group:nth-child(2) {
-            animation-delay: 0.3s;
-        }
-
-        .form-group:nth-child(3) {
-            animation-delay: 0.5s;
-        }
-
-        .form-group:nth-child(4) {
-            animation-delay: 0.7s;
-        }
-
-        .form-group:nth-child(5) {
-            animation-delay: 0.9s;
-        }
-
-        .form-group:nth-child(6) {
-            animation-delay: 1.1s;
+            margin-bottom: 20px;
         }
 
         .form-control {
-            border-radius: 8px;
+            border-radius: 10px;
             border: 1px solid #ced4da;
             transition: all 0.3s ease;
         }
 
         .form-control:focus {
-            border-color: #80bdff;
-            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+            border-color: #007bff;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
             transform: scale(1.02);
         }
 
         .btn-custom {
-            background-color: #0069d9;
+            background-color: #003366;
             color: white;
-            padding: 10px 15px;
+            padding: 12px 18px;
             font-size: 16px;
             font-weight: bold;
-            border-radius: 8px;
+            border-radius: 10px;
             transition: background-color 0.3s ease, transform 0.3s ease;
             border: none;
-            margin-top: 15px;
-            animation: fadeInButton 1.3s ease-in-out;
         }
 
         .btn-custom:hover {
-            background-color: #0056b3;
-            transform: translateY(-5px);
+            background-color: #002244;
+            transform: translateY(-4px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
         }
 
         .btn-custom:focus {
             outline: none;
-            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
         }
 
+        label {
+            font-weight: bold;
+            color: #555;
+        }
+
+        .form-text {
+            color: #888;
+        }
+
+        /* Animations */
         @keyframes fadeInBody {
             from {
                 opacity: 0;
@@ -99,92 +95,72 @@
                 opacity: 1;
             }
         }
-
-        @keyframes slideIn {
-            from {
-                transform: translateY(20px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                transform: translateY(20px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        @keyframes fadeInTitle {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeInButton {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
     </style>
 </head>
+
 <body>
 
-<div class="container form-container">
-    <h2 class="form-title">Ajouter un Étudiant</h2>
-    <form method="POST" action="">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="id_first_name">Prénom :</label>
-            {{ form.first_name }}
-        </div>
-        <div class="form-group">
-            <label for="id_last_name">Nom :</label>
-            {{ form.last_name }}
-        </div>
-        <div class="form-group">
-            <label for="id_matricule">Matricule :</label>
-            {{ form.matricule }}
-        </div>
-        <div class="form-group">
-            <label for="id_filiere">Filière :</label>
-            {{ form.filiere }}
-        </div>
-        <div class="form-group">
-            <label for="id_classe">Classe :</label>
-            {{ form.classe }}
-        </div>
-        <div class="form-group">
-            <label for="id_metier">Métier :</label>
-            {{ form.metier }}
-        </div>
-        <div class="form-group">
-            <label for="id_email">Email :</label>
-            {{ form.email }}
-        </div>
-        <button type="submit" class="btn btn-custom btn-block">Ajouter l'Étudiant</button>
-    </form>
-</div>
+    <div class="container form-container">
+        <h2 class="form-title">Ajouter un Étudiant</h2>
+        <form method="POST" action="{% url 'add_student' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="id_first_name">Prénom :</label>
+                        {{ form.first_name }}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="id_last_name">Nom :</label>
+                        {{ form.last_name }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="id_matricule">Matricule :</label>
+                        {{ form.matricule }}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="id_filiere">Filière :</label>
+                        {{ form.filiere }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="id_classe">Classe :</label>
+                        {{ form.classe }}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="id_metier">Métier :</label>
+                        {{ form.metier }}
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="id_email">Email :</label>
+                {{ form.email }}
+            </div>
+            <div class="form-group">
+                <label for="photo" class="form-label">Photo</label>
+                <input type="file" class="form-control" id="photo" name="photo" accept="image/*">
+            </div>
+            <button type="submit" class="btn btn-custom btn-block">Ajouter l'Étudiant</button>
+        </form>
+    </div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+
 </html>

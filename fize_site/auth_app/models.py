@@ -36,7 +36,7 @@ class Administrateur(models.Model):
         return f'{self.id}-{self.first_name}-{self.last_name}'
     
 class Salle(models.Model):
-    code = models.CharField(max_length=10, unique=True, null=True, blank=True)  
+    id = models.AutoField(primary_key=True)
     numero = models.IntegerField(null=True, blank=True)
     name = models.CharField(max_length=255, null=True)
     
@@ -48,8 +48,10 @@ class ResponsableFiliere(models.Model):
     matricule = models.CharField(max_length=20, default='modifier')
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
-    profession = models.CharField(max_length=100, blank=True, null=True)
-    email = models.EmailField(unique=True, null=True, blank=True)
+    profession = models.CharField(max_length=100, null=True)
+    email = models.EmailField(unique=True, null=True)
+    num_tel = models.IntegerField(unique=True, null=True)
+    grade = models.CharField(max_length=20, blank=True)
     qr_code = models.ImageField(upload_to='qr_codes/students', blank=True, null=True)
     photo = models.ImageField(upload_to='photos/responsable', blank=True, null=True)  
     
@@ -69,15 +71,15 @@ class ResponsableFiliere(models.Model):
     
 class Teacher(models.Model):
     id = models.AutoField(primary_key=True, unique=True)
-    matricule = models.CharField(max_length=20, default='modifier')
+    matricule = models.CharField(max_length=20, default='matricule')
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     profession = models.CharField(max_length=100, blank=True, null=True)
     email = models.EmailField(unique=True, null=True, blank=True)
-    classe = models.ManyToManyField('Classe', related_name='classe')
-    matieres = models.ManyToManyField('Matiere', related_name='teachers')
-    responsable = models.ForeignKey(ResponsableFiliere, on_delete=models.CASCADE, null=True)
-    filiere = models.ForeignKey('Filiere', on_delete=models.CASCADE, null=True)
+    num_tel = models.IntegerField(unique=True, blank=True, null=True)
+    status = models.CharField(max_length=20, blank=True, null=True)
+    responsable = models.ForeignKey(ResponsableFiliere, on_delete=models.CASCADE, null=True, blank=True)
+    comptable = models.ForeignKey('Comptable', on_delete=models.CASCADE, null=True, blank=True)
     qr_code = models.ImageField(upload_to='qr_codes/teacher', blank=True, null=True)
     
     def __str__(self):
@@ -97,10 +99,17 @@ class Teacher(models.Model):
 class Filiere(models.Model):
     id = models.AutoField(primary_key=True, unique=True)
     nom = models.CharField(max_length=100)
-    responsable = models.ForeignKey(ResponsableFiliere, on_delete=models.CASCADE)
+    responsable = models.ForeignKey(ResponsableFiliere, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.nom
+
+class Associer(models.Model): #Filiere
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, null=True)
+    responsable = models.ForeignKey(ResponsableFiliere, on_delete=models.CASCADE, null=True)
+    
+    def __srt__(self):
+        return f'{self.teacher}'
 
 class Matiere(models.Model):
     id = models.AutoField(primary_key=True)
@@ -113,8 +122,6 @@ class Matiere(models.Model):
     filiere = models.ForeignKey(Filiere, on_delete=models.CASCADE, related_name='matieres', null=True)
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, null=True)
     responsable = models.ForeignKey(ResponsableFiliere, on_delete=models.CASCADE, null=True)
-    student = models.ManyToManyField('Student', related_name='students', null=True)
-    classes = models.ManyToManyField('Classe', related_name='classe_matiere')
     
     def __str__(self):
         return f'{self.nom_matiere}'
@@ -124,12 +131,7 @@ class Classe(models.Model):
     name = models.CharField(max_length=100)
     promo = models.IntegerField(null=True)
     description = models.TextField(null=True, blank=True)
-    salle = models.ManyToManyField(Salle, related_name='classes')
-    teacher = models.ManyToManyField(Teacher, related_name='teacher')
     filiere = models.ForeignKey(Filiere, on_delete=models.CASCADE, null=True)
-    students = models.ManyToManyField('Student', related_name='classes')
-    matiere = models.ManyToManyField(Matiere, related_name='matiere_classe')
-    
     
     def __str__(self):
         return f'{self.name}-P{self.promo}'
@@ -140,12 +142,12 @@ class Student(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     filiere = models.ForeignKey(Filiere, on_delete=models.SET_NULL, null=True, blank=True)
+    classe = models.ForeignKey(Classe, on_delete=models.SET_NULL, null=True, blank=True)
     metier = models.CharField(max_length=100, blank=True, null=True)
     email = models.EmailField(unique=True, null=True, blank=True)
-    classe = models.ForeignKey(Classe, on_delete=models.CASCADE, null=True)
-    matiere = models.ManyToManyField(Matiere, related_name='students_matiere')
     qr_code = models.ImageField(upload_to='qr_codes/students', blank=True, null=True)
     photo = models.ImageField(upload_to='photos/', blank=True, null=True)  
+    
     
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
@@ -167,11 +169,13 @@ class Pointage(models.Model):
     arrivee = models.TimeField(default=timezone.now)
     sortie = models.TimeField(default=timezone.now)
     total = models.IntegerField(default=0, null=True)
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, null=True)
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, null=True)
+    responsable = models.ForeignKey(ResponsableFiliere, on_delete=models.CASCADE, null=True)
     
     def __str__(self):
-        return f'{self.total}'
+        return f'{self.student}'
+    
 class Note(models.Model):
     id = models.AutoField(primary_key=True, unique=True)
     student = models.ForeignKey(Student, on_delete=models.CASCADE, null=True)
@@ -179,6 +183,7 @@ class Note(models.Model):
     matiere = models.ForeignKey(Matiere, on_delete=models.CASCADE, null=True)
     classe = models.ForeignKey(Classe, on_delete=models.CASCADE, null=True)
     administrateur = models.ForeignKey(Administrateur, on_delete=models.CASCADE, null=True)
+    responsable = models.ForeignKey(ResponsableFiliere, on_delete=models.CASCADE, null=True)    
     note_eva1 = models.FloatField(default=0)
     note_eva2 = models.FloatField(default=0)
     integration = models.FloatField(default=0)
@@ -188,16 +193,19 @@ class Note(models.Model):
         return f"{self.student} - {self.matiere}"
 
     def save(self, *args, **kwargs):
-        if self.matiere not in self.teacher.matieres.all():
-            raise ValidationError("Le professeur ne peut pas saisir de note pour cette matière.")
-        
         self.moyen_semes = round((self.note_eva1 + self.note_eva2 + self.integration) / 3, 2)
         super(Note, self).save(*args, **kwargs)
+        
+     # def save(self, *args, **kwargs):
+    #     if self.matiere not in self.teacher.matieres.all():
+    #         raise ValidationError("Le professeur ne peut pas saisir de note pour cette matière.")
+    
 
 class Bulletin(models.Model):
     id = models.AutoField(primary_key=True, unique=True)
     student = models.ForeignKey(Student, on_delete=models.CASCADE, null=True)
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, null=True)
+    responsable = models.ForeignKey(ResponsableFiliere, on_delete=models.CASCADE, null=True)
     matiere = models.ForeignKey(Matiere, on_delete=models.CASCADE, null=True)
     moyen_semes1 = models.FloatField(default=0)
     moyen_semes2 = models.FloatField(default=0)
@@ -214,35 +222,28 @@ class Bulletin(models.Model):
         super(Note, self).save(*args, **kwargs)
 
 class Enseigner(models.Model):
-    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
-    matiere = models.ForeignKey(Matiere, on_delete=models.CASCADE)
-    classe = models.ForeignKey(Classe, on_delete=models.CASCADE)
-    salle = models.ForeignKey(Salle, on_delete=models.CASCADE)
-    class Meta:
-        unique_together = ('teacher', 'matiere', 'classe', 'salle')
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='enseignements', null=True)
+    matiere = models.ForeignKey(Matiere, on_delete=models.CASCADE, related_name='enseignements', null=True)
+    classe = models.ForeignKey(Classe, on_delete=models.CASCADE, null=True, related_name='students')
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, null=True, blank=True, related_name='classes')
+
+    def __str__(self):
+        return f"{self.teacher} enseigne {self.matiere} dans {self.classe}"
+
+
 
 class Programme(models.Model):
     code_programme = models.CharField(max_length=50)
     niveau = models.CharField(max_length=50)
     responsablefiliere = models.ForeignKey(ResponsableFiliere, on_delete=models.CASCADE)
 
-class Planifier(models.Model):
-    programme = models.ForeignKey(Programme, on_delete=models.CASCADE)
-    filiere = models.ForeignKey(ResponsableFiliere, on_delete=models.CASCADE)
+MOYENS_PAIEMENT = [('CB', 'Carte Bancaire'), ('PP', 'Paypal'), ('BT', 'Virement Bancaire'),]
 
-class Paiement(models.Model):
-    MOYENS_PAIEMENT = [
-        ('CB', 'Carte Bancaire'),
-        ('PP', 'Paypal'),
-        ('BT', 'Virement Bancaire'),
-    ]
-    
+class Paiement(models.Model):   
     student = models.ForeignKey('Student', on_delete=models.CASCADE)
-    teacher = models.ForeignKey('Teacher', on_delete=models.SET_NULL, null=True, blank=True)
-    comptable = models.ForeignKey('Comptable', on_delete=models.SET_NULL, null=True, blank=True)
     montant = models.DecimalField(max_digits=10, decimal_places=2)
     date_paiement = models.DateTimeField(auto_now_add=True)
-    moyen_paiement = models.CharField(max_length=2, choices=MOYENS_PAIEMENT, default='CB')
+    moyen_paiement = models.CharField(max_length=10, choices=MOYENS_PAIEMENT, default='CB')
     est_paye = models.BooleanField(default=False)
 
     def __str__(self):
@@ -255,11 +256,16 @@ class Comptable(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.EmailField(unique=True)
-    teachers = models.ManyToManyField('Teacher', related_name='comptable_paye', blank=True)
-    students = models.ManyToManyField('Student', related_name='comptable_valide', blank=True)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
+    
+class Oberver_paiement(models.Model):
+    comptable = models.ForeignKey(Comptable, on_delete=models.CASCADE, null=True)
+    paiement = models.ForeignKey(Paiement, on_delete=models.CASCADE, null=True)
+    
+    def __str__(self):
+        return f'{self.comptable}'
 
 class ResponsableClasse(models.Model):
     id = models.AutoField(primary_key=True)
@@ -301,13 +307,14 @@ class CahierDeCours(models.Model):
     corpus_stage = models.TextField(blank=True, null=True)
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, null=True)
     classe = models.ForeignKey(Classe, on_delete=models.CASCADE, null=True)
+    responsable = models.ForeignKey(ResponsableClasse, on_delete=models.CASCADE, null=True)
+    adjoint = models.ForeignKey(AdjointClasse, on_delete=models.CASCADE, null=True)
     
     def __str__(self):
         return f'Cahier de {self.teacher} pour la classe {self.classe} le {self.date}'
 
 class Planning(models.Model):
     id = models.AutoField(primary_key=True, unique=True)
-    student = models.ForeignKey(Student, on_delete=models.CASCADE, default=1)
     date = models.DateField(default=timezone.now)
     premiere_heure = models.TimeField(default='00:00')
     deuxieme_heure = models.TimeField(default='00:00')
@@ -315,22 +322,32 @@ class Planning(models.Model):
     activite1 = models.CharField(max_length=100)
     activite2 = models.CharField(max_length=100, default='Activite2')
     activite3 = models.CharField(max_length=100, default='Activite3')
-    salle = models.ForeignKey(Salle, on_delete=models.CASCADE, default=1)
+    salle = models.ForeignKey(Salle, on_delete=models.CASCADE, null=True)
     classe = models.ForeignKey(Classe, on_delete=models.CASCADE, null=True)
-    professeur = models.ForeignKey(Teacher, on_delete=models.CASCADE, default=1)
+    professeur = models.ForeignKey(Teacher, on_delete=models.CASCADE, null=True)
     responsable = models.ForeignKey(ResponsableFiliere, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return f"{self.activite1} - {self.activite2} - {self.date} ({self.premiere_heure} - {self.deuxieme_heure} - {self.troisieme_heure})"
+        return f"{self.date})"
 
-# class TeacherPayment(models.Model):
-#     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
-#     montant = models.DecimalField(max_digits=10, decimal_places=2, default=120.00)  # Montant par défaut fixé à 120 euros
-#     payee = models.BooleanField(default=False)
-#     payment_date = models.DateField(null=True, blank=True)
-#     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+class Consulter_planning(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, null=True)
+    planning = models.ForeignKey(Planning, on_delete=models.CASCADE, null=True)
+    
+MEDIA_TYPE_CHOICES = [
+        ('book', 'Livre'),
+        ('pdf', 'PDF'),
+        ('video', 'Vidéo'),
+    ]
+class Media(models.Model):
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, null=True)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, null=True)
+    classe = models.ForeignKey(Classe, on_delete=models.CASCADE, null=True)
+    title = models.CharField(max_length=255)
+    description = models.TextField(blank=True, null=True)
+    media_type = models.CharField(max_length=10, choices=MEDIA_TYPE_CHOICES)
+    file = models.FileField(upload_to='media/')
+    uploaded_at = models.DateTimeField(auto_now_add=True)
 
-#     def mark_payee(self):
-#         self.payee = True
-#         self.payment_date = timezone.now()
-#         self.save()
+    def __str__(self):
+        return self.title

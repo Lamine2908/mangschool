@@ -4,13 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modifier les Notes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             background-color: #f7f7f7;
+            color: #333;
         }
         .container {
-            max-width: 600px;
+            max-width: 700px;
             margin: 50px auto;
             background-color: white;
             padding: 20px;
@@ -19,14 +21,14 @@
         }
         h1 {
             text-align: center;
-            color: #333;
+            color: #007bff;
             margin-bottom: 30px;
         }
         label {
             font-weight: bold;
             margin-top: 15px;
         }
-        .form-control {
+        .form-control, .form-select {
             width: 100%;
             padding: 10px;
             margin: 10px 0;
@@ -37,47 +39,40 @@
         .btn {
             width: 100%;
             padding: 10px;
-            background-color: #5cb85c;
+            background-color: #28a745;
             color: white;
             border: none;
             cursor: pointer;
             font-size: 16px;
             margin-top: 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
         }
         .btn:hover {
-            background-color: #4cae4c;
+            background-color: #218838;
         }
     </style>
 </head>
 <body>
-
-<div class="container">
-    <h1>Modifier la Note</h1>
-    
-    <form method="POST">
-        {% csrf_token %}
-        
-        <label for="student">Étudiant</label>
-        {{ form.student }}
-
-        <label for="classe">Classe</label>
-        {{ form.classe }}
-
-        <label for="matiere">Matière</label>
-        {{ form.matiere }}
-
-        <label for="note_eva1">Note Évaluation 1</label>
-        {{ form.note_eva1 }}
-
-        <label for="note_eva2">Note Évaluation 2</label>
-        {{ form.note_eva2 }}
-
-        <label for="integration">Note d'Intégration</label>
-        {{ form.integration }}
-
-        <button type="submit" class="btn">Enregistrer les modifications</button>
-    </form>
-</div>
-
+    <div class="container">
+        <h1>Modifier les Notes de <strong>{{note.student.first_name}} {{note.student.last_name}}</strong></h1>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="note_eva1" class="form-label">Note Évaluation 1</label>
+                {{ form.note_eva1 }}
+            </div>
+            <div class="mb-3">
+                <label for="note_eva2" class="form-label">Note Évaluation 2</label>
+                {{ form.note_eva2 }}
+            </div>
+            <div class="mb-3">
+                <label for="integration" class="form-label">Note d'Intégration</label>
+                {{ form.integration }}
+            </div>
+            <button type="submit" class="btn">Enregistrer les modifications</button>
+        </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

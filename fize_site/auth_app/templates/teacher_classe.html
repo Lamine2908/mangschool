@@ -73,7 +73,7 @@
     <div class="container mt-5">
         <h1 class="mb-4">Liste des Enseignants et leurs Classes</h1>
 
-        {% if teachers %}
+        {% comment %} {% if teachers %} {% endcomment %}
             <table class="table table-hover table-bordered align-middle">
                 <thead class="table-light">
                     <tr>
@@ -102,9 +102,9 @@
                     {% endfor %}
                 </tbody>
             </table>
-        {% else %}
+        {% comment %} {% else %}
             <p class="empty-message">Aucun enseignant trouvé.</p>
-        {% endif %}
+        {% endif %} {% endcomment %}
 
         <div class="text-center mt-4">
             <a href="{% url 'responsables_filieres' %}" class="btn btn-custom">Retour à l'accueil</a>
