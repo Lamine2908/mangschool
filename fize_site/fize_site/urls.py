@@ -17,7 +17,7 @@ Including another URLconf
 
 from django import views
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from auth_app import views
 from django.conf import settings
 from django.conf.urls.static import static
@@ -39,7 +39,7 @@ urlpatterns = [
     path('student_add/', views.add_student, name='add_student'),
     path('filieres/', views.liste_filieres, name='liste_filieres'),
     path('teacher_add/', views.add_teacher, name='add_teacher'),
-    path('Affecter_professeur/<int:teacher_id>/', views.affecter_professeur, name='affecter_professeur'),
+    path('Affecter_professeur/<int:responsable_id>/', views.affecter_professeur, name='affecter_professeur'),
     path('ajouter_filiere/', views.ajouter_filiere, name='ajouter_filiere'),
     path('ajouter_responsable/', views.ajouter_responsable, name='ajouter_responsable'),
     path('espaceadmins', views.espaceadmins, name='espaceadmins'),
@@ -51,7 +51,7 @@ urlpatterns = [
     path('comptable/', views.comptable, name='comptable'),
     path('pointage/<int:teacher_id>/', views.pointage, name='pointage'),
     path('success_page/', views.success_page, name='success_page'),
-    path('pointages/<int:teacher_id>/', views.liste_pointages, name='liste_pointages'),
+    # path('pointages/<int:teacher_id>/', views.liste_pointages, name='liste_pointages'),
     path('create_planning/', views.create_planning, name='create_planning'),
     path('parametre_filiere/<int:responsable_id>/', views.parametre_filiere, name='parametre_filiere'),    
     path('espaceeleve/<int:student_id>/', views.espaceeleve, name='espaceeleve'),
@@ -62,8 +62,8 @@ urlpatterns = [
     path('responsableclasse/', views.espaceresponsableclasse, name='espaceresponsableclasse'),
     path('responsables_filieres/', views.responsables_filieres, name='responsables_filieres'),
     path('responsable_filiere/<int:responsable_id>', views.responsable_filiere, name='responsable_filiere'),
-    # path('paiement_liste/', views.paiement_liste, name='paiement_liste'),
-    # path('valider-paiement/<int:paiement_id>/', views.valider_paiement, name='valider_paiement'),
+    path('notes_filiere/<int:responsable_id>/', views.notes_filiere, name='notes_filiere'),
+    path('moyenne_par_classe/<int:responsable_id>/', views.moyenne_par_classe, name='moyenne_par_classe'),
     # path('classe_detail/<int:classe_id>/', views.classe_detail, name='classe_detail'),
     path('ajouter_classe/', views.ajouter_classe, name='ajouter_classe'),
     path('liste_classes/', views.liste_classes, name='liste_classes'),
@@ -93,7 +93,7 @@ urlpatterns = [
     # path('paiements/', views.view_teacher_payments, name='view_teacher_payments'),
     # path('manage_payments/', views.manage_payments, name='manage_payments'),
     # path('payment_list/', views.payment_list, name='payment_list'),
-    path('affecter_prof/<int:responsable_id>/', views.affecter_prof, name='affecter_prof'),
+    # path('affecter_prof/<int:responsable_id>/', views.affecter_prof, name='affecter_prof'),
     path('teacher_class/', views.teacher_class, name='teacher_class'),   
     path('affecter_eleve/<int:admin_id>/', views.Affecter_eleve, name='Affecter_eleve'),
     path('liste_classe/', views.liste_classe, name='liste_classe'),
@@ -112,5 +112,5 @@ urlpatterns = [
     path('upload/', views.upload_and_resize_image, name='upload_image'),
     path('success/', views.success_page, name='success_page'), 
     path('classe/<int:classe_id>/', views.details_classe, name='details_classe'),
-    
+    # path('', include('auth_app.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

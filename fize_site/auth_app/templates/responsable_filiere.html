@@ -155,7 +155,7 @@
                         <i class="bi bi-person-check section-icon"></i>
                         <h5 class="card-title">Gestion des Professeurs</h5>
                         <p class="card-text">Suivez la répartition des enseignants dans les cours.</p>
-                        <a href="{% url 'teacher_list' %}" class="btn btn-primary">Gérer les Enseignants</a>
+                        <a href="{% url 'affecter_professeur' responsableFiliere.id %}" class="btn btn-primary">Gérer les Enseignants</a>
                     </div>
                 </div>
             </div>
@@ -164,9 +164,9 @@
                 <div class="card section-card">
                     <div class="card-body">
                         <i class="bi bi-person-check section-icon"></i>
-                        <h5 class="card-title">Infos Professeurs</h5>
+                        <h5 class="card-title">Infos classes</h5>
                         <p class="card-text">Accedez a cette page pour voir les professeurs et les clases gerees</p>
-                        <a href="#" class="btn btn-primary">Gérer les Enseignants</a>
+                        <a href="{% url 'teacher_class' %}" class="btn btn-primary">Gérer les Enseignants</a>
                     </div>
                 </div>
             </div>
@@ -182,17 +182,28 @@
                 </div>
             </div>
 
-            {% comment %} 
             <div class="col-md-4 mb-4">
                 <div class="card section-card">
                     <div class="card-body">
                         <i class="bi bi-file-earmark-text section-icon"></i>
-                        <h5 class="card-title">Gestion des Dossiers Étudiants</h5>
+                        <h5 class="card-title">Gestion des notes Étudiants</h5>
                         <p class="card-text">Accédez aux dossiers des étudiants de votre filière.</p>
-                        <a href="" class="btn btn-primary">Voir les Dossiers</a>
+                        <a href="{% url 'notes_filiere' responsableFiliere.id %}" class="btn btn-primary">Voir les Dossiers</a>
                     </div>
                 </div>
-            </div> {% endcomment %}
+            </div>
+
+            
+            <div class="col-md-4 mb-4">
+                <div class="card section-card">
+                    <div class="card-body">
+                        <i class="bi bi-file-earmark-text section-icon"></i>
+                        <h5 class="card-title">Gestion des notes Classes</h5>
+                        <p class="card-text">Accédez aux notes des classes de votre filière.</p>
+                        <a href="{% url 'moyenne_par_classe' responsableFiliere.id %}" class="btn btn-primary">Voir les Dossiers</a>
+                    </div>
+                </div>
+            </div>
 
             <div class="col-md-4 mb-4">
                 <div class="card section-card">

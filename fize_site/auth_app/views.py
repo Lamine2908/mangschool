@@ -361,25 +361,21 @@ from .models import Teacher, Enseigner, Classe, Matiere
 def ajouter_ressource(request, teacher_id):
     teacher = get_object_or_404(Teacher, id=teacher_id)
 
-    # Obtenir les classes et matières affectées à l'enseignant à partir du modèle Enseigner
     enseignements = Enseigner.objects.filter(matiere__teacher=teacher)
 
     if request.method == 'POST':
-        form = MediaForm(request.POST, request.FILES, teacher=teacher)  # Passer teacher au formulaire
+        form = MediaForm(request.POST, request.FILES, teacher=teacher)
         if form.is_valid():
             media = form.save(commit=False)
             media.teacher = teacher
 
-            # Récupérer les instances des classes et matières depuis leurs ID dans POST
             classe_id = request.POST.get('classe')
             matiere_id = request.POST.get('matiere')
 
             try:
-                # Récupérer les instances Classe et Matière correspondant aux ID
                 classe = Classe.objects.get(id=classe_id)
                 matiere = Matiere.objects.get(id=matiere_id)
 
-                # Vérifier si cette classe et matière sont bien dans l'enseignement de cet enseignant
                 enseignement = enseignements.filter(classe=classe, matiere=matiere).first()
                 
                 if enseignement:
@@ -410,80 +406,70 @@ def liste_ressource(request, teacher_id):
 
 # def paiement_liste(request):
 #     paiements = Paiement.objects.all()
-#     return render(request, 'paiement_liste.html', {'paiements': paiements})
+#     return render(request, 'paiement_liste.html', {'paiements': paiements}
 
-from .models import Teacher, Note, Classe, Student, Matiere, Enseigner
+from django.shortcuts import get_object_or_404, redirect, render
+from django.contrib import messages
 from .form import NoteForm
+from .models import Teacher, Enseigner, Classe, Matiere, Student, Note
 
 def ajouter_notes(request, teacher_id):
     teacher = get_object_or_404(Teacher, id=teacher_id)
-    enseignements = Enseigner.objects.filter(matiere__teacher=teacher)
+    enseignements = Enseigner.objects.filter(teacher=teacher)
     classes = Classe.objects.filter(id__in=enseignements.values_list('classe_id', flat=True))
     matieres = Matiere.objects.filter(id__in=enseignements.values_list('matiere_id', flat=True))
     students = Student.objects.filter(classe__in=classes)
-
-    selected_class_teacher = None
-
+    
     if request.method == 'POST':
-        form = NoteForm(request.POST, valid_classes=classes)
-
+        form = NoteForm(request.POST)
+        form.fields['student'].queryset = students
+        form.fields['matiere'].queryset = matieres
         if form.is_valid():
             note = form.save(commit=False)
-
             existence_note = Note.objects.filter(student=note.student, matiere=note.matiere, teacher=teacher).first()
-            
             if existence_note:
                 messages.error(request, f"Une note existe déjà pour {note.student} dans {note.matiere}. Veuillez accéder à la liste pour la modifier.")
                 return redirect('ajouter_notes', teacher_id=teacher_id)
-
             try:
                 note.teacher = teacher
                 note.save()
-
                 messages.success(request, 'Note ajoutée avec succès.')
                 return redirect('afficher_notes', teacher_id=teacher_id)
-
             except ValidationError as e:
                 messages.error(request, e.messages[0])
         else:
             messages.error(request, 'Erreur lors de l\'ajout de la note. Veuillez vérifier les informations.')
-
     else:
         form = NoteForm()
         form.fields['student'].queryset = students
         form.fields['matiere'].queryset = matieres
-
-    class_id = request.GET.get('class_id')
-    if class_id:
-        selected_class = get_object_or_404(Classe, id=class_id)
-        selected_class_teacher = selected_class.teacher
-
+    
     context = {
         'teacher': teacher,
         'classes': classes,
         'matieres': matieres,
         'students': students,
-        'form': form,
-        'selected_class_teacher': selected_class_teacher,
+        'form': form
     }
-
     return render(request, 'ajouter_notes.html', context)
-
-from django.shortcuts import render, get_object_or_404
-from .models import Teacher, Note, Classe, Student, Enseigner
 
 def afficher_notes(request, teacher_id):
     teacher = get_object_or_404(Teacher, id=teacher_id)
-    
-    enseignements = Enseigner.objects.filter(matiere__teacher=teacher)
+    enseignements = Enseigner.objects.filter(teacher=teacher)
     classes = Classe.objects.filter(id__in=enseignements.values_list('classe_id', flat=True))
     students = Student.objects.filter(classe__in=classes).distinct()
     notes = Note.objects.filter(student__in=students, teacher=teacher)
 
     filter_student = request.GET.get('student', '')
-    
+    filter_lastname = request.GET.get('lastname', '')
+    filter_class = request.GET.get('classe', '')
+
     if filter_student:
         notes = notes.filter(student__first_name__icontains=filter_student)
+    if filter_lastname:
+        notes = notes.filter(student__last_name__icontains=filter_lastname)
+    if filter_class:
+        notes = notes.filter(student__classe__name__icontains=filter_class)
 
     context = {
         'teacher': teacher,
@@ -491,8 +477,8 @@ def afficher_notes(request, teacher_id):
         'students': students,
         'notes': notes,
     }
-    
     return render(request, 'afficher_notes.html', context)
+
 
 
 from django.shortcuts import render, get_object_or_404
@@ -682,19 +668,70 @@ def class_list(request):
     classes = Classe.objects.all()
     return render(request, 'class_info.html', {'classes': classes})
 
-def affecter_prof(request, responsable_id):
-    responsable = get_object_or_404(ResponsableFiliere, id=responsable_id)
-    
-    if request.method == 'POST':
-        form = AffecterProfForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('teacher_class') 
-    else:
 
-        form = AffecterProfForm()
+def notes_filiere(request, responsable_id):
+    responsable = get_object_or_404(ResponsableFiliere, id=responsable_id)
+    classes = Classe.objects.filter(filiere__responsable=responsable)
+    students = Student.objects.filter(classe__in=classes)
+    notes = Note.objects.filter(student__in=students)
     
-    return render(request, 'affecter_prof.html', {'form': form, 'responsable': responsable})
+    filter_student = request.GET.get('student', '')
+    filter_lastname = request.GET.get('lastname', '')
+    filter_classe = request.GET.get('classe', '')
+
+    if filter_student:
+        notes = notes.filter(student__first_name__icontains=filter_student)
+    if filter_lastname:
+        notes = notes.filter(student__last_name__icontains=filter_lastname)
+    if filter_classe:
+        notes = notes.filter(student__classe__name__icontains=filter_classe)
+
+    context = {
+        'responsable': responsable,
+        'classes': classes,
+        'students': students,
+        'notes': notes,
+    }
+    return render(request, 'notes_filiere.html', context)
+
+from django.shortcuts import render, get_object_or_404
+from django.db.models import Avg
+from .models import ResponsableFiliere, Classe, Note, Student
+
+def moyenne_par_classe(request, responsable_id):
+    responsable = get_object_or_404(ResponsableFiliere, id=responsable_id)
+    classes = Classe.objects.filter(filiere__responsable=responsable)
+
+    moyennes = []
+    for classe in classes:
+        students = Student.objects.filter(classe=classe)
+        notes = Note.objects.filter(student__in=students)
+        moyenne_generale = notes.aggregate(moyenne=Avg('moyen_semes'))['moyenne']
+        moyennes.append({
+            'classe': classe,
+            'moyenne_generale': moyenne_generale,
+        })
+
+    context = {
+        'responsable': responsable,
+        'moyennes': moyennes,
+    }
+    return render(request, 'moyenne_par_classe.html', context)
+
+
+# def affecter_prof(request, responsable_id):
+#     responsable = get_object_or_404(ResponsableFiliere, id=responsable_id)
+    
+#     if request.method == 'POST':
+#         form = AffecterProfForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('teacher_class') 
+#     else:
+
+#         form = AffecterProfForm()
+    
+#     return render(request, 'affecter_prof.html', {'form': form, 'responsable': responsable})
 
 def teacher_class(request):
 
@@ -717,23 +754,25 @@ def Affecter_eleve(request, admin_id):
     return render(request, 'affecter_eleve.html', {'form':form, 'administrateur':administrateur})
 
 from .form import AffecterProfesseurForm
+from .models import Administrateur, Enseigner
 
 def affecter_professeur(request, responsable_id):
-    
-    teacher = Teacher.objects.filter(teacher=teacher)
-    enseignements = Enseigner.objects.filter(matiere__teacher=teacher)
-    
+    responsable = get_object_or_404(ResponsableFiliere, id=responsable_id)
     if request.method == 'POST':
         form = AffecterProfesseurForm(request.POST)
         if form.is_valid():
             enseigner = form.save(commit=False)
-            enseigner.teacher = teacher
+            enseigner.responsable = responsable
             enseigner.save()
-            return redirect('success_page')
+            return redirect('teacher_class')
     else:
         form = AffecterProfesseurForm()
-    
-    return render(request, 'affecter_professeur.html', {'form': form, 'teacher': teacher})
+    return render(request, 'affecter_professeur.html', {'form': form, 'responsable': responsable})
+
+def teacher_class(request):
+    teachers = Teacher.objects.prefetch_related('enseignements__classe').all()
+    return render(request, 'teacher_classe.html', {'teachers': teachers})
+
 
 def liste_classe(request):
     students = Student.objects.filter(classe__isnull=False)

@@ -226,6 +226,7 @@ class Enseigner(models.Model):
     matiere = models.ForeignKey(Matiere, on_delete=models.CASCADE, related_name='enseignements', null=True)
     classe = models.ForeignKey(Classe, on_delete=models.CASCADE, null=True, related_name='students')
     student = models.ForeignKey(Student, on_delete=models.CASCADE, null=True, blank=True, related_name='classes')
+    responsable = models.ForeignKey(ResponsableFiliere, on_delete=models.CASCADE, related_name='enseignements', null=True)
 
     def __str__(self):
         return f"{self.teacher} enseigne {self.matiere} dans {self.classe}"

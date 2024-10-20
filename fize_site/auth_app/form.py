@@ -281,17 +281,11 @@ class SalleForm(forms.ModelForm):
 class PointageForm(forms.ModelForm):
     class Meta:
         model = Pointage
-        fields = ['student', 'arrivee', 'sortie']
+        fields = ['teacher','student', 'date', 'arrivee', 'sortie']
         widgets = {
-            'arrivee': forms.TimeInput(attrs={'class': 'form-control', 'type': 'time'}),
-            'sortie': forms.TimeInput(attrs={'class': 'form-control', 'type': 'time'}),
-            'student': forms.Select(attrs={'class': 'form-control'}),
+            'arrivee': forms.HiddenInput(),
+            'sortie': forms.HiddenInput(),
         }
-
-    def __init__(self, *args, **kwargs):
-        super(PointageForm, self).__init__(*args, **kwargs)
-        for field in self.fields.values():
-            field.widget.attrs.update({'class': 'form-control'})
 
             
 class PlanningForm(forms.ModelForm):
@@ -437,14 +431,12 @@ class MediaForm(forms.ModelForm):
         fields = ['title','file']
 
     def __init__(self, *args, **kwargs):
-        teacher = kwargs.pop('teacher', None)  # On passe l'enseignant en paramètre
+        teacher = kwargs.pop('teacher', None)
         super(MediaForm, self).__init__(*args, **kwargs)
         
         if teacher:
-            # Filtrer les classes et matières en fonction de l'enseignant
             enseignements = Enseigner.objects.filter(matiere__teacher=teacher)
             
-            # Obtenir les classes et matières et les passer comme queryset aux champs ModelChoiceField
             self.fields['classe'] = forms.ModelChoiceField(
                 queryset=Classe.objects.filter(id__in=enseignements.values_list('classe_id', flat=True)),
                 widget=forms.Select(attrs={'class': 'form-control'}),
