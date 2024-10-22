@@ -1,5 +1,5 @@
 from django.contrib import admin
-from auth_app.models import Student, Teacher, CahierDeCours, Enseigner, Planning, Note, Classe,Salle, Matiere, Filiere, Comptable, Administrateur, ResponsableFiliere, ResponsableClasse
+from auth_app.models import Student, Teacher, CahierDeCours, ResponsableMetier, Enseigner, Planning, Note, Classe,Salle, Matiere, Filiere, Comptable, Administrateur, ResponsableFiliere, ResponsableClasse
 
 admin.site.register(Student)
 admin.site.register(Teacher)
@@ -15,3 +15,4 @@ admin.site.register(Note)
 admin.site.register(Planning)
 admin.site.register(CahierDeCours)
 admin.site.register(Enseigner)
+admin.site.register(ResponsableMetier)

@@ -93,25 +93,9 @@
                 {{ form.description }}
             </div>
             <div class="mb-3">
-                <label for="salle" class="form-label">Salle</label>
-                <div>
-                    {{ form.salle }}
-                </div>
-            </div>
-            <div class="mb-3">
-                <label for="teacher" class="form-label">Professeur(s)</label>
-                <div>
-                    {{ form.teacher }}
-                </div>
-            </div>
-            <div class="mb-3">
                 <label for="filiere" class="form-label">Filiere</label>
                 <div>
                     {{ form.filiere }}
-                </div>
-                <label for="matiere" class="form-label">Matières</label>
-                <div>
-                    {{ form.matiere }}
                 </div>
             </div>
             <div class="d-grid gap-2">
@@ -119,7 +103,7 @@
             </div>
         </form>
         <div class="d-grid gap-2">
-            <a href="{% url 'espaceadmins' %}" class="btn btn-outline-primary btn-home"><i class="fas fa-home"></i> Retour à l'accueil</a>
+            <a href="{% url 'espaceadmin' administrateur.id %}" class="btn btn-outline-primary btn-home"><i class="fas fa-home"></i>Acceuil</a>
         </div>
     </div>
 

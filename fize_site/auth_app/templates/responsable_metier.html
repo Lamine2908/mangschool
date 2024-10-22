@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Espace Responsable de Filière - Geschool</title>
+    <title>Espace Responsable de Metier - Geschool</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <style>
@@ -120,8 +120,8 @@
 
     <header class="hero">
         <div class="container position-relative">
-            <h1>Bienvenue {{responsableFiliere.first_name}} {{responsableFiliere.last_name}}</h1>
-            <p>Gérez et suivez les activités pédagogiques de votre filière.</p>
+            <h1>Bienvenue {{responsableMetier.first_name}} {{responsableMetier.last_name}}</h1>
+            <p>Gérez et suivez les activités pédagogiques de votre classe.</p>
         </div>
     </header>
 
@@ -132,12 +132,12 @@
                     <div class="card-body">
                         <i class="bi bi-graph-up section-icon"></i>
                         <h5 class="card-title">Liste Plannings</h5>
-                        <p class="card-text">Suivez les performances académiques de vos étudiants.</p>
-                        <a href="{% url 'planning_list' %}" class="btn btn-primary">Voir les Performances</a>
+                        <p class="card-text">Suivez les activites académiques de vos étudiants.</p>
+                        <a href="{% url 'planning_eleve' %}" class="btn btn-primary">Voir les s</a>
                     </div>
                 </div>
             </div>
-
+{% comment %} 
             <div class="col-md-4 mb-4">
                 <div class="card section-card">
                     <div class="card-body">
@@ -147,7 +147,7 @@
                         <a href="{% url 'create_planning' %}" class="btn btn-primary">Gérer les plannings</a>
                     </div>
                 </div>
-            </div>
+            </div> {% endcomment %}
 
             <div class="col-md-4 mb-4">
                 <div class="card section-card">
@@ -155,12 +155,12 @@
                         <i class="bi bi-person-check section-icon"></i>
                         <h5 class="card-title">Gestion des Professeurs</h5>
                         <p class="card-text">Suivez la répartition des enseignants dans les cours.</p>
-                        <a href="{% url 'affecter_professeur' responsableFiliere.id %}" class="btn btn-primary">Gérer les Enseignants</a>
+                        <a href="{% url 'affecter_professeur' responsableMetier.id %}" class="btn btn-primary">Gérer les Enseignants</a>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-4 mb-4">
+            {% comment %} <div class="col-md-4 mb-4">
                 <div class="card section-card">
                     <div class="card-body">
                         <i class="bi bi-person-check section-icon"></i>
@@ -169,15 +169,15 @@
                         <a href="{% url 'teacher_class' %}" class="btn btn-primary">Gérer les Enseignants</a>
                     </div>
                 </div>
-            </div>
+            </div> {% endcomment %}
 
             <div class="col-md-4 mb-4">
                 <div class="card section-card">
                     <div class="card-body">
                         <i class="bi bi-clipboard-data section-icon"></i>
                         <h5 class="card-title">Cahiers de Texte</h5>
-                        <p class="card-text">Accédez a cette page pour consulter les activités de la filière.</p>
-                        <a href="{% url 'listes_cahiers' %}" class="btn btn-primary">Voir les cahiers</a>
+                        <p class="card-text">Accédez a cette page pour consulter les activités de la classe.</p>
+                        <a href="#" class="btn btn-primary">Voir les cahiers</a>
                     </div>
                 </div>
             </div>
@@ -187,8 +187,8 @@
                     <div class="card-body">
                         <i class="bi bi-file-earmark-text section-icon"></i>
                         <h5 class="card-title">Gestion des notes Étudiants</h5>
-                        <p class="card-text">Accédez aux dossiers des étudiants de votre filière.</p>
-                        <a href="{% url 'notes_filiere' responsableFiliere.id %}" class="btn btn-primary">Voir les Dossiers</a>
+                        <p class="card-text">Accédez aux dossiers des étudiants de votre classe.</p>
+                        <a href="#" class="btn btn-primary">Voir les Dossiers</a>
                     </div>
                 </div>
             </div>
@@ -199,8 +199,8 @@
                     <div class="card-body">
                         <i class="bi bi-file-earmark-text section-icon"></i>
                         <h5 class="card-title">Gestion des notes Classes</h5>
-                        <p class="card-text">Accédez aux notes des classes de votre filière.</p>
-                        <a href="{% url 'moyenne_par_classe' responsableFiliere.id %}" class="btn btn-primary">Voir les Dossiers</a>
+                        <p class="card-text">Accédez aux notes des classes de votre classe.</p>
+                        <a href="#" class="btn btn-primary">Voir les Dossiers</a>
                     </div>
                 </div>
             </div>
@@ -215,7 +215,7 @@
                     </div>
                 </div>
             </div>
-
+{% comment %} 
             <div class="col-md-4 mb-4">
                 <div class="card section-card">
                     <div class="card-body">
@@ -225,7 +225,7 @@
                         <a href="{% url 'parametre_filiere' responsableFiliere.id %}" class="btn btn-primary">Voir les Paramètres</a>                    
                     </div>
                 </div>
-            </div>
+            </div> {% endcomment %}
         </div>
     </main>
 

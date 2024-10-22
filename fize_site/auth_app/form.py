@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import Student, Note, Paiement, CahierDeCours, Pointage, Classe, Salle, Comptable, Teacher, Planning,ResponsableClasse, ResponsableFiliere, CahierDeCours, Bulletin
+from .models import Student, Note, Paiement, CahierDeCours, ResponsableMetier, Projet, Pointage, Classe, Salle, Comptable, Teacher, Planning,ResponsableClasse, ResponsableFiliere, CahierDeCours, Bulletin
 from django.contrib.auth import get_user_model
 
 
@@ -257,8 +257,6 @@ class ModifierNoteForm(forms.ModelForm):
             'integration': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Intégration'}),
         }
 
-    
-
 class BulletinForm(forms.Form):
     class Meta:
         model = Bulletin
@@ -450,3 +448,13 @@ class MediaForm(forms.ModelForm):
 
         for field in self.fields.values():
             field.widget.attrs.update({'class': 'form-control'})
+
+class ProjetForm(forms.Form):
+    class Meta :
+        Model = Projet
+        field = ['libelle', 'description', 'date', 'student']
+        
+class ResponsableMetierForm(forms.Form):
+    class Meta :
+        Model = ResponsableMetier
+        field = ['matricule', 'first_name', 'last_name', 'profession', 'status', 'email', 'num_tel'] 

@@ -123,74 +123,85 @@
         </div>
     </header>
 
-    <main class="container my-5">
-        <div class="row text-center">
-            <div class="col-md-4 mb-4">
-                <div class="card section-card">
-                    <div class="card-body">
-                        <i class="bi bi-trophy section-icon"></i>
-                        <h5 class="card-title">Consulter les Résultats</h5>
-                        <p class="card-text">Accédez à vos notes et résultats académiques en ligne.</p>
-                        <a href="{% url 'note_eleve' student.id %}" class="btn btn-primary">Voir les Résultats</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4 mb-4">
-                <div class="card section-card">
-                    <div class="card-body">
-                        <i class="bi bi-calendar-x section-icon"></i>
-                        <h5 class="card-title">Gestion des Absences</h5>
-                        <p class="card-text">Consultez et gérez vos absences et retards.</p>
-                        <a href="#" class="btn btn-primary">Voir les Absences</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4 mb-4">
-                <div class="card section-card">
-                    <div class="card-body">
-                        <i class="bi bi-people section-icon"></i>
-                        <h5 class="card-title">Infos</h5>
-                        <p class="card-text">Découvrez et rejoignez des clubs et des événements scolaires.</p>
-                        <a href="{% url 'student_detail' student.id %}" class="btn btn-primary">Voir les Activités</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4 mb-4">
-                <div class="card section-card">
-                    <div class="card-body">
-                        <i class="bi bi-calendar section-icon"></i>
-                        <h5 class="card-title">Consulter l'Emploi du Temps</h5>
-                        <p class="card-text">Consultez votre emploi du temps et les horaires des cours.</p>
-                        <a href="{% url 'filter_planning' %}" class="btn btn-primary">Voir l'Emploi du Temps</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4 mb-4">
-                <div class="card section-card">
-                    <div class="card-body">
-                        <i class="bi bi-book section-icon"></i>
-                        <h5 class="card-title">Accéder aux Ressources</h5>
-                        <p class="card-text">Accédez aux matériaux pédagogiques et supports de cours.</p>
-                        <a href="#" class="btn btn-primary">Voir les Ressources</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4 mb-4">
-                <div class="card section-card">
-                    <div class="card-body">
-                        <i class="bi bi-credit-card section-icon"></i>
-                        <h5 class="card-title">Paiements</h5>
-                        <p class="card-text">Accédez à cette page pour effectuer vos paiements.</p>
-                        <a href="#" class="btn btn-primary">Effectuer un Paiement</a>
-                    </div>
+    <main class="container my-5"><div class="row text-center">
+        <div class="col-md-4 mb-4">
+            <div class="card section-card">
+                <div class="card-body">
+                    <i class="bi bi-bar-chart-fill section-icon"></i>
+                    <h5 class="card-title">Consulter les Résultats</h5>
+                    <p class="card-text">Accédez à vos notes et résultats académiques en ligne.</p>
+                    <a href="{% url 'note_eleve' student.id %}" class="btn btn-primary">Voir les Résultats</a>
                 </div>
             </div>
         </div>
+    
+        <div class="col-md-4 mb-4">
+            <div class="card section-card">
+                <div class="card-body">
+                    <i class="bi bi-person-x-fill section-icon"></i>
+                    <h5 class="card-title">Gestion des Absences</h5>
+                    <p class="card-text">Consultez et gérez vos absences et retards.</p>
+                    <a href="#" class="btn btn-primary">Voir les Absences</a>
+                </div>
+            </div>
+        </div>
+    
+        <div class="col-md-4 mb-4">
+            <div class="card section-card">
+                <div class="card-body">
+                    <i class="bi bi-people-fill section-icon"></i> 
+                    <h5 class="card-title">Infos</h5>
+                    <p class="card-text">Découvrez et rejoignez des clubs et des événements scolaires.</p>
+                    <a href="{% url 'student_detail' student.id %}" class="btn btn-primary">Voir les Activités</a>
+                </div>
+            </div>
+        </div>
+    
+        <div class="col-md-4 mb-4">
+            <div class="card section-card">
+                <div class="card-body">
+                    <i class="bi bi-calendar-event-fill section-icon"></i> 
+                    <h5 class="card-title">Consulter l'Emploi du Temps</h5>
+                    <p class="card-text">Consultez votre emploi du temps et les horaires des cours.</p>
+                    <a href="{% url 'filter_planning' %}" class="btn btn-primary">Voir l'Emploi du Temps</a>
+                </div>
+            </div>
+        </div>
+    
+        <div class="col-md-4 mb-4">
+            <div class="card section-card">
+                <div class="card-body">
+                    <i class="bi bi-book-half section-icon"></i>
+                    <h5 class="card-title">Accéder aux Ressources</h5>
+                    <p class="card-text">Accédez aux matériaux pédagogiques et supports de cours.</p>
+                    <a href="#" class="btn btn-primary">Voir les Ressources</a>
+                </div>
+            </div>
+        </div>
+    
+        <div class="col-md-4 mb-4">
+            <div class="card section-card">
+                <div class="card-body">
+                    <i class="bi bi-wallet2 section-icon"></i>
+                    <h5 class="card-title">Paiements</h5>
+                    <p class="card-text">Accédez à cette page pour effectuer vos paiements.</p>
+                    <a href="#" class="btn btn-primary">Effectuer un Paiement</a>
+                </div>
+            </div>
+        </div>
+    
+        <div class="col-md-4 mb-4">
+            <div class="card section-card">
+                <div class="card-body">
+                    <i class="bi bi-briefcase-fill section-icon"></i>
+                    <h5 class="card-title">Projets</h5>
+                    <p class="card-text">Accédez à cette page pour gérer vos projets.</p>
+                    <a href="#" class="btn btn-primary">Voir plus</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     </main>
 
     <footer class="footer text-center py-3">

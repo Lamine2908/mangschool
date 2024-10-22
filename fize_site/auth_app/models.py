@@ -125,6 +125,21 @@ class Matiere(models.Model):
     
     def __str__(self):
         return f'{self.nom_matiere}'
+    
+
+class ResponsableMetier(models.Model):
+    id = models.AutoField(primary_key=True, unique=True)
+    matricule = models.CharField(max_length=20, default='matricule')
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    profession = models.CharField(max_length=100, blank=True, null=True)
+    email = models.EmailField(unique=True, null=True, blank=True)
+    num_tel = models.IntegerField(unique=True, blank=True, null=True)
+    status = models.CharField(max_length=20, blank=True, null=True)
+    responsable = models.ForeignKey(ResponsableFiliere, on_delete=models.CASCADE, null=True, blank=True)
+    
+    def __str__(self):
+        return f'{self.first_name} : {self.last_name}'
 
 class Classe(models.Model):
     id = models.AutoField(primary_key=True, unique=True)
@@ -132,6 +147,7 @@ class Classe(models.Model):
     promo = models.IntegerField(null=True)
     description = models.TextField(null=True, blank=True)
     filiere = models.ForeignKey(Filiere, on_delete=models.CASCADE, null=True)
+    responsableMetier = models.ForeignKey(ResponsableMetier, on_delete=models.CASCADE, null=True)
     
     def __str__(self):
         return f'{self.name}-P{self.promo}'
@@ -227,12 +243,10 @@ class Enseigner(models.Model):
     classe = models.ForeignKey(Classe, on_delete=models.CASCADE, null=True, related_name='students')
     student = models.ForeignKey(Student, on_delete=models.CASCADE, null=True, blank=True, related_name='classes')
     responsable = models.ForeignKey(ResponsableFiliere, on_delete=models.CASCADE, related_name='enseignements', null=True)
-
+    
     def __str__(self):
         return f"{self.teacher} enseigne {self.matiere} dans {self.classe}"
-
-
-
+    
 class Programme(models.Model):
     code_programme = models.CharField(max_length=50)
     niveau = models.CharField(max_length=50)
@@ -317,12 +331,12 @@ class CahierDeCours(models.Model):
 class Planning(models.Model):
     id = models.AutoField(primary_key=True, unique=True)
     date = models.DateField(default=timezone.now)
-    premiere_heure = models.TimeField(default='00:00')
-    deuxieme_heure = models.TimeField(default='00:00')
-    troisieme_heure = models.TimeField(default='00:00')
-    activite1 = models.CharField(max_length=100)
-    activite2 = models.CharField(max_length=100, default='Activite2')
-    activite3 = models.CharField(max_length=100, default='Activite3')
+    premiere_heure = models.TimeField(default='08:30')
+    deuxieme_heure = models.TimeField(default='11:00')
+    troisieme_heure = models.TimeField(default='14:00')
+    activite1 = models.CharField(max_length=100, null=True)
+    activite2 = models.CharField(max_length=100, null=True)
+    activite3 = models.CharField(max_length=100, null=True)
     salle = models.ForeignKey(Salle, on_delete=models.CASCADE, null=True)
     classe = models.ForeignKey(Classe, on_delete=models.CASCADE, null=True)
     professeur = models.ForeignKey(Teacher, on_delete=models.CASCADE, null=True)
@@ -346,9 +360,23 @@ class Media(models.Model):
     classe = models.ForeignKey(Classe, on_delete=models.CASCADE, null=True)
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
-    media_type = models.CharField(max_length=10, choices=MEDIA_TYPE_CHOICES)
+    media_type = models.CharField(max_length=10, choices=MEDIA_TYPE_CHOICES, null=True)
     file = models.FileField(upload_to='media/')
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.title
+
+class Projet(models.Model):
+    id = models.AutoField(primary_key=True, unique=True)
+    libelle=models.CharField(max_length=50, null=True)
+    description = models.TextField(null=True, blank=True)
+    file = models.FileField(upload_to='media/projet', null=True)
+    media_type = models.CharField(max_length=10, choices=MEDIA_TYPE_CHOICES, null=True)    
+    date = models.DateTimeField(default=timezone.now)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, null=True)
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, null=True)
+    responsable = models.ForeignKey(ResponsableFiliere, on_delete=models.CASCADE, null=True)
+    
+    def __str__(self):
+        return f'{self.libelle}'

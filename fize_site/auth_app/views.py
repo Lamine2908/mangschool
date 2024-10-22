@@ -2,8 +2,8 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
-from .models import Student, Teacher, Classe, Salle, Pointage, Note, Matiere, CahierDeCours, Comptable, Administrateur, Planning, ResponsableFiliere, ResponsableClasse
-from .form import StudentForm, NoteForm, MatiereForm, CahierDeCoursForm, PointageForm, AffecterProfForm, AffecterEleveForm, ClasseForm, SalleForm, TeacherForm, PlanningForm , CustomUserCreationForm, ConnexionForm, TeacherUpdateForm, StudentUpdateForm
+from .models import Student, Teacher, Classe, Salle, Pointage, ResponsableMetier, Note, Matiere, CahierDeCours, Comptable, Administrateur, Planning, ResponsableFiliere, ResponsableClasse
+from .form import StudentForm, NoteForm, MatiereForm, CahierDeCoursForm, ResponsableMetierForm, PointageForm, AffecterProfForm, AffecterEleveForm, ClasseForm, SalleForm, TeacherForm, PlanningForm , CustomUserCreationForm, ConnexionForm, TeacherUpdateForm, StudentUpdateForm
 from django.core.mail import send_mail
 from django.core.exceptions import ValidationError
 
@@ -38,6 +38,11 @@ def responsable_filiere(request, responsable_id):
     responsableFiliere = get_object_or_404(ResponsableFiliere, id=responsable_id)
     return render(request, 'responsable_filiere.html', {'responsableFiliere': responsableFiliere})
 
+def responsable_metier(request, responsable_id):
+    responsableMetier = get_object_or_404(ResponsableMetier, id=responsable_id)
+    return render(request, 'responsable_metier.html', {'responsableMetier': responsableMetier})
+
+
 def espaceprof(request, teacher_id):
     teacher = get_object_or_404(Teacher, id=teacher_id)
     return render(request, 'espaceprof.html', {'teacher': teacher})
@@ -65,6 +70,7 @@ def responsableclasse(request, responsable_id):
 def espacecomptable(request, comptable_id):
     comptables = get_object_or_404(Comptable, id=comptable_id)
     return render(request, 'espacecomptable.html', {'comptables': comptables})
+
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 
@@ -98,6 +104,12 @@ def connexion(request):
                 responsableFiliere = ResponsableFiliere.objects.get(matricule=matricule, email=email)
                 return redirect('responsable_filiere', responsable_id=responsableFiliere.id)
             except ResponsableFiliere.DoesNotExist:
+               pass 
+            
+            try:
+                responsableMetier = ResponsableMetier.objects.get(matricule=matricule, email=email)
+                return redirect('responsable_metier', responsable_id=responsableMetier.id)
+            except ResponsableMetier.DoesNotExist:
                 pass
 
             try:
@@ -169,6 +181,7 @@ def add_teacher(request):
         form = TeacherForm()
     return render(request, 'add_teacher.html', {'form': form})
 
+
 from .form import ResponsableFiliereForm, ResponsableUpdateForm
 
 def ajouter_responsable(request):
@@ -180,6 +193,17 @@ def ajouter_responsable(request):
     else:
         form = ResponsableFiliereForm()
     return render(request, 'ajouter_responsable_filiere.html', {'form': form})
+
+def ajouter_responsable_metier(request):
+    if request.method == 'POST':
+        form = ResponsableMetierForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('responsableMetier_list')
+    else:
+        form = ResponsableMetierForm()
+    return render(request, 'ajouter_responsable_metier.html', {'form': form})
+
 
 def delete_teacher_by_id(request, teacher_id):
     teacher = get_object_or_404(Teacher, id=teacher_id)
@@ -757,13 +781,10 @@ from .form import AffecterProfesseurForm
 from .models import Administrateur, Enseigner
 
 def affecter_professeur(request, responsable_id):
-    responsable = get_object_or_404(ResponsableFiliere, id=responsable_id)
+    responsable = get_object_or_404(ResponsableMetier, id=responsable_id)
     if request.method == 'POST':
         form = AffecterProfesseurForm(request.POST)
         if form.is_valid():
-            enseigner = form.save(commit=False)
-            enseigner.responsable = responsable
-            enseigner.save()
             return redirect('teacher_class')
     else:
         form = AffecterProfesseurForm()
@@ -873,14 +894,14 @@ def create_planning(request):
 
 def planning_list(request):
     responsable = ResponsableFiliere.objects.all()
-    plannings = Planning.objects.all()
+    plannings = Planning.objects.all().order_by('-date')
     return render(request, 'planning_list.html', {
         'plannings': plannings,
         'responsable': responsable
     })
 
 def planning_eleve(request):
-    plannings = Planning.objects.all()
+    plannings = Planning.objects.all().order_by('-date')
     return render(request, 'planning_eleve.html', {
         'plannings': plannings,
     })
@@ -904,7 +925,7 @@ def delete_planning(request, pk):
     return render(request, 'supprimer_planning.html', {'planning': planning})
 
 def filter_planning(request):
-    plannings = Planning.objects.all()
+    plannings = Planning.objects.all().order_by('-date')
     date = request.GET.get('date')
     
     if date:

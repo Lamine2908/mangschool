@@ -102,7 +102,11 @@
         <input type="text" id="lastname" name="lastname" value="{{ request.GET.lastname }}">
         <label for="classe">Classe:</label>
         <input type="text" id="classe" name="classe" value="{{ request.GET.classe }}">
-        <button type="submit">Filtrer</button>
+        <div style="text-align: center; margin-top: 20px;">
+            <button type="submit" class="btn btn-primary" style="margin-right: 10px;">Filtrer</button> 
+            <a href="{% url 'responsable_filiere' responsable.id %}" class="btn btn-secondary">Retour</a>
+        </div>
+        
     </form>
     <table class="table table-hover table-bordered">
         <thead class="table-light">
@@ -124,5 +128,6 @@
             {% endfor %}
         </tbody>
     </table>
+    <a href="{% url 'responsable_filiere' responsable.id %}" class="btn btn-secondary">Retour</a>
 </body>
 </html>

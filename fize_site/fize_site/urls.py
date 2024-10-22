@@ -30,6 +30,7 @@ urlpatterns = [
     path('acceuil/', views.index, name='index'),
     path('deconnexion/', views.deconnexion, name='deconnexion'),
     path('student/', views.student_list, name='student_list'),
+    path('responsable_metier/<int:responsable_id>/', views.responsable_metier, name='responsable_metier'),
     path('detail_eleve/<int:student_id>/', views.student_detail, name='student_detail'),
     path('detail_prof/<int:teacher_id>/', views.detail_prof, name='detail_prof'),
     path('filter_students_view/', views.filter_students_view, name='filter_students_view'),
