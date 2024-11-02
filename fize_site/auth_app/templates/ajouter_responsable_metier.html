@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ajouter un Responsable de Filiere</title>
+    <title>Ajouter un Responsable de metier</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
@@ -101,8 +101,8 @@
 <body>
 
     <div class="container form-container">
-        <h2 class="form-title">Ajouter un Responsable de Filiere</h2>
-        <form method="POST" action="{% url 'ajouter_responsable' %}" enctype="multipart/form-data">
+        <h2 class="form-title">Ajouter un Responsable de metier</h2>
+        <form method="POST" action="{% url 'ajouter_responsable_metier' resposable_id.id %}" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="row">
                 <div class="col-md-6">
@@ -135,8 +135,8 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label for="id_grade">Grade :</label>
-                        {{ form.grade }}
+                        <label for="id_grade">Status :</label>
+                        {{ form.status }}
                     </div>
                 </div>
             </div>

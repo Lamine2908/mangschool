@@ -143,6 +143,7 @@
                     <th>Activite 1</th>
                     <th>Activite 2</th>
                     <th>Activite 3</th>
+                    <th>Classe</th>
                     <th>Salle</th>
                     <th>Professeur</th>
                 </tr>
@@ -151,13 +152,14 @@
                 {% for planning in plannings %}
                     {% if planning %}
                         <tr>
-                            <td>{{ planning.date }}</td>
-                            <td>{{ planning.premiere_heure }}</td>
-                            <td>{{ planning.deuxieme_heure }}</td>
-                            <td>{{ planning.troisieme_heure }}</td>
+                            <td>{{ planning.date |date:"d F Y" }}</td>
+                            <td>{{ planning.premiere_heure|date:"H:i" }}</td>
+                            <td>{{ planning.deuxieme_heure|date:"H:i" }}</td>
+                            <td>{{ planning.troisieme_heure|date:"H:i" }}</td>
                             <td>{{ planning.activite1 }}</td>
                             <td>{{ planning.activite2 }}</td>
                             <td>{{ planning.activite3 }}</td>
+                            <td>{{ planning.classe }}</td>
                             <td>{{ planning.salle }}</td>
                             <td>{{ planning.professeur }}</td>
                         </tr>

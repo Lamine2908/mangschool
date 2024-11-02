@@ -8,7 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <style>
         .navbar {
-            background-color: #1a3c5a;
+            background-color: #d0690e;
         }
 
         .navbar-brand,
@@ -21,10 +21,10 @@
         }
 
         .hero {
-            background: url('https://images.ctfassets.net/63bmaubptoky/sZriYkvztFPUnfxy83p_SiPo-cUxTL2x5XzyC5FRwvs/e37799a95f714bd48891d63c91c930be/logiciel-de-gestion-etablissement-scolaire-FR-Capterra-Header.png?w=2200') no-repeat center center;
             background-size: cover;
+            background-color: #d0690e;
             color: #ffffff;
-            padding: 20px 0;
+            padding: 30px 1;
             text-align: center;
             position: relative;
             overflow: hidden;
@@ -41,11 +41,13 @@
             z-index: 1;
         }
 
+
         .hero h1 {
             font-size: 3.5rem;
             margin-bottom: 20px;
             z-index: 2;
             color : yellow;
+            position: relative;
         }
 
         .hero p {
@@ -53,10 +55,9 @@
             z-index: 2;
             {% comment %} color : r; {% endcomment %}
         }
-
         .section-icon {
             font-size: 2.5rem;
-            color: #1a3c5a;
+            color: #d0690e;
             margin-bottom: 15px;
         }
 
@@ -74,16 +75,16 @@
         }
 
         .section-card .btn {
-            background-color: #1a3c5a;
+            background-color: #d0690e;
             color: #ffffff;
         }
 
         .section-card .btn:hover {
-            background-color: #1a3c5a;
+            background-color: #c56f08;
         }
 
         .footer {
-            background-color: #1a3c5a;
+            background-color: #d0690e;
             color: #ffffff;
             padding: 20px 0;
         }
@@ -117,7 +118,7 @@
 
     <header class="hero">
         <div class="container position-relative">
-            <h1>Bienvenue {{Administrateur.first_name}} {{Administrateur.last_name}}</h1>
+            <h1>Bienvenue dans l'espace {{administrateur.first_name}}</h1>
             <p>Gérez les informations et les activités scolaires efficacement</p>
         </div>
     </header>

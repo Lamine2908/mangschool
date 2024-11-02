@@ -2,8 +2,8 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
-from .models import Student, Teacher, Classe, Salle, Pointage, ResponsableMetier, Note, Matiere, CahierDeCours, Comptable, Administrateur, Planning, ResponsableFiliere, ResponsableClasse
-from .form import StudentForm, NoteForm, MatiereForm, CahierDeCoursForm, ResponsableMetierForm, PointageForm, AffecterProfForm, AffecterEleveForm, ClasseForm, SalleForm, TeacherForm, PlanningForm , CustomUserCreationForm, ConnexionForm, TeacherUpdateForm, StudentUpdateForm
+from .models import *
+from .form import *
 from django.core.mail import send_mail
 from django.core.exceptions import ValidationError
 
@@ -194,17 +194,6 @@ def ajouter_responsable(request):
         form = ResponsableFiliereForm()
     return render(request, 'ajouter_responsable_filiere.html', {'form': form})
 
-def ajouter_responsable_metier(request):
-    if request.method == 'POST':
-        form = ResponsableMetierForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('responsableMetier_list')
-    else:
-        form = ResponsableMetierForm()
-    return render(request, 'ajouter_responsable_metier.html', {'form': form})
-
-
 def delete_teacher_by_id(request, teacher_id):
     teacher = get_object_or_404(Teacher, id=teacher_id)
 
@@ -375,6 +364,23 @@ def parametre_filiere(request, responsable_id):
     
     return render(request, 'parametre_filiere.html', context)
 
+
+def ajouter_responsable_metier(request, responsable_id):
+    responsable = get_object_or_404(ResponsableFiliere, id=responsable_id)
+    if request.method == 'POST':
+        form = ResponsableMetierForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('responsableMetier_list')
+    else:
+        form = ResponsableMetierForm()
+    return render(request, 'ajouter_responsable_metier.html', {'form': form, 'responsable':responsable})
+
+def responsableMetier_list(request, responsable_id):
+    responsable = get_object_or_404(ResponsableFiliere, id=responsable_id)
+    responsableMetieRs = ResponsableMetier.objects.filter(responsable=responsable)
+    
+    return render(request, 'responsable_metier.html', {'responsable':responsable, })
 
 from .form import MediaForm
 
@@ -909,12 +915,12 @@ def planning_eleve(request):
 def edit_planning(request, pk):
     planning = get_object_or_404(Planning, id=pk)
     if request.method == 'POST':
-        form = PlanningForm(request.POST)
+        form = EditPlanningForm(request.POST, instance=planning)
         if form.is_valid():
             form.save()
             return redirect('planning_list')
     else:
-        form = PlanningForm()
+        form = EditPlanningForm(instance=planning)
     return render(request, 'edit_planning.html', {'form': form, 'planning':planning})
 
 def delete_planning(request, pk):
@@ -984,7 +990,6 @@ def liste_pointages(request, teacher_id):
         'teacher': teacher
     })
 
-
 from django.shortcuts import render, redirect
 from PIL import Image
 from .form import ImageUploadForm
@@ -997,10 +1002,17 @@ def upload_and_resize_image(request):
         if form.is_valid():
             image = form.cleaned_data['image']
             img = Image.open(image)
+
+            if img.mode == 'RGBA':
+                img = img.convert('RGB')
+                
             img_resized = img.resize((600, 600))
-            file_name = image.name
+
+            file_name = os.path.splitext(image.name)[0] + ".jpeg"
             save_path = os.path.join(settings.MEDIA_ROOT, 'student_photos', file_name)
-            img_resized.save(save_path)
+
+            img_resized.save(save_path, format="JPEG") 
+
             return redirect('success_page')
     else:
         form = ImageUploadForm()

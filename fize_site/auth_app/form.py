@@ -86,12 +86,10 @@ class ResponsableFiliereForm(forms.ModelForm):
         model = ResponsableFiliere
         fields = ['matricule', 'first_name', 'last_name', 'profession', 'email', 'num_tel', 'grade']
 
-
 class ResponsableUpdateForm(forms.ModelForm):
     class Meta:
         model = ResponsableFiliere
         fields = ['matricule', 'first_name', 'last_name', 'profession', 'email', 'num_tel', 'grade']
-
 
     def clean(self):
         cleaned_data = super().clean()
@@ -181,8 +179,6 @@ class StudentUpdateForm(forms.ModelForm):
             raise forms.ValidationError("Tous les champs obligatoires doivent être remplis.")
 
         return cleaned_data
-
-
 
 class CahierDeCoursForm(forms.ModelForm):
     classe = forms.ModelChoiceField(
@@ -287,6 +283,24 @@ class PointageForm(forms.ModelForm):
 
             
 class PlanningForm(forms.ModelForm):
+    class Meta:
+        model = Planning
+        fields = '__all__'
+        widgets = {
+            'date': forms.DateInput(attrs={'type': 'date'}),
+            'premiere_heure': forms.TimeInput(attrs={'type': 'time'}),
+            'deuxieme_heure': forms.TimeInput(attrs={'type': 'time'}),
+            'troisieme_heure': forms.TimeInput(attrs={'type': 'time'}),
+            'activite1': forms.TextInput(attrs={'class': 'form-control'}),
+            'activite2': forms.TextInput(attrs={'class': 'form-control'}),
+            'activite3': forms.TextInput(attrs={'class': 'form-control'}),
+            'salle': forms.Select(attrs={'class': 'form-control'}),
+            'classe': forms.Select(attrs={'class': 'form-control'}),
+            'professeur': forms.Select(attrs={'class': 'form-control'}),
+            'responsable': forms.Select(attrs={'class': 'form-control'}),
+        }
+
+class EditPlanningForm(forms.ModelForm):
     class Meta:
         model = Planning
         fields = '__all__'

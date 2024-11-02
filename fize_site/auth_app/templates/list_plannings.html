@@ -22,6 +22,7 @@
                         <th scope="col">Activité 1</th>
                         <th scope="col">Activité 2</th>
                         <th scope="col">Activité 3</th>
+                        <th scope="col">Classe</th>
                         <th scope="col">Salle</th>
                         <th scope="col">Professeur</th>
                     </tr>
@@ -29,13 +30,14 @@
                 <tbody>
                     {% for planning in plannings %}
                     <tr>
-                        <td>{{ planning.date }}</td>
-                        <td>{{ planning.premiere_heure }}</td>
-                        <td>{{ planning.deuxieme_heure }}</td>
-                        <td>{{ planning.troisieme_heure }}</td>
+                        <td>{{ planning.date|date:"d F Y" }}</td>
+                        <td>{{ planning.premiere_heure|date:"H:i" }}</td>
+                        <td>{{ planning.deuxieme_heure|date:"H:i" }}</td>
+                        <td>{{ planning.troisieme_heure|date:"H:i" }}</td>
                         <td>{{ planning.activite1 }}</td>
                         <td>{{ planning.activite2 }}</td>
                         <td>{{ planning.activite3 }}</td>
+                        <td>{{ planning.classe }}</td>
                         <td>{{ planning.salle }}</td>
                         <td>{{ planning.professeur }}</td>
                     </tr>

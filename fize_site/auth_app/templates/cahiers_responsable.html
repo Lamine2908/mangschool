@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,7 +15,8 @@
         h1 {
             text-align: center;
             margin-top: 20px;
-            color: #343a40;
+            color: #007bff;
+            animation: fadeInDown 1s ease-in-out;
         }
 
         .container {
@@ -27,9 +27,10 @@
 
         form {
             margin-bottom: 20px;
+            animation: fadeInUp 1s ease-in-out;
         }
 
-        input[type="text"] {
+        input[type="text"], input[type="date"] {
             padding: 8px;
             border: 1px solid #ddd;
             border-radius: 4px;
@@ -43,6 +44,7 @@
             background-color: #007bff;
             color: white;
             cursor: pointer;
+            transition: background-color 0.3s ease;
         }
 
         button:hover {
@@ -54,12 +56,14 @@
             border-collapse: collapse;
             background-color: #ffffff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 1.5s ease;
         }
 
         th, td {
-            padding: 12px 15px;
+            padding: 10px;
             text-align: left;
             border-bottom: 1px solid #ddd;
+            font-size: 0.9em;
         }
 
         th {
@@ -73,47 +77,36 @@
         }
 
         tr:hover {
-            background-color: #f1f1f1;
-        }
-
-        td {
-            color: #343a40;
+            background-color: #e0e7ff;
+            transition: background-color 0.3s ease;
         }
 
         td[colspan="15"] {
             text-align: center;
             font-style: italic;
+            color: #666;
         }
 
+        .reduced {
+            width: 6%;
+        }
+
+        /* Responsive and Animated Styles */
         @media (max-width: 600px) {
             table, th, td {
                 display: block;
                 width: 100%;
             }
 
-            th, td {
-                box-sizing: border-box;
-                text-align: left;
-            }
-
             th {
                 display: none;
-            }
-
-            tr {
-                margin-bottom: 20px;
-                border-bottom: 2px solid #ddd;
-            }
-
-            tr:nth-child(even) {
-                background-color: transparent;
             }
 
             td {
                 display: flex;
                 justify-content: space-between;
                 padding: 10px;
-                font-size: 0.9em;
+                font-size: 0.85em;
             }
 
             td:before {
@@ -121,6 +114,22 @@
                 font-weight: bold;
                 color: #007bff;
             }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
@@ -147,15 +156,15 @@
                     <th>Durée</th>
                     <th>Horaire</th>
                     <th>Durée Théorie</th>
-                    <th>Corpus Théorie</th>
+                    <th class="reduced">C. Théorie</th>
                     <th>Durée TD</th>
-                    <th>Corpus TD</th>
+                    <th class="reduced">C. TD</th>
                     <th>Durée TP</th>
-                    <th>Corpus TP</th>
+                    <th class="reduced">C. TP</th>
                     <th>Durée TPA</th>
-                    <th>Corpus TPA</th>
+                    <th class="reduced">C. TPA</th>
                     <th>Durée Stage</th>
-                    <th>Corpus Stage</th>
+                    <th class="reduced">C. Stage</th>
                     <th>Appreciation</th>
                 </tr>
             </thead>
@@ -168,24 +177,24 @@
                     <td data-label="Durée">{{ cahier.duree }}</td>
                     <td data-label="Horaire">{{ cahier.horaire }}</td>
                     <td data-label="Durée Théorie">{{ cahier.duree_theorie }}</td>
-                    <td data-label="Corpus Théorie">{{ cahier.corpus_theorie }}</td>
+                    <td data-label="C. Théorie" class="reduced">{{ cahier.corpus_theorie }}</td>
                     <td data-label="Durée TD">{{ cahier.duree_td }}</td>
-                    <td data-label="Corpus TD">{{ cahier.corpus_td }}</td>
+                    <td data-label="C. TD" class="reduced">{{ cahier.corpus_td }}</td>
                     <td data-label="Durée TP">{{ cahier.duree_tp }}</td>
-                    <td data-label="Corpus TP">{{ cahier.corpus_tp }}</td>
+                    <td data-label="C. TP" class="reduced">{{ cahier.corpus_tp }}</td>
                     <td data-label="Durée TPA">{{ cahier.duree_tpa }}</td>
-                    <td data-label="Corpus TPA">{{ cahier.corpus_tpa }}</td>
+                    <td data-label="C. TPA" class="reduced">{{ cahier.corpus_tpa }}</td>
                     <td data-label="Durée Stage">{{ cahier.duree_stage }}</td>
-                    <td data-label="Corpus Stage">{{ cahier.corpus_stage }}</td>
+                    <td data-label="C. Stage" class="reduced">{{ cahier.corpus_stage }}</td>
+                    <td data-label="Appreciation">{{ cahier.appreciation }}</td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="15">Aucun cahier de cours disponible.</td>
+                    <td colspan="16">Aucun cahier de cours disponible.</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
 </body>
-
 </html>
