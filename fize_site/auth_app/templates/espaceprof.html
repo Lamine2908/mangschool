@@ -55,8 +55,8 @@
             color : yellow;
         }
 
-        .hero p {
-            font-size: 2rem;
+        .hero marquee {
+            font-size: 3rem;
             z-index: 2;
             color : white;
         }
@@ -103,17 +103,17 @@
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark">
-        <a class="navbar-brand" href="#">Geschool</a>
+        <a class="navbar-brand" href="#"><marquee>Geschool</marquee></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
-                <li class="nav-item">
+                {% comment %} <li class="nav-item">
                     <a class="nav-link" href="{% url 'espaceprof' teacher.id %}">Accueil</a>
-                </li>
+                </li> {% endcomment %}
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Espace Professeur</a>
+                    <a class="nav-link active" aria-current="page" href="#"><marquee>{{teacher.first_name}} {{teacher.last_name}}</marquee></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'connexion' %}">Déconnexion</a>
@@ -125,7 +125,7 @@
     <header class="hero">
         <div class="container position-relative">
             <h1>Bienvenue {{teacher.first_name}} {{teacher.last_name}}</h1>
-            <p>Gérez vos classes et activités pédagogiques facilement</p>
+            <marquee>Gérez vos classes et activités pédagogiques facilement</marquee>
         </div>
     </header>
 
@@ -137,7 +137,7 @@
                         <i class="bi bi-journal-bookmark section-icon"></i>
                         <h5 class="card-title">Liste de la classe</h5>
                         <p class="card-text">Planifiez et organisez vos cours.</p>
-                        <a href="{% url 'prof_etudiant_list' teacher.id %}" class="btn btn-primary">Voir les Cours</a>
+                        <a href="{% url 'prof_etudiant_list' teacher.id %}" class="btn btn-primary">Voir les Classes</a>
                     </div>
                 </div>
             </div>

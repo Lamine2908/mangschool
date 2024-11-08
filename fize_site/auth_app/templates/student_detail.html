@@ -126,11 +126,15 @@
                 {% endif %}
             </div>
             <div>
-                <input type="file" name="photo" id="photo" class="hidden-file-input" accept="image/*" required>
+                {% if student.photo %}
                 <label for="photo">
-                    <img src="#" alt="{{ student.first_name }} {{ student.last_name }}" class="student-photo" id="student-photo-preview">
+                    <img src="{{ student.photo.url }}" alt="{{ student.first_name }} {{ student.last_name }}" class="student-photo" id="student-photo-preview">
                 </label>
+                {% else %}
+                <p>Pas de photo disponible</p>
+                {% endif %}
             </div>
+            
         </div>
 
         <p><span class="info-label">Prénom:</span> {{ student.first_name }}</p>

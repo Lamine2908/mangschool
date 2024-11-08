@@ -1,5 +1,6 @@
 from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib import messages
+from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from .models import *
@@ -14,39 +15,37 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 def navigation(request):
     return render(request, 'navigation.html')
 
+@login_required
 def espaceeleve(request, student_id):
     student = get_object_or_404(Student, id=student_id)
     return render(request, 'espaceeleve.html', {'student': student})
 
-def espaceseleves(request):
-    student = Student.objects.all()
-    return render(request, 'espaceeleve.html', {'student': student})
-
+@login_required
 def espaceadmin(request, admin_id):
     administrateur = get_object_or_404(Administrateur, id=admin_id)
     return render(request, 'espaceadmin.html', {'administrateur': administrateur})
 
+@login_required
 def espaceadmins(request):
     administrateur = Administrateur.objects.all()
     return render(request, 'espaceadmin.html', {'administrateur': administrateur})
 
-def responsables_filieres(request):
-    responsableFilieres = ResponsableFiliere.objects.all()
-    return render(request, 'responsable_filiere.html', {'responsableFilieres': responsableFilieres})
-
+@login_required
 def responsable_filiere(request, responsable_id):
     responsableFiliere = get_object_or_404(ResponsableFiliere, id=responsable_id)
     return render(request, 'responsable_filiere.html', {'responsableFiliere': responsableFiliere})
 
+@login_required
 def responsable_metier(request, responsable_id):
     responsableMetier = get_object_or_404(ResponsableMetier, id=responsable_id)
     return render(request, 'responsable_metier.html', {'responsableMetier': responsableMetier})
 
-
+@login_required
 def espaceprof(request, teacher_id):
     teacher = get_object_or_404(Teacher, id=teacher_id)
     return render(request, 'espaceprof.html', {'teacher': teacher})
 
+@login_required
 def inscription(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
@@ -57,22 +56,19 @@ def inscription(request):
         form = CustomUserCreationForm()
     return render(request, 'inscription.html', {'form': form})
 
+@login_required
 def espaceresponsableclasse(request):
     return render(request, 'responsableClasse.html')
 
-def comptable(request):
-    return render(request, 'espacecomptable.html')
-
+@login_required
 def responsableclasse(request, responsable_id):
     responsableClasse = get_object_or_404(ResponsableClasse, id=responsable_id)
     return render(request, 'responsableClasse.html', {'responsableClasse': responsableClasse})
 
+@login_required
 def espacecomptable(request, comptable_id):
     comptables = get_object_or_404(Comptable, id=comptable_id)
     return render(request, 'espacecomptable.html', {'comptables': comptables})
-
-from django.contrib import messages
-from django.shortcuts import render, redirect, get_object_or_404
 
 def connexion(request):
     if request.method == 'POST':
@@ -82,49 +78,60 @@ def connexion(request):
             matricule = form.cleaned_data.get('matricule')
             email = form.cleaned_data.get('email')
             
+            user_found = False
+
             try:
+                
                 student = Student.objects.get(matricule=matricule, email=email)
-                return redirect('espaceeleve', student_id=student.id)
+                user_found = True
+                return render(request, 'espaceeleve.html', {'student': student})
             except Student.DoesNotExist:
                 pass
 
             try:
                 teacher = Teacher.objects.get(matricule=matricule, email=email)
-                return redirect('espaceprof', teacher_id=teacher.id)
+                user_found = True
+                return render(request, 'espaceprof.html', {'teacher': teacher})
             except Teacher.DoesNotExist:
                 pass
 
             try:
                 administrateur = Administrateur.objects.get(matricule=matricule, email=email)
-                return redirect('espaceadmin', admin_id=administrateur.id)
+                user_found = True
+                return render(request, 'espaceadmin.html', {'administrateur': administrateur})
             except Administrateur.DoesNotExist:
                 pass
 
             try:
                 responsableFiliere = ResponsableFiliere.objects.get(matricule=matricule, email=email)
-                return redirect('responsable_filiere', responsable_id=responsableFiliere.id)
+                user_found = True
+                return render(request, 'responsable_filiere.html', {'responsable_filiere': responsableFiliere})
             except ResponsableFiliere.DoesNotExist:
-               pass 
+                pass 
             
             try:
                 responsableMetier = ResponsableMetier.objects.get(matricule=matricule, email=email)
-                return redirect('responsable_metier', responsable_id=responsableMetier.id)
+                user_found = True
+                return render(request, 'responsable_metier.html', {'responsable_metier': responsableMetier})
             except ResponsableMetier.DoesNotExist:
                 pass
 
             try:
                 comptable = Comptable.objects.get(matricule=matricule, email=email)
-                return redirect('espacecomptable', comptable_id=comptable.id)
+                user_found = True
+                return render(request, 'espacecomptable.html', {'comptable': comptable})
             except Comptable.DoesNotExist:
                 pass
 
-            messages.error(request, "Informations Incorrectes .")
+            if not user_found:
+                messages.error(request, "Informations incorrectes. Veuillez vérifier votre matricule et votre email.")
         else:
             messages.error(request, "Formulaire invalide, veuillez vérifier les informations.")
     else:
         form = ConnexionForm()
 
     return render(request, 'connexion.html', {'form': form})
+
 
 
 def index(request):
@@ -143,10 +150,12 @@ def student_detail(request, student_id):
     student = get_object_or_404(Student, id=student_id)
     return render(request, 'student_detail.html', {'student': student})
 
-def teacher_list(request):
+def teacher_list(request, admin_id):
+    administrateur = get_object_or_404(Administrateur, id=admin_id)
     teachers = Teacher.objects.all()
-    return render(request, 'teacher_list.html', {'teachers': teachers})
+    return render(request, 'teacher_list.html', {'administrateur':administrateur, 'teachers': teachers})
 
+@login_required
 def responsableFiliere_list(request):
     responsables = ResponsableFiliere.objects.all()
     return render(request, 'responsableFiliere_list.html', {'responsables': responsables})
@@ -161,6 +170,8 @@ def add_student(request):
         form = StudentForm()
     return render(request, 'add_student.html', {'form': form})
 
+
+@login_required
 def delete_student_by_id(request, student_id):
     student = get_object_or_404(Student, id=student_id)
 
@@ -213,7 +224,6 @@ def delete_student_by_id(request, student_id):
         return redirect('student_list')
 
     return render(request, 'delete_students.html', {'student': student})
-
 
 def filter_students_view(request):
     students = Student.objects.all()
@@ -273,6 +283,7 @@ def update_responsable(request, admin_id):
     
     return render(request, 'modifier_responsable.html', {'form': form, 'admin': admin})
 
+@login_required
 def update_student(request, student_id):
     if request.method == 'POST':
         student = get_object_or_404(Student, id=student_id)
@@ -354,7 +365,6 @@ def ajouter_filiere(request):
     
     return render(request, 'ajouter_filiere.html', {'form': form})
 
-
 def parametre_filiere(request, responsable_id):
     responsable = get_object_or_404(ResponsableFiliere, id=responsable_id)
     
@@ -363,7 +373,6 @@ def parametre_filiere(request, responsable_id):
     }
     
     return render(request, 'parametre_filiere.html', context)
-
 
 def ajouter_responsable_metier(request, responsable_id):
     responsable = get_object_or_404(ResponsableFiliere, id=responsable_id)
@@ -509,8 +518,6 @@ def afficher_notes(request, teacher_id):
     }
     return render(request, 'afficher_notes.html', context)
 
-
-
 from django.shortcuts import render, get_object_or_404
 from .models import Teacher, Note, Enseigner
 
@@ -536,7 +543,6 @@ def filtrer_notes(request, teacher_id):
     }
     
     return render(request, 'filtrer_notes.html', context)
-
 
 def note_eleve(request, student_id):
     student = get_object_or_404(Student, id=student_id)
@@ -590,6 +596,7 @@ from django.shortcuts import render, get_object_or_404
 from django.core.exceptions import ValidationError
 from .models import Teacher, Student, Enseigner, Classe
 
+@login_required
 def prof_etudiant_list(request, teacher_id):
     teacher = get_object_or_404(Teacher, id=teacher_id)
     enseignements = Enseigner.objects.filter(teacher=teacher)
@@ -602,6 +609,17 @@ def prof_etudiant_list(request, teacher_id):
         'students_by_class': students_by_class,
     }
     return render(request, 'prof_etudiant_list.html', context)
+
+@login_required
+def classes(request, classe_id):
+    classe = get_object_or_404(Classe, id=classe_id)
+    students = Student.objects.filter(classe=classe)
+    context = {
+        'classe': classe,
+        'students': students
+    }
+    
+    return render(request, 'classes.html', context)
 
 
 def details_classe(request, classe_id):
@@ -1018,3 +1036,40 @@ def upload_and_resize_image(request):
         form = ImageUploadForm()
 
     return render(request, 'upload_image.html', {'form': form})
+
+from django.core.mail import send_mail
+from django.shortcuts import render
+from django.http import HttpResponse
+
+def envoyer_email(request):
+    if request.method == 'POST':
+        nom = request.POST.get('nom')
+        subject = request.POST.get('subject')
+        email = request.POST.get('email')
+        message = request.POST.get('message')
+        
+        data = {
+            'nom': nom,
+            'email': email,
+            'subject': subject,
+            'message': message
+        }
+        
+        corps = f"""
+        Nouveau message de {data['nom']} :
+        
+        Message : {data['message']}
+        
+        Depuis l'email : {data['email']}
+        """
+        
+        send_mail(
+            data['subject'],
+            corps,               
+            '',                    
+            ['laminfal29@gmail.com'] 
+        )
+        
+        return HttpResponse("Email envoyé avec succès!")
+    
+    return render(request, 'mail.html', {})

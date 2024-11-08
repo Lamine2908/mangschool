@@ -20,6 +20,7 @@ class Administrateur(models.Model):
     email = models.EmailField(unique=True, null=False, blank=False)
     qr_code = models.ImageField(upload_to='qr_codes/students', blank=True, null=True)
     photo = models.ImageField(upload_to='photos/admin', blank=True, null=True)  
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
@@ -54,6 +55,7 @@ class ResponsableFiliere(models.Model):
     grade = models.CharField(max_length=20, blank=True)
     qr_code = models.ImageField(upload_to='qr_codes/students', blank=True, null=True)
     photo = models.ImageField(upload_to='photos/responsable', blank=True, null=True)  
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
@@ -81,6 +83,7 @@ class Teacher(models.Model):
     responsable = models.ForeignKey(ResponsableFiliere, on_delete=models.CASCADE, null=True, blank=True)
     comptable = models.ForeignKey('Comptable', on_delete=models.CASCADE, null=True, blank=True)
     qr_code = models.ImageField(upload_to='qr_codes/teacher', blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
@@ -137,6 +140,7 @@ class ResponsableMetier(models.Model):
     num_tel = models.IntegerField(unique=True, blank=True, null=True)
     status = models.CharField(max_length=20, blank=True, null=True)
     responsable = models.ForeignKey(ResponsableFiliere, on_delete=models.CASCADE, null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     
     def __str__(self):
         return f'{self.first_name} : {self.last_name}'
@@ -163,7 +167,7 @@ class Student(models.Model):
     email = models.EmailField(unique=True, null=True, blank=True)
     qr_code = models.ImageField(upload_to='qr_codes/students', blank=True, null=True)
     photo = models.ImageField(upload_to='photos/', blank=True, null=True)  
-    
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
@@ -271,7 +275,8 @@ class Comptable(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.EmailField(unique=True)
-
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
     

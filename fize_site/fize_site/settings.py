@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'auth_app'
+    'auth_app',
 ]
 
 MIDDLEWARE = [
@@ -130,6 +130,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = '/connexion/' 
 LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL ='/connexion/'
+LOGOUT_REDIRECT_URL ='/deconnexion/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'laminfal29@gmail.com'
+EMAIL_HOST_PASSWORD = ''
+EMAIL_USE_SSL=False

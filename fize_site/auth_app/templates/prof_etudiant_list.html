@@ -61,7 +61,8 @@
                 <div class="class-card">
                     <h2 class="text-center text-secondary">{{ classe.name }}</h2>
                     <p class="text-center text-primary">{{ classe.description }}</p>
-                    <table class="student-table">
+                    <a href="{% url 'classes' classe.id %}">voir</a>
+                    {% comment %} <table class="student-table">
                         <thead>
                             <tr>
                                 <th>Prénom</th>
@@ -84,7 +85,7 @@
                             </tr>
                             {% endfor %}
                         </tbody>
-                    </table>
+                    </table> {% endcomment %}
                 </div>
             </div>
             {% endfor %}

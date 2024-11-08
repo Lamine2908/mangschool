@@ -174,10 +174,9 @@ class StudentUpdateForm(forms.ModelForm):
         filiere = cleaned_data.get('filiere')
         metier = cleaned_data.get('metier')
         email = cleaned_data.get('email')
-
-        if not matricule or not first_name or not last_name or not filiere  or not metier or not email:
+        photo=cleaned_data.get('photo')
+        if not matricule or not first_name or not last_name or not filiere  or not metier or not email or not photo:
             raise forms.ValidationError("Tous les champs obligatoires doivent être remplis.")
-
         return cleaned_data
 
 class CahierDeCoursForm(forms.ModelForm):

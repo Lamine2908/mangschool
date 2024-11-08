@@ -1,10 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-    <title>Erreur</title>
+    <meta charset="UTF-8">
+    <title>Erreur de Pointage</title>
 </head>
 <body>
-    <h1>Page non trouvée</h1>
-    <p>Nous ne pouvons pas trouver la page que vous recherchez.</p>
+    <h1>Erreur lors du pointage</h1>
+    <p>Une erreur s'est produite lors du pointage.</p>
+    <p>{{ error }}</p>
+    <a href="{% url 'pointage' teacher.id %}">Réessayer</a>
 </body>
 </html>
