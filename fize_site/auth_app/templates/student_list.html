@@ -25,7 +25,7 @@
         }
 
         .hero {
-            background: url('https://images.ctfassets.net/63bmaubptoky/sZriYkvztFPUnfxy83p_SiPo-cUxTL2x5XzyC5FRwvs/e37799a95f714bd48891d63c91c930be/logiciel-de-gestion-etablissement-scolaire-FR-Capterra-Header.png?w=2200') no-repeat center center;
+            background: url('https://images.ctfassets.net/63bmaubptoky/sZriYkvztFPUnfxy83p_SiPo-cUxTL2x5XzyC5FRwvs/e37799a95f714bd48891d63c91c930be/logiciel-de-gestion-etablissement-scolaire-FR-Capterra-Header.png?w=2200') no-repeat center center; 
             background-size: cover;
             color: #ffffff;
             padding: 120px 0;
@@ -106,7 +106,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Accueil</a>
+                    <a class="nav-link" href="{% url 'espaceadmin' administrateur.id %}">Accueil</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'filter_students_view' %}">Filtrer les élèves</a>
@@ -120,7 +120,7 @@
     </nav>
     <div class="container my-4">
         <h1 class="mb-4">Liste des Élèves</h1>
-        <a href="{% url 'add_student' %}" class="btn btn-primary mb-3">Ajouter un Élève</a>
+        <a href="{% url 'add_student' administrateur.id %}" class="btn btn-primary mb-3">Ajouter un Élève</a>
         <a href="{% url 'filter_students_view' %}" class="btn btn-primary mb-3">Rechercher un Élève</a>
 
         <table class="table table-striped">

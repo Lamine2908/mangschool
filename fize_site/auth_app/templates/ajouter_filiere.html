@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ajouter une filiere</title>
+    <title>Ajouter une filière</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+            background-color: #f4f9f4; /* couleur de fond plus douce */
         }
+
         .form-container {
             background-color: #fff;
             border-radius: 10px;
@@ -16,61 +19,157 @@
             padding: 30px;
             margin-top: 50px;
         }
-        .form-title {
-            font-size: 24px;
-            font-weight: bold;
-            color: #007bff;
+
+        .navbar {
+            background-color: #2C6B2F; /* un vert plus foncé pour la navbar */
         }
-        .form-label {
-            font-weight: bold;
+
+        .navbar-brand,
+        .nav-link {
+            color: #ffffff !important;
         }
+
+        .navbar-nav .nav-link:hover {
+            background-color: #56A755; /* un vert plus clair au survol */
+            color: #fff !important;
+        }
+
+        .navbar-nav .nav-link.active {
+            background-color: #4A914A; /* vert doux pour l'état actif */
+        }
+
+        .hero {
+            background: url('https://images.ctfassets.net/63bmaubptoky/sZriYkvztFPUnfxy83p_SiPo-cUxTL2x5XzyC5FRwvs/e37799a95f714bd48891d63c91c930be/logiciel-de-gestion-etablissement-scolaire-FR-Capterra-Header.png?w=2200') no-repeat center center;
+            background-size: cover;
+            color: #ffffff;
+            padding: 120px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+
+        .hero h1,
+        .hero p {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+        }
+
+        .footer {
+            background-color: #2C6B2F; /* même vert foncé que la navbar */
+            color: white;
+            padding: 15px 0;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            text-align: center;
+        }
+
         .btn-custom {
-            background-color: #007bff;
+            background-color: #2C6B2F; /* vert principal pour les boutons */
             color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
         }
+
         .btn-custom:hover {
-            background-color: #0056b3;
+            background-color: #56A755; /* vert plus clair au survol */
+        }
+
+        .form-title {
+            color: #2C6B2F; /* couleur du titre */
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .alert {
+            margin-bottom: 20px;
         }
     </style>
 </head>
+
 <body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="#"><marquee>Geschool</marquee></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'espaceadmin' administrateur.id %}">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="{% url 'espaceadmin' administrateur.id %}">Espace Administrateur</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'connexion' %}">Déconnexion</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
 
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="form-container">
-                <h2 class="form-title mb-4">Ajouter une nouvelle filiere</h2>
-                <form method="post" novalidate>
-                    {% csrf_token %}
-    
-                    {% if messages %}
-                        <div class="mb-3">
-                            {% for message in messages %}
-                                <div class="alert alert-{{ message.tags }}">
-                                    {{ message }}
-                                </div>
-                            {% endfor %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="form-container">
+                    <h2 class="form-title mb-4">Ajouter une nouvelle filière</h2>
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+                        {% if messages %}
+                            <div class="mb-3">
+                                {% for message in messages %}
+                                    <div class="alert alert-{{ message.tags }}">
+                                        {{ message }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <div class="form-group">
+                            <label for="id_nom" class="form-label">Nom</label>
+                            {{ form.nom }}
                         </div>
-                    {% endif %}
-
-                    <div class="form-group">
-                        <label for="id_nom" class="form-label">Nom</label>
-                        {{ form.nom }}
-                    </div>
-                    <div class="form-group">
-                        <label for="id_responsable" class="form-label">Responsable</label>
-                        {{ form.responsable }}
-                    </div>
-                    
-                    <button type="submit" class="btn btn-custom btn-block">Ajouter la filiere</button>
-                </form>
+                        <div class="form-group">
+                            <label for="id_responsable" class="form-label">Responsable</label>
+                            {{ form.responsable }}
+                        </div>
+                        <button type="submit" class="btn btn-custom btn-block">Ajouter la filière</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <footer class="footer">
+        <p>© 2024 Geschool. Tous droits réservés.</p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+
 </html>

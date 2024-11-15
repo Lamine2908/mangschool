@@ -77,14 +77,11 @@ WSGI_APPLICATION = 'fize_site.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'Projet',
-        'USER': 'root',
-        'PASSWORD':'Dj@ngo2024',
-        'HOST':'127.0.0.1',
-        'PORT':'3306'
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',  # Utilise la base de données SQLite dans le dossier du projet
     }
 }
+
 
 
 # Password validation

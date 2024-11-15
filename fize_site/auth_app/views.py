@@ -15,37 +15,26 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 def navigation(request):
     return render(request, 'navigation.html')
 
-@login_required
 def espaceeleve(request, student_id):
     student = get_object_or_404(Student, id=student_id)
     return render(request, 'espaceeleve.html', {'student': student})
 
-@login_required
 def espaceadmin(request, admin_id):
     administrateur = get_object_or_404(Administrateur, id=admin_id)
     return render(request, 'espaceadmin.html', {'administrateur': administrateur})
 
-@login_required
-def espaceadmins(request):
-    administrateur = Administrateur.objects.all()
-    return render(request, 'espaceadmin.html', {'administrateur': administrateur})
-
-@login_required
 def responsable_filiere(request, responsable_id):
     responsableFiliere = get_object_or_404(ResponsableFiliere, id=responsable_id)
     return render(request, 'responsable_filiere.html', {'responsableFiliere': responsableFiliere})
 
-@login_required
 def responsable_metier(request, responsable_id):
     responsableMetier = get_object_or_404(ResponsableMetier, id=responsable_id)
     return render(request, 'responsable_metier.html', {'responsableMetier': responsableMetier})
 
-@login_required
 def espaceprof(request, teacher_id):
     teacher = get_object_or_404(Teacher, id=teacher_id)
     return render(request, 'espaceprof.html', {'teacher': teacher})
 
-@login_required
 def inscription(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
@@ -56,16 +45,13 @@ def inscription(request):
         form = CustomUserCreationForm()
     return render(request, 'inscription.html', {'form': form})
 
-@login_required
 def espaceresponsableclasse(request):
     return render(request, 'responsableClasse.html')
 
-@login_required
 def responsableclasse(request, responsable_id):
     responsableClasse = get_object_or_404(ResponsableClasse, id=responsable_id)
     return render(request, 'responsableClasse.html', {'responsableClasse': responsableClasse})
 
-@login_required
 def espacecomptable(request, comptable_id):
     comptables = get_object_or_404(Comptable, id=comptable_id)
     return render(request, 'espacecomptable.html', {'comptables': comptables})
@@ -141,9 +127,10 @@ def deconnexion(request):
     logout(request)
     return redirect('connexion')
 
-def student_list(request):
+def student_list(request, admin_id):
+    administrateur=get_object_or_404(Administrateur, id=admin_id)
     students = Student.objects.all()
-    return render(request, 'student_list.html', {'students': students})
+    return render(request, 'student_list.html', {'administrateur':administrateur,'students': students})
 
 def student_detail(request, student_id):
     
@@ -155,12 +142,13 @@ def teacher_list(request, admin_id):
     teachers = Teacher.objects.all()
     return render(request, 'teacher_list.html', {'administrateur':administrateur, 'teachers': teachers})
 
-@login_required
-def responsableFiliere_list(request):
+def responsableFiliere_list(request, admin_id):
+    administrateur=get_object_or_404(Administrateur, id=admin_id)
     responsables = ResponsableFiliere.objects.all()
-    return render(request, 'responsableFiliere_list.html', {'responsables': responsables})
+    return render(request, 'responsableFiliere_list.html', {'administrateur':administrateur,'responsables': responsables})
 
-def add_student(request):
+def add_student(request, admin_id):
+    administrateur=get_object_or_404(Administrateur, id=admin_id)
     if request.method == 'POST':
         form = StudentForm(request.POST)
         if form.is_valid():
@@ -168,10 +156,8 @@ def add_student(request):
             return redirect('student_list')
     else:
         form = StudentForm()
-    return render(request, 'add_student.html', {'form': form})
+    return render(request, 'add_student.html', {'form': form, 'administrateur':administrateur})
 
-
-@login_required
 def delete_student_by_id(request, student_id):
     student = get_object_or_404(Student, id=student_id)
 
@@ -182,28 +168,30 @@ def delete_student_by_id(request, student_id):
 
     return render(request, 'delete_student.html', {'student': student})
 
-def add_teacher(request):
+
+def add_teacher(request, admin_id):
+    administrateur=get_object_or_404(Administrateur, id=admin_id)
     if request.method == 'POST':
         form = TeacherForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('teacher_list')
+            return redirect('teacher_list', admin_id=administrateur.id )
     else:
         form = TeacherForm()
-    return render(request, 'add_teacher.html', {'form': form})
-
+    return render(request, 'add_teacher.html', {'form': form, 'administrateur':administrateur})
 
 from .form import ResponsableFiliereForm, ResponsableUpdateForm
 
-def ajouter_responsable(request):
+def ajouter_responsable(request, admin_id):
+    administrateur=get_object_or_404(Administrateur, id=admin_id)
     if request.method == 'POST':
         form = ResponsableFiliereForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('responsableFiliere_list')
+            return redirect('responsableFiliere_list', admin_id=administrateur.id)
     else:
         form = ResponsableFiliereForm()
-    return render(request, 'ajouter_responsable_filiere.html', {'form': form})
+    return render(request, 'ajouter_responsable_filiere.html', {'form': form, 'administrateur':administrateur})
 
 def delete_teacher_by_id(request, teacher_id):
     teacher = get_object_or_404(Teacher, id=teacher_id)
@@ -211,7 +199,7 @@ def delete_teacher_by_id(request, teacher_id):
     if request.method == 'POST':
         teacher.delete()
         messages.success(request, "Le professeur a été supprimé avec succès.")
-        return redirect('teacher_list')
+        return redirect('teacher_list', admin_id=administrateur.id)
 
     return render(request, 'delete_teachers.html', {'teacher': teacher})
 
@@ -227,6 +215,7 @@ def delete_student_by_id(request, student_id):
 
 def filter_students_view(request):
     students = Student.objects.all()
+    administrateurs=Administrateur.objects.all()
 
     id = request.GET.get('id')
     first_name = request.GET.get('first_name')
@@ -239,7 +228,7 @@ def filter_students_view(request):
     elif last_name:
         students = students.filter(last_name__icontains=last_name)
 
-    return render(request, 'filter_students.html', {'students': students})
+    return render(request, 'filter_students.html', {'students': students, 'administrateurs':administrateurs})
 
 def filter_teacher(request):
     teachers = Teacher.objects.all()
@@ -337,9 +326,10 @@ def liste_matieres(request):
 
 from .models import Filiere
 
-def liste_filieres(request):
+def liste_filieres(request, admin_id):
+    administrateur=get_object_or_404(Administrateur, id=admin_id)
     filieres = Filiere.objects.all()
-    return render(request, 'liste_filieres.html', {'filieres': filieres})
+    return render(request, 'liste_filieres.html', {'filieres': filieres, 'administrateur':administrateur})
 
 def supprimer_matiere(request, matiere_id):
     matiere = Matiere.objects.get(id=matiere_id)
@@ -351,7 +341,8 @@ def supprimer_matiere(request, matiere_id):
 
 from .form import FiliereForm
 
-def ajouter_filiere(request):
+def ajouter_filiere(request, admin_id):
+    administrateur=get_object_or_404(Administrateur, id=admin_id)
     if request.method == 'POST':
         form = FiliereForm(request.POST)
         if form.is_valid():
@@ -363,7 +354,7 @@ def ajouter_filiere(request):
     else:
         form = FiliereForm()
     
-    return render(request, 'ajouter_filiere.html', {'form': form})
+    return render(request, 'ajouter_filiere.html', {'form': form, 'administrateur':administrateur})
 
 def parametre_filiere(request, responsable_id):
     responsable = get_object_or_404(ResponsableFiliere, id=responsable_id)
@@ -638,7 +629,8 @@ def liste_salles(request):
     salles = Salle.objects.all()
     return render(request, 'liste_salles.html', {'salles': salles})
 
-def ajouter_salle(request):
+def ajouter_salle(request, admin_id):
+    administrateur=get_object_or_404(Administrateur, id=admin_id)
     if request.method == 'POST':
         form = SalleForm(request.POST)
         if form.is_valid():
@@ -648,7 +640,7 @@ def ajouter_salle(request):
     else:
         form = SalleForm()
     
-    return render(request, 'ajouter_salle.html', {'form': form})
+    return render(request, 'ajouter_salle.html', {'form': form, 'administrateur':administrateur})
 
 def modifier_classe(request, id):
     classe = get_object_or_404(Classe, id=id)
@@ -801,22 +793,42 @@ def Affecter_eleve(request, admin_id):
         
     return render(request, 'affecter_eleve.html', {'form':form, 'administrateur':administrateur})
 
+from django.shortcuts import render, get_object_or_404, redirect
 from .form import AffecterProfesseurForm
-from .models import Administrateur, Enseigner
+from .models import ResponsableFiliere, Enseigner, Teacher, Matiere, Classe
 
 def affecter_professeur(request, responsable_id):
-    responsable = get_object_or_404(ResponsableMetier, id=responsable_id)
+    responsable = get_object_or_404(ResponsableFiliere, id=responsable_id)
+    
     if request.method == 'POST':
         form = AffecterProfesseurForm(request.POST)
         if form.is_valid():
+            # Récupérer les données du formulaire
+            professeur = form.cleaned_data['teacher']
+            matiere = form.cleaned_data['matiere']
+            classe = form.cleaned_data['classe']
+            
+            # Créer une nouvelle instance du modèle Enseigner
+            Enseigner.objects.create(
+                teacher=professeur,
+                matiere=matiere,
+                classe=classe,
+                responsable=responsable
+            )
+            
+            # Rediriger vers la vue teacher_class
             return redirect('teacher_class')
     else:
         form = AffecterProfesseurForm()
+
     return render(request, 'affecter_professeur.html', {'form': form, 'responsable': responsable})
 
 def teacher_class(request):
+    # Récupérer tous les enseignants avec leurs classes et matières associées
     teachers = Teacher.objects.prefetch_related('enseignements__classe').all()
+    
     return render(request, 'teacher_classe.html', {'teachers': teachers})
+
 
 
 def liste_classe(request):
@@ -907,6 +919,7 @@ def create_planning(request):
                     activite1=planning.activite1,
                     activite2=planning.activite2,
                     activite3=planning.activite3,
+                    classe=planning.classe,
                     salle=planning.salle,
                     professeur=planning.professeur,
                     responsable = planning.responsable

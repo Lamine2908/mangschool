@@ -6,103 +6,129 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ajouter un Responsable de Filiere</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        body {
+  <style>
+    body {
             font-family: 'Roboto', sans-serif;
             background-color: #f9fbfd;
             color: #333;
             animation: fadeInBody 1s ease-in-out;
         }
-
-        .form-container {
-            max-width: 650px;
-            margin: 60px auto;
-            background-color: #ffffff;
-            padding: 45px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        .navbar {
+            background-color: #d0690e;
         }
 
-        .form-container:hover {
-            transform: scale(1.01);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        .navbar-brand,
+        .nav-link {
+            color: #ffffff ;
         }
 
-        .form-title {
-            font-size: 28px;
-            font-weight: bold;
-            margin-bottom: 30px;
-            color: #003366;
+        .navbar-nav .nav-link:hover {
+            color: #cce5ff !important;
+        }
+
+        .hero {
+            background-size: cover;
+            background-color: #d0690e;
+            color: #ffffff;
+            padding: 30px 1;
             text-align: center;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
         }
 
-        .form-group {
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+
+
+        .hero h1 {
+            font-size: 3.5rem;
             margin-bottom: 20px;
+            z-index: 2;
+            color : yellow;
+            position: relative;
         }
 
-        .form-control {
-            border-radius: 10px;
-            border: 1px solid #ced4da;
-            transition: all 0.3s ease;
+        .hero p {
+            font-size: 2rem;
+            z-index: 2;
+            {% comment %} color : r; {% endcomment %}
+        }
+        .section-icon {
+            font-size: 2.5rem;
+            color: #d0690e;
+            margin-bottom: 15px;
         }
 
-        .form-control:focus {
-            border-color: #007bff;
-            box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
-            transform: scale(1.02);
+        .section-card {
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
         }
 
-        .btn-custom {
-            background-color: #003366;
-            color: white;
-            padding: 12px 18px;
-            font-size: 16px;
-            font-weight: bold;
-            border-radius: 10px;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-            border: none;
+        .section-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
         }
 
-        .btn-custom:hover {
-            background-color: #002244;
-            transform: translateY(-4px);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        .section-card .btn {
+            background-color: #d0690e;
+            color: #ffffff;
         }
 
-        .btn-custom:focus {
-            outline: none;
-            box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+        .section-card .btn:hover {
+            background-color: #c56f08;
         }
 
-        label {
-            font-weight: bold;
-            color: #555;
+        .footer {
+            background-color: #d0690e;
+            color: #ffffff;
+            padding: 20px 0;
         }
 
-        .form-text {
-            color: #888;
-        }
-
-        /* Animations */
-        @keyframes fadeInBody {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
+        .footer p {
+            margin: 0;
         }
     </style>
+
 </head>
 
 <body>
 
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="#"><marquee>Geschool</marquee></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'espaceadmin' administrateur.id %}">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="{% url 'espaceadmin' administrateur.id %}">Espace Administrateur</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'connexion' %}">Déconnexion</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+
     <div class="container form-container">
         <h2 class="form-title">Ajouter un Responsable de Filiere</h2>
-        <form method="POST" action="{% url 'ajouter_responsable' %}" enctype="multipart/form-data">
+        <form method="POST" action="{% url 'ajouter_responsable' administrateur.id %}" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="row">
                 <div class="col-md-6">

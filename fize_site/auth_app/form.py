@@ -134,7 +134,6 @@ class TeacherUpdateForm(forms.ModelForm):
             }),
         }
 
-
     def clean(self):
         cleaned_data = super().clean()
 
@@ -210,7 +209,8 @@ class PaiementForm(forms.ModelForm):
 class ClasseForm(forms.ModelForm):
     class Meta:
         model = Classe
-        fields = '__all__'
+        fields =  ['name', 'promo', 'description', 'filiere']
+
 
 from django import forms
 from django.core.exceptions import ValidationError
@@ -359,12 +359,9 @@ from django import forms
 from .models import Enseigner, Classe, Matiere
 
 class AffecterProfesseurForm(forms.ModelForm):
-    classe = forms.ModelChoiceField(queryset=Classe.objects.all(), label="Classe")
-    matiere = forms.ModelChoiceField(queryset=Matiere.objects.all(), label="Matière")
-
     class Meta:
         model = Enseigner
-        fields = ['teacher', 'classe', 'matiere']
+        fields = ['teacher', 'classe', 'matiere', 'responsable']
 
 
 class AssignClassForm(forms.ModelForm):
