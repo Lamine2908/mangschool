@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ajouter un Responsable de metier</title>
+    <title>Ajouter un Responsable de Métier</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
@@ -14,11 +14,25 @@
             animation: fadeInBody 1s ease-in-out;
         }
 
+        .navbar {
+            background-color: #2C6B2F; /* Couleur de fond principale */
+        }
+
+        .navbar-brand,
+        .nav-link {
+            color: #ffffff !important;
+        }
+
+        .navbar-nav .nav-link:hover {
+            background-color: #56A755;
+            color: #fff !important;
+        }
+
         .form-container {
-            max-width: 650px;
+            max-width: 750px;
             margin: 60px auto;
             background-color: #ffffff;
-            padding: 45px;
+            padding: 40px;
             border-radius: 15px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -33,7 +47,7 @@
             font-size: 28px;
             font-weight: bold;
             margin-bottom: 30px;
-            color: #003366;
+            color: #2C6B2F;
             text-align: center;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -50,13 +64,13 @@
         }
 
         .form-control:focus {
-            border-color: #007bff;
+            border-color: #56A755;
             box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
             transform: scale(1.02);
         }
 
         .btn-custom {
-            background-color: #003366;
+            background-color: #2C6B2F;
             color: white;
             padding: 12px 18px;
             font-size: 16px;
@@ -67,7 +81,7 @@
         }
 
         .btn-custom:hover {
-            background-color: #002244;
+            background-color: #56A755;
             transform: translateY(-4px);
             box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
         }
@@ -86,7 +100,7 @@
             color: #888;
         }
 
-        /* Animations */
+        /* Animation */
         @keyframes fadeInBody {
             from {
                 opacity: 0;
@@ -95,13 +109,35 @@
                 opacity: 1;
             }
         }
+
     </style>
 </head>
 
 <body>
 
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="#"><marquee>Geschool</marquee></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'espaceadmin' administrateur.id %}">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="{% url 'espaceadmin' administrateur.id %}">Espace Administrateur</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'connexion' %}">Déconnexion</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
     <div class="container form-container">
-        <h2 class="form-title">Ajouter un Responsable de metier</h2>
+        <h2 class="form-title">Ajouter un Responsable de Métier</h2>
         <form method="POST" action="{% url 'ajouter_responsable_metier' resposable_id.id %}" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="row">
@@ -145,14 +181,14 @@
                 {{ form.email }}
             </div>
             <div class="form-group">
-                <label for="id_num_tel">Telephone :</label>
+                <label for="id_num_tel">Téléphone :</label>
                 {{ form.num_tel }}
             </div>
             <div class="form-group">
                 <label for="photo" class="form-label">Photo</label>
                 <input type="file" class="form-control" id="photo" name="photo" accept="image/*">
             </div>
-            <button type="submit" class="btn btn-custom btn-block">Ajouter l'Étudiant</button>
+            <button type="submit" class="btn btn-custom btn-block">Ajouter le Responsable</button>
         </form>
     </div>
 

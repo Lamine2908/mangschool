@@ -154,7 +154,7 @@
                         <i class="bi bi-person-check section-icon"></i>
                         <h5 class="card-title">Infos classes</h5>
                         <p class="card-text">Accedez a cette page pour voir les professeurs et les clases gerees</p>
-                        <a href="{% url 'teacher_class' %}" class="btn btn-primary">Gérer les Enseignants</a>
+                        <a href="{% url 'teacher_class' responsableFiliere.id %}" class="btn btn-primary">Gérer les Enseignants</a>
                     </div>
                 </div>
             </div>
@@ -165,7 +165,7 @@
                         <i class="bi bi-clipboard-data section-icon"></i>
                         <h5 class="card-title">Cahiers de Texte</h5>
                         <p class="card-text">Accédez a cette page pour consulter les activités de la filière.</p>
-                        <a href="{% url 'listes_cahiers' %}" class="btn btn-primary">Voir les cahiers</a>
+                        <a href="{% url 'listes_cahiers' responsableFiliere.id %}" class="btn btn-primary">Voir les cahiers</a>
                     </div>
                 </div>
             </div>

@@ -9,7 +9,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <style>
         .navbar {
-            background-color: #d0690e;
+            background-color: #28a745;
         }
 
         .navbar-brand,
@@ -18,7 +18,7 @@
         }
 
         .navbar-nav .nav-link:hover {
-            color: #cce5ff !important;
+            color: #d4edda !important;
         }
 
         .hero {
@@ -55,7 +55,7 @@
 
         .section-icon {
             font-size: 2.5rem;
-            color: #d0690e;
+            color: #28a745;
             margin-bottom: 15px;
         }
 
@@ -73,16 +73,16 @@
         }
 
         .section-card .btn {
-            background-color: #d0690e;
+            background-color: #28a745;
             color: #ffffff;
         }
 
         .section-card .btn:hover {
-            background-color: #d0690e;
+            background-color: #218838;
         }
 
         .footer {
-            background-color: #d0690e;
+            background-color: #28a745;
             color: #ffffff;
             padding: 20px 0;
         }
@@ -103,10 +103,10 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Accueil</a>
+                    <a class="nav-link" href="{% url 'responsable_filiere' responsable.id %}">Accueil</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Espace Responsable</a>
+                    <a class="nav-link active" aria-current="page" href="#"><marquee>{{responsable.first_name}} {{responsable.last_name}}</marquee></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'index' %}">Déconnexion</a>
@@ -122,7 +122,7 @@
                     <i class="bi bi-book section-icon"></i>
                     <h3>Affecter les professeurs</h3>
                     <p>Gerer les professeurs de votre filiere.</p>
-                    <a href="{% url 'affecter_professeur' responsable.id %}" class="btn btn-primary">Affectre</a>
+                    <a href="{% url 'affecter_professeur' responsable.id %}" class="btn btn-primary">Affecter</a>
                 </div>
             </div>
             <div class="col-md-4 mb-4">
@@ -130,15 +130,15 @@
                     <i class="bi bi-journal section-icon"></i>
                     <h3>Gestion des Matières</h3>
                     <p>Gérez les matières et les cours de votre filière.</p>
-                    <a href="{% url 'ajouter_matiere' %}" class="btn btn-primary">Ajouter</a>
+                    <a href="{% url 'ajouter_matiere' responsable.id %}" class="btn btn-primary">Ajouter</a>
                 </div>
             </div>
             <div class="col-md-4 mb-4">
                 <div class="section-card p-4">
                     <i class="bi bi-journal section-icon"></i>
                     <h3>Liste des Matières</h3>
-                    <p>Lister les matières votre filière.</p>
-                    <a href="{% url 'liste_matieres' %}" class="btn btn-primary">Lister</a>
+                    <p>Lister les matières de votre filière.</p>
+                    <a href="{% url 'liste_matieres' responsable.id %}" class="btn btn-primary">Lister</a>
                 </div>
             </div>
             <div class="col-md-4 mb-4">

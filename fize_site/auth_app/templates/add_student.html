@@ -7,60 +7,110 @@
     <title>Ajouter un Étudiant</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f9fbfd;
+            color: #333;
+        }
+
         .navbar {
-            background-color: #d0690e;
+            background-color: #2C6B2F; /* Couleur de fond principale */
         }
 
         .navbar-brand,
         .nav-link {
-            color: #ffffff ;
+            color: #ffffff !important;
         }
 
         .navbar-nav .nav-link:hover {
-            color: #cce5ff !important;
+            background-color: #56A755;
+            color: #fff !important;
         }
 
         .hero {
-            background-size: cover;
             background-color: #d0690e;
             color: #ffffff;
             padding: 30px 1;
             text-align: center;
             position: relative;
-            overflow: hidden;
         }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1;
-        }
-
 
         .hero h1 {
             font-size: 3.5rem;
             margin-bottom: 20px;
-            z-index: 2;
-            color : yellow;
-            position: relative;
+            color: yellow;
         }
 
         .hero p {
             font-size: 2rem;
-            z-index: 2;
-            {% comment %} color : r; {% endcomment %}
-        }
-        .section-icon {
-            font-size: 2.5rem;
-            color: #d0690e;
-            margin-bottom: 15px;
+            color: white;
         }
 
+        .footer {
+            background-color: #2C6B2F;
+            color: #ffffff;
+            padding: 20px 0;
+        }
+
+        .footer p {
+            margin: 0;
+        }
+
+        /* Formulaire */
+        .form-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-title {
+            font-size: 2rem;
+            color: #2C6B2F;
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-top: 5px;
+            font-size: 1rem;
+        }
+
+        .form-group input[type="file"] {
+            padding: 10px;
+        }
+
+        .btn-custom {
+            background-color: #2C6B2F;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            width: 100%;
+            border: none;
+            font-size: 1.1rem;
+        }
+
+        .btn-custom:hover {
+            background-color: #56A755;
+        }
+
+        /* Styling pour les autres éléments */
+        .navbar-brand marquee {
+            font-size: 1.5rem;
+            color: yellow;
+        }
+
+        /* Cards */
         .section-card {
             background-color: #ffffff;
             border: 1px solid #dee2e6;
@@ -82,22 +132,12 @@
         .section-card .btn:hover {
             background-color: #c56f08;
         }
-
-        .footer {
-            background-color: #d0690e;
-            color: #ffffff;
-            padding: 20px 0;
-        }
-
-        .footer p {
-            margin: 0;
-        }
     </style>
 </head>
 
 <body>
 
-     <nav class="navbar navbar-expand-lg navbar-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark">
         <a class="navbar-brand" href="#"><marquee>Geschool</marquee></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -117,7 +157,7 @@
             </ul>
         </div>
     </nav>
-    
+
     <div class="container form-container">
         <h2 class="form-title">Ajouter un Étudiant</h2>
         <form method="POST" action="{% url 'add_student' administrateur.id %}" enctype="multipart/form-data">

@@ -328,7 +328,7 @@ class CahierDeCours(models.Model):
     corpus_stage = models.TextField(blank=True, null=True)
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, null=True)
     classe = models.ForeignKey(Classe, on_delete=models.CASCADE, null=True)
-    responsable = models.ForeignKey(ResponsableClasse, on_delete=models.CASCADE, null=True)
+    responsable = models.ForeignKey(ResponsableFiliere, on_delete=models.CASCADE, null=True)
     adjoint = models.ForeignKey(AdjointClasse, on_delete=models.CASCADE, null=True)
     
     def __str__(self):

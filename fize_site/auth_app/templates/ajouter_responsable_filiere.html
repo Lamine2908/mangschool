@@ -4,66 +4,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ajouter un Responsable de Filiere</title>
+    <title>Ajouter un Responsable de Filière</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <style>
-    body {
+    
+    <style>
+        body {
             font-family: 'Roboto', sans-serif;
             background-color: #f9fbfd;
             color: #333;
             animation: fadeInBody 1s ease-in-out;
         }
+
         .navbar {
-            background-color: #d0690e;
+            background-color: #2C6B2F; /* Couleur de fond principale */
         }
 
         .navbar-brand,
         .nav-link {
-            color: #ffffff ;
+            color: #ffffff !important;
         }
 
         .navbar-nav .nav-link:hover {
-            color: #cce5ff !important;
+            background-color: #56A755;
+            color: #fff !important;
         }
 
         .hero {
-            background-size: cover;
-            background-color: #d0690e;
+            background-color: #2C6B2F;
             color: #ffffff;
-            padding: 30px 1;
+            padding: 20px 0;
             text-align: center;
             position: relative;
-            overflow: hidden;
         }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1;
-        }
-
 
         .hero h1 {
             font-size: 3.5rem;
             margin-bottom: 20px;
-            z-index: 2;
-            color : yellow;
-            position: relative;
         }
 
         .hero p {
-            font-size: 2rem;
-            z-index: 2;
-            {% comment %} color : r; {% endcomment %}
+            font-size: 1.5rem;
         }
+
         .section-icon {
             font-size: 2.5rem;
-            color: #d0690e;
+            color: #2C6B2F;
             margin-bottom: 15px;
         }
 
@@ -73,6 +58,7 @@
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s, box-shadow 0.3s;
+            padding: 20px;
         }
 
         .section-card:hover {
@@ -81,16 +67,16 @@
         }
 
         .section-card .btn {
-            background-color: #d0690e;
+            background-color: #2C6B2F;
             color: #ffffff;
         }
 
         .section-card .btn:hover {
-            background-color: #c56f08;
+            background-color: #56A755;
         }
 
         .footer {
-            background-color: #d0690e;
+            background-color: #2C6B2F;
             color: #ffffff;
             padding: 20px 0;
         }
@@ -98,8 +84,54 @@
         .footer p {
             margin: 0;
         }
-    </style>
 
+        /* Améliorations pour le formulaire */
+        .form-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-title {
+            font-size: 2rem;
+            color: #2C6B2F;
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-top: 5px;
+            font-size: 1rem;
+        }
+
+        .form-group input[type="file"] {
+            padding: 10px;
+        }
+
+        .btn-custom {
+            background-color: #2C6B2F;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            width: 100%;
+            border: none;
+            font-size: 1.1rem;
+        }
+
+        .btn-custom:hover {
+            background-color: #56A755;
+        }
+    </style>
 </head>
 
 <body>
@@ -125,9 +157,8 @@
         </div>
     </nav>
 
-
     <div class="container form-container">
-        <h2 class="form-title">Ajouter un Responsable de Filiere</h2>
+        <h2 class="form-title">Ajouter un Responsable de Filière</h2>
         <form method="POST" action="{% url 'ajouter_responsable' administrateur.id %}" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="row">
@@ -171,14 +202,14 @@
                 {{ form.email }}
             </div>
             <div class="form-group">
-                <label for="id_num_tel">Telephone :</label>
+                <label for="id_num_tel">Téléphone :</label>
                 {{ form.num_tel }}
             </div>
             <div class="form-group">
                 <label for="photo" class="form-label">Photo</label>
                 <input type="file" class="form-control" id="photo" name="photo" accept="image/*">
             </div>
-            <button type="submit" class="btn btn-custom btn-block">Ajouter l'Étudiant</button>
+            <button type="submit" class="btn btn-custom">Ajouter le Responsable</button>
         </form>
     </div>
 

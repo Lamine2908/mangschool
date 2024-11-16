@@ -153,7 +153,7 @@ def add_student(request, admin_id):
         form = StudentForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('student_list')
+            return redirect('student_list', id=admin_id)
     else:
         form = StudentForm()
     return render(request, 'add_student.html', {'form': form, 'administrateur':administrateur})
@@ -294,19 +294,20 @@ def detail_prof(request, teacher_id):
     teacher = get_object_or_404(Teacher, id=teacher_id)
     return render(request, 'teacher_detail.html', {'teacher': teacher})
 
-def ajouter_matiere(request):
+def ajouter_matiere(request, responsable_id):
+    responsable=get_object_or_404(ResponsableFiliere, id=responsable_id)
     if request.method == 'POST':
         form = MatiereForm(request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, 'Matière ajoutée avec succès.')
-            return redirect('liste_matieres')
+            return redirect('liste_matieres', id=responsable_id)
         else:
             messages.error(request, 'Erreur lors de l\'ajout de la matière. Veuillez vérifier les informations.')
     else:
         form = MatiereForm()
     
-    return render(request, 'ajouter_matiere.html', {'form': form})
+    return render(request, 'ajouter_matiere.html', {'form': form, 'responsable':responsable})
 
 def modifier_matiere(request, matiere_id):
     matiere = get_object_or_404(Matiere, id=matiere_id)
@@ -314,15 +315,16 @@ def modifier_matiere(request, matiere_id):
         form = MatiereForm(request.POST, instance=matiere)
         if form.is_valid():
             form.save()
-            return redirect('liste_matieres')
+            return redirect('liste_matieres', id=matiere_id)
     else:
         form = MatiereForm(instance=matiere)
 
     return render(request, 'modifier_matiere.html', {'form': form})
 
-def liste_matieres(request):
+def liste_matieres(request, responsable_id):
+    responsable=get_object_or_404(ResponsableFiliere, id=responsable_id)
     matieres = Matiere.objects.all()
-    return render(request, 'liste_matieres.html', {'matieres': matieres})
+    return render(request, 'liste_matieres.html', {'responsable': responsable, 'matieres': matieres})
 
 from .models import Filiere
 
@@ -566,7 +568,6 @@ def modifier_notes(request, note_id):
 
 def ajouter_classe(request, administrateur_id):
     administrateur = get_object_or_404(Administrateur, id=administrateur_id)
-    
     if request.method == 'POST':
         form = ClasseForm(request.POST)
         if form.is_valid():
@@ -579,7 +580,7 @@ def ajouter_classe(request, administrateur_id):
 
     return render(request, 'ajouter_classe.html', {'form': form, 'administrateur': administrateur})
 
-def liste_classes(request):
+def liste_classes(request, ):
     classes = Classe.objects.all()
     return render(request, 'liste_classe.html', {'classes': classes})
 
@@ -587,7 +588,6 @@ from django.shortcuts import render, get_object_or_404
 from django.core.exceptions import ValidationError
 from .models import Teacher, Student, Enseigner, Classe
 
-@login_required
 def prof_etudiant_list(request, teacher_id):
     teacher = get_object_or_404(Teacher, id=teacher_id)
     enseignements = Enseigner.objects.filter(teacher=teacher)
@@ -601,7 +601,6 @@ def prof_etudiant_list(request, teacher_id):
     }
     return render(request, 'prof_etudiant_list.html', context)
 
-@login_required
 def classes(request, classe_id):
     classe = get_object_or_404(Classe, id=classe_id)
     students = Student.objects.filter(classe=classe)
@@ -612,12 +611,9 @@ def classes(request, classe_id):
     
     return render(request, 'classes.html', context)
 
-
 def details_classe(request, classe_id):
     classe = get_object_or_404(Classe, id=classe_id)
-
     students = classe.students.all()
-
     context = {
         'classe': classe,
         'students': students,
@@ -693,7 +689,6 @@ def supprimer_salle(request, id):
     
     return render(request, 'supprimer_salle.html', {'salle': salle})
 
-
 def class_info(request):
     classes = Classe.objects.all()
     teachers = Classe.objects.all()
@@ -707,7 +702,6 @@ def class_info(request):
 def class_list(request):
     classes = Classe.objects.all()
     return render(request, 'class_info.html', {'classes': classes})
-
 
 def notes_filiere(request, responsable_id):
     responsable = get_object_or_404(ResponsableFiliere, id=responsable_id)
@@ -758,7 +752,6 @@ def moyenne_par_classe(request, responsable_id):
     }
     return render(request, 'moyenne_par_classe.html', context)
 
-
 # def affecter_prof(request, responsable_id):
 #     responsable = get_object_or_404(ResponsableFiliere, id=responsable_id)
     
@@ -773,11 +766,10 @@ def moyenne_par_classe(request, responsable_id):
     
 #     return render(request, 'affecter_prof.html', {'form': form, 'responsable': responsable})
 
-def teacher_class(request):
-
-    teachers = Teacher.objects.prefetch_related('classes').all()
-    return render(request, 'teacher_classe.html', {'teachers': teachers})
-
+# def teacher_class(request):
+#     responsable=get_object_or_404(ResponsableFiliere, id=responsable_id)
+#     teachers = Teacher.objects.prefetch_related('classes').all()
+#     return render(request, 'teacher_classe.html', {'responsable':responsable,'teachers': teachers})
 
 def Affecter_eleve(request, admin_id):
     administrateur = get_object_or_404(Administrateur, id=admin_id)
@@ -803,43 +795,34 @@ def affecter_professeur(request, responsable_id):
     if request.method == 'POST':
         form = AffecterProfesseurForm(request.POST)
         if form.is_valid():
-            # Récupérer les données du formulaire
             professeur = form.cleaned_data['teacher']
             matiere = form.cleaned_data['matiere']
             classe = form.cleaned_data['classe']
-            
-            # Créer une nouvelle instance du modèle Enseigner
             Enseigner.objects.create(
                 teacher=professeur,
                 matiere=matiere,
                 classe=classe,
                 responsable=responsable
             )
-            
-            # Rediriger vers la vue teacher_class
-            return redirect('teacher_class')
+
+            return redirect('teacher_class', id=responsable_id)
     else:
         form = AffecterProfesseurForm()
 
     return render(request, 'affecter_professeur.html', {'form': form, 'responsable': responsable})
 
-def teacher_class(request):
-    # Récupérer tous les enseignants avec leurs classes et matières associées
+def teacher_class(request, responsable_id):
+    responsable=get_object_or_404(ResponsableFiliere, id=responsable_id)
     teachers = Teacher.objects.prefetch_related('enseignements__classe').all()
-    
-    return render(request, 'teacher_classe.html', {'teachers': teachers})
-
-
+    return render(request, 'teacher_classe.html', {'responsable':responsable, 'teachers': teachers})
 
 def liste_classe(request):
     students = Student.objects.filter(classe__isnull=False)
     classes = Classe.objects.prefetch_related('student_set').all()
     return render(request, 'liste_classe.html', {'students': students, 'classes':classes})
 
-
 def remplir_cahier(request, teacher_id):
     teacher = get_object_or_404(Teacher, id=teacher_id)
-    
     enseignements = Enseigner.objects.filter(teacher=teacher)
     classes = Classe.objects.filter(id__in=enseignements.values_list('classe_id', flat=True))
     
@@ -863,7 +846,6 @@ def remplir_cahier(request, teacher_id):
 
     return render(request, 'remplir_cahier.html', {'form': form, 'teacher': teacher, 'classes': classes})
 
-
 def liste_cahiers(request, teacher_id):
     teacher = get_object_or_404(Teacher, id=teacher_id)
     date_filter = request.GET.get('date', '')
@@ -882,8 +864,8 @@ def liste_cahiers(request, teacher_id):
     }
     return render(request, 'liste_cahier.html', context)
 
-def listes_cahiers(request):
-    responsable = ResponsableFiliere.objects.all()
+def listes_cahiers(request, responsable_id):
+    responsable = get_object_or_404(ResponsableFiliere, id=responsable_id)
     date_filter = request.GET.get('date', '')
     competence_filter = request.GET.get('competence', '')
     teacher_filter = request.GET.get('teacher', '')
@@ -899,11 +881,11 @@ def listes_cahiers(request):
         cahiers = cahiers.filter(teacher__first_name__icontains=teacher_filter) | cahiers.filter(teacher__last_name__icontains=teacher_filter)
     
     context = {
+        'responsable':responsable,
         'cahiers': cahiers,
         'teacher': responsable
     }
     return render(request, 'cahiers_responsable.html', context)
-
 
 def create_planning(request):
     resp = ResponsableFiliere.objects.all()

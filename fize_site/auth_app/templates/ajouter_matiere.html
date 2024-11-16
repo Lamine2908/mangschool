@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +10,19 @@
         body {
             background-color: #f8f9fa;
         }
+
+        .navbar {
+            background-color: #28a745;
+        }
+
+        .navbar-brand, .nav-link {
+            color: #ffffff !important;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #d4edda !important;
+        }
+
         .form-container {
             background-color: #fff;
             border-radius: 10px;
@@ -16,94 +30,192 @@
             padding: 30px;
             margin-top: 50px;
         }
+
         .form-title {
             font-size: 24px;
             font-weight: bold;
-            color: #007bff;
+            color: #28a745; /* Couleur verte */
         }
+
         .form-label {
             font-weight: bold;
         }
+
         .btn-custom {
-            background-color: #007bff;
+            background-color: #28a745; /* Couleur verte */
             color: #fff;
         }
+
         .btn-custom:hover {
-            background-color: #0056b3;
+            background-color: #218838; /* Couleur verte plus foncée */
+        }
+
+        .footer {
+            background-color: #28a745;
+            color: #ffffff;
+            padding: 20px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+        }
+
+        .footer p {
+            margin: 0;
+        }
+
+        .add-matiere-link {
+            font-size: 1.2rem;
+            display: inline-block;
+            margin-top: 20px;
+            color: #28a745;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+
+        .add-matiere-link:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            padding-bottom: 80px;
         }
     </style>
 </head>
+
 <body>
 
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="form-container">
-                <h2 class="form-title mb-4">Ajouter une nouvelle matière</h2>
-                <form method="post" novalidate>
-                    {% csrf_token %}
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="#">Geschool</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'responsable_filiere' responsable.id %}">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#"><marquee>{{responsable.first_name}} {{responsable.last_name}}</marquee></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'index' %}">Déconnexion</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="form-container">
+                    <h2 class="form-title mb-4">Ajouter une nouvelle matière</h2>
+                    <form method="post" novalidate>
+                        {% csrf_token %}
     
-                    {% if messages %}
-                        <div class="mb-3">
-                            {% for message in messages %}
-                                <div class="alert alert-{{ message.tags }}">
-                                    {{ message }}
+                        {% if messages %}
+                            <div class="mb-3">
+                                {% for message in messages %}
+                                    <div class="alert alert-{{ message.tags }}">
+                                        {{ message }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        
+                        <!-- Formulaire -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="id_code_matiere" class="form-label">Code de la matière</label>
+                                    {{ form.code_matiere }}
                                 </div>
-                            {% endfor %}
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="id_nom_matiere" class="form-label">Nom de la matière</label>
+                                    {{ form.nom_matiere }}
+                                </div>
+                            </div>
                         </div>
-                    {% endif %}
-                    
-                    <!-- Formulaire -->
-                    <div class="form-group">
-                        <label for="id_code_matiere" class="form-label">Code de la matière</label>
-                        {{ form.code_matiere }}
-                    </div>
-                    <div class="form-group">
-                        <label for="id_nom_matiere" class="form-label">Nom de la matière</label>
-                        {{ form.nom_matiere }}
-                    </div>
-                    <div class="form-group">
-                        <label for="id_ue" class="form-label">Unité d'enseignement</label>
-                        {{ form.ue }}
-                    </div>
-                    <div class="form-group">
-                        <label for="id_credit" class="form-label">Crédits</label>
-                        {{ form.credit }}
-                    </div>
-                    <div class="form-group">
-                        <label for="id_volume" class="form-label">Volume horaire</label>
-                        {{ form.volume }}
-                    </div>
-                    <div class="form-group">
-                        <label for="id_semestre" class="form-label">Semestre</label>
-                        {{ form.semestre }}
-                    </div>
-                    <div class="form-group">
-                        <label for="id_filiere" class="form-label">Filière</label>
-                        {{ form.filiere }}
-                    </div>
-                    <div class="form-group">
-                        <label for="id_teacher" class="form-label">Professeur</label>
-                        {{ form.teacher }}
-                    </div>
-                    <div class="form-group">
-                        <label for="id_responsable" class="form-label">Responsable</label>
-                        {{ form.responsable }}
-                    </div>
-                    <div class="form-group">
-                        <label for="id_classes" class="form-label">Classes</label>
-                        {{ form.classes }}
-                    </div>
-                    
-                    <button type="submit" class="btn btn-custom btn-block">Ajouter la matière</button>
-                </form>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="id_ue" class="form-label">Unité d'enseignement</label>
+                                    {{ form.ue }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="id_credit" class="form-label">Crédits</label>
+                                    {{ form.credit }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="id_volume" class="form-label">Volume horaire</label>
+                                    {{ form.volume }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="id_semestre" class="form-label">Semestre</label>
+                                    {{ form.semestre }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="id_filiere" class="form-label">Filière</label>
+                                    {{ form.filiere }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="id_teacher" class="form-label">Professeur</label>
+                                    {{ form.teacher }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="id_responsable" class="form-label">Responsable</label>
+                                    {{ form.responsable }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="id_classes" class="form-label">Classes</label>
+                                    {{ form.classes }}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-custom btn-block">Ajouter la matière</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <footer class="footer">
+        <p>© 2024 Geschool. Tous droits réservés.</p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+
 </html>
