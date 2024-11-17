@@ -7,7 +7,19 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background-color: #e9ecef;
+            background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+        }
+        .navbar {
+            background-color: #28a745;
+        }
+        .navbar-brand,
+        .nav-link {
+            color: #ffffff !important;
+        }
+        .navbar-nav .nav-link.active {
+            color: #fff !important;
+            background-color: #218838 !important;
         }
         .container {
             margin-top: 30px;
@@ -25,8 +37,22 @@
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
         }
         .class-card h2 {
-            color: #007bff;
+            color: #28a745;
             font-weight: bold;
+        }
+        .class-card p {
+            font-size: 1.1rem;
+            color: #333;
+        }
+        .class-card a {
+            text-decoration: none;
+            color: #28a745;
+            font-weight: bold;
+            display: inline-block;
+            margin-top: 15px;
+        }
+        .class-card a:hover {
+            text-decoration: underline;
         }
         .student-table {
             width: 100%;
@@ -39,7 +65,7 @@
             text-align: left;
         }
         .student-table th {
-            background-color: #007bff;
+            background-color: #28a745;
             color: #ffffff;
             font-weight: bold;
         }
@@ -50,47 +76,38 @@
         .student-table tr:nth-child(even) {
             background-color: #f8f9fa;
         }
+        .card-columns {
+            column-count: 2;
+        }
     </style>
 </head>
 <body>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <a class="navbar-brand" href="#">Geschool</a>
+        <a class="nav-link" href="{% url 'espaceprof' teacher.id %}">Accueil</a>
+        <a class="nav-link active" href="#">
+            <marquee>{{ teacher.first_name }} {{ teacher.last_name }}</marquee>
+        </a>
+        <a class="nav-link" href="{% url 'connexion' %}">Déconnexion</a>
+    </nav>
+
     <div class="container">
-        <h1 class="mb-5 text-center text-primary display-4">Classes de {{ teacher.first_name }} {{ teacher.last_name }}</h1>
+        <h1 class="mb-5 text-center text-success display-4">Classes de {{ teacher.first_name }} {{ teacher.last_name }}</h1>
+
         <div class="row">
             {% for classe, students in students_by_class.items %}
-            <div class="col-md-6">
+            <div class="col-md-6 mb-4">
                 <div class="class-card">
-                    <h2 class="text-center text-secondary">{{ classe.name }}</h2>
-                    <p class="text-center text-primary">{{ classe.description }}</p>
-                    <a href="{% url 'classes' classe.id %}">voir</a>
-                    {% comment %} <table class="student-table">
-                        <thead>
-                            <tr>
-                                <th>Prénom</th>
-                                <th>Nom</th>
-                                <th>Matricule</th>
-                                <th>Email</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for student in students %}
-                            <tr>
-                                <td>{{ student.first_name }}</td>
-                                <td>{{ student.last_name }}</td>
-                                <td>{{ student.matricule }}</td>
-                                <td>{{ student.email }}</td>
-                            </tr>
-                            {% empty %}
-                            <tr>
-                                <td colspan="3">Aucun étudiant dans cette classe.</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table> {% endcomment %}
+                    <h2 class="text-center text-success">{{ classe.name }}</h2>
+                    <p class="text-center text-muted">{{ classe.description }}</p>
+                    <a href="{% url 'classes' teacher.id %}" class="d-block text-center">Voir les étudiants</a>
+                    
                 </div>
             </div>
             {% endfor %}
         </div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

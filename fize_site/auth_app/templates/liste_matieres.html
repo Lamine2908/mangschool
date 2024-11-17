@@ -90,7 +90,7 @@
         }
 
         .container {
-            padding-bottom: 80px; /* Add space to avoid content under the fixed footer */
+            padding-bottom: 80px; 
         }
     </style>
 </head>
@@ -105,7 +105,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'responsable_filiere' responsable.id %}">Accueil</a>
+                    <a class="nav-link" href="{% url 'parametre_filiere' responsable.id %}">Accueil</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="#">
@@ -127,9 +127,9 @@
                 <tr>
                     <th>Code Matière</th>
                     <th>Nom Matière</th>
-                    <th>UE</th>
+                    <th>Unité d'enseignement</th>
                     <th>Crédit</th>
-                    <th>Volume</th>
+                    <th>Volume horaire</th>
                     <th>Semestre</th>
                     <th>Filière</th>
                     <th>Professeur</th>
@@ -148,7 +148,7 @@
                         <td>{{ matiere.filiere.nom }}</td>
                         <td>{{ matiere.teacher.first_name }} {{ matiere.teacher.last_name }}</td>
                         <td>
-                            <a href="{% url 'modifier_matiere' matiere.id %}" class="btn btn-warning btn-sm">Modifier</a>
+                            <a href="{% url 'modifier_matiere' responsable.id matiere.id %}" class="btn btn-warning btn-sm">Modifier</a>
                             <a href="{% url 'supprimer_matiere' matiere.id %}" class="btn btn-danger btn-sm">Supprimer</a>
                         </td>
                     </tr>

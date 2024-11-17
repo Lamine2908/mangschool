@@ -152,6 +152,17 @@
                 <div class="card section-card">
                     <div class="card-body">
                         <i class="bi bi-person-check section-icon"></i>
+                        <h5 class="card-title">Gérer les Responsables de Métier</h5>
+                        <p class="card-text">Ajoutez, modifiez ou supprimez des informations des Responsables de métier.</p>
+                        <a href="{% url 'ajouter_responsable_metier' administrateur.id %}" class="btn btn-primary">Voir plus</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card section-card">
+                    <div class="card-body">
+                        <i class="bi bi-person-check section-icon"></i>
                         <h5 class="card-title">Gérer les Filières</h5>
                         <p class="card-text">Ajoutez, modifiez ou supprimez des filières.</p>
                         <a href="{% url 'ajouter_filiere' administrateur.id %}" class="btn btn-primary">Voir les Filières</a>

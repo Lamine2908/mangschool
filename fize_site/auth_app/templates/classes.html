@@ -8,7 +8,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
     <style>
         .navbar {
-            background-color: #d0690e;
+            background-color: #28a745; /* Couleur verte */
         }
 
         .navbar-brand,
@@ -23,7 +23,7 @@
         .hero {
             background: url('https://images.ctfassets.net/63bmaubptoky/sZriYkvztFPUnfxy83p_SiPo-cUxTL2x5XzyC5FRwvs/e37799a95f714bd48891d63c91c930be/logiciel-de-gestion-etablissement-scolaire-FR-Capterra-Header.png?w=2200') no-repeat center center;
             background-size: cover;
-            color: green;
+            color: white;
             padding: 20px 0;
             text-align: center;
             position: relative;
@@ -44,25 +44,20 @@
         .hero h1 {
             position: relative;
             z-index: 2;
-        }
-
-
-        .hero h1 {
             font-size: 3.5rem;
             margin-bottom: 20px;
-            z-index: 2;
-            color : yellow;
+            color: yellow;
         }
 
         .hero marquee {
             font-size: 3rem;
             z-index: 2;
-            color : white;
+            color: white;
         }
 
         .section-icon {
             font-size: 2.5rem;
-            color: #d0690e;
+            color: #28a745;
             margin-bottom: 15px;
         }
 
@@ -80,16 +75,16 @@
         }
 
         .section-card .btn {
-            background-color: #d0690e;
+            background-color: #28a745;
             color: #ffffff;
         }
 
         .section-card .btn:hover {
-            background-color: #c85c0a;
+            background-color: #218838;
         }
 
         .footer {
-            background-color: #d0690e;
+            background-color: #28a745;
             color: #ffffff;
             padding: 20px 0;
         }
@@ -97,6 +92,7 @@
         .footer p {
             margin: 0;
         }
+
         .class-card {
             background-color: #f8f9fa;
             padding: 20px;
@@ -104,9 +100,11 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             transition: transform 0.2s;
         }
+
         .class-card:hover {
             transform: translateY(-10px);
         }
+
         .student-photo {
             width: 100px;
             height: 100px;
@@ -114,23 +112,45 @@
             border-radius: 50%;
             margin-bottom: 15px;
         }
+
         .student-table {
             margin-top: 20px;
         }
+
         .student-table th, .student-table td {
-            padding: 10px;
+            padding: 20px;
             text-align: center;
+        }
+
+        .student-table th {
+            background-color: #28a745;
+            color: #ffffff;
+        }
+
+        .student-table tbody tr:hover {
+            background-color: #f1f1f1;
         }
     </style>
 </head>
 <body>
+
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <a class="navbar-brand" href="#">Geschool</a>
+        <a class="nav-link" href="{% url 'espaceprof' teacher.id %}">Accueil</a>
+        <a class="nav-link active" href="#">
+            <marquee>{{ teacher.first_name }} {{ teacher.last_name }}</marquee>
+        </a>
+        <a class="nav-link" href="{% url 'connexion' %}">Déconnexion</a>
+    </nav>
+
+    <div class="container my-5">
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="class-card">
-                    <h2 class="text-center text-secondary">{{ classe.name }} <i class="fas fa-chalkboard-teacher"></i></h2>
+                    <h2 class="text-center text-success">{{ classe.name }} <i class="fas fa-chalkboard-teacher"></i></h2>
                     <p class="text-center text-primary">{{ classe.description }}</p>
                     <table class="table table-bordered student-table">
-                        <thead class="thead-dark">
+                        <thead>
                             <tr>
                                 <th>Matricule</th>
                                 <th>Prénom</th>

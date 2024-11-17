@@ -12,7 +12,7 @@
         }
 
         .navbar {
-            background-color: #0d6efd;
+            background-color: #28a745; /* Vert */
         }
 
         .navbar-brand,
@@ -58,7 +58,7 @@
 
         .section-icon {
             font-size: 2.5rem;
-            color: #d0690e; 
+            color: #28a745; /* Vert */
             margin-bottom: 15px;
         }
 
@@ -76,22 +76,32 @@
         }
 
         .section-card .btn {
-            background-color: #d0690e;
+            background-color: #28a745;
             color: #ffffff;
         }
 
         .section-card .btn:hover {
-            background-color: #d0690e; 
+            background-color: #218838; 
         }
 
         .footer {
-            background-color: #d0690e; 
+            background-color: #28a745;
             color: #ffffff;
             padding: 20px 0;
         }
 
         .footer p {
             margin: 0;
+        }
+
+        .btn-primary {
+            background-color: #28a745; 
+            border-color: #28a745;
+        }
+
+        .btn-primary:hover {
+            background-color: #218838; 
+            border-color: #1e7e34;
         }
     </style>
 </head>
@@ -109,19 +119,19 @@
                     <a class="nav-link" href="{% url 'espaceadmin' administrateur.id %}">Accueil</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'filter_students_view' %}">Filtrer les élèves</a>
+                    <a class="nav-link" href="{% url 'filter_students_view' administrateur.id %}">Filtrer les élèves</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'connexion' %}">Déconnexion</a>
                 </li>
             </ul>
-            
         </div>
     </nav>
+
     <div class="container my-4">
         <h1 class="mb-4">Liste des Élèves</h1>
         <a href="{% url 'add_student' administrateur.id %}" class="btn btn-primary mb-3">Ajouter un Élève</a>
-        <a href="{% url 'filter_students_view' %}" class="btn btn-primary mb-3">Rechercher un Élève</a>
+        <a href="{% url 'filter_students_view' administrateur.id %}" class="btn btn-primary mb-3">Rechercher un Élève</a>
 
         <table class="table table-striped">
             <thead>
@@ -134,7 +144,6 @@
                     <th>Métier</th>
                     <th>email</th>
                     <th>Action</th>
-                    
                 </tr>
             </thead>
             <tbody>
@@ -156,7 +165,6 @@
                 {% endfor %}
             </tbody>
         </table>
-        
     </div>
 </body>
 </html>

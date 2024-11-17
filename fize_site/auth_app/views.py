@@ -153,7 +153,7 @@ def add_student(request, admin_id):
         form = StudentForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('student_list', id=admin_id)
+            return redirect('student_list', admin_id=admin_id)
     else:
         form = StudentForm()
     return render(request, 'add_student.html', {'form': form, 'administrateur':administrateur})
@@ -179,8 +179,6 @@ def add_teacher(request, admin_id):
     else:
         form = TeacherForm()
     return render(request, 'add_teacher.html', {'form': form, 'administrateur':administrateur})
-
-from .form import ResponsableFiliereForm, ResponsableUpdateForm
 
 def ajouter_responsable(request, admin_id):
     administrateur=get_object_or_404(Administrateur, id=admin_id)
@@ -213,9 +211,9 @@ def delete_student_by_id(request, student_id):
 
     return render(request, 'delete_students.html', {'student': student})
 
-def filter_students_view(request):
+def filter_students_view(request, admin_id):
+    administrateur=get_object_or_404(Administrateur, id=admin_id)
     students = Student.objects.all()
-    administrateurs=Administrateur.objects.all()
 
     id = request.GET.get('id')
     first_name = request.GET.get('first_name')
@@ -228,7 +226,7 @@ def filter_students_view(request):
     elif last_name:
         students = students.filter(last_name__icontains=last_name)
 
-    return render(request, 'filter_students.html', {'students': students, 'administrateurs':administrateurs})
+    return render(request, 'filter_students.html', {'administrateur':administrateur ,'students': students})
 
 def filter_teacher(request):
     teachers = Teacher.objects.all()
@@ -246,18 +244,19 @@ def filter_teacher(request):
         
     return render(request, 'filter_teachers.html', {'teachers': teachers})
 
-def update_teacher(request, teacher_id):
+def update_teacher(request, admin_id, teacher_id):
+    administrateur=get_object_or_404(Administrateur, id=admin_id)
     if request.method == 'POST':
         teacher = get_object_or_404(Teacher, id=teacher_id)
         form = TeacherUpdateForm(request.POST, instance=teacher)
         if form.is_valid():
             form.save()
-            return redirect('teacher_list')
+            return redirect('teacher_list', admin_id=administrateur.id)
     else:
         teacher = get_object_or_404(Teacher, id=teacher_id)
         form = TeacherUpdateForm(instance=teacher)
     
-    return render(request, 'modifier_prof.html', {'form': form, 'teacher': teacher})
+    return render(request, 'modifier_prof.html', {'form': form, 'administrateur':administrateur, 'teacher': teacher})
 
 def update_responsable(request, admin_id):
     admin = get_object_or_404(ResponsableFiliere, id=admin_id)
@@ -301,7 +300,7 @@ def ajouter_matiere(request, responsable_id):
         if form.is_valid():
             form.save()
             messages.success(request, 'Matière ajoutée avec succès.')
-            return redirect('liste_matieres', id=responsable_id)
+            return redirect('liste_matieres', responsable_id=responsable_id)
         else:
             messages.error(request, 'Erreur lors de l\'ajout de la matière. Veuillez vérifier les informations.')
     else:
@@ -309,17 +308,18 @@ def ajouter_matiere(request, responsable_id):
     
     return render(request, 'ajouter_matiere.html', {'form': form, 'responsable':responsable})
 
-def modifier_matiere(request, matiere_id):
+def modifier_matiere(request, responsable_id, matiere_id):
+    responsable=get_object_or_404(ResponsableFiliere, id=responsable_id)
     matiere = get_object_or_404(Matiere, id=matiere_id)
     if request.method == 'POST':
         form = MatiereForm(request.POST, instance=matiere)
         if form.is_valid():
             form.save()
-            return redirect('liste_matieres', id=matiere_id)
+            return redirect('liste_matieres', responsable_id=responsable_id)
     else:
         form = MatiereForm(instance=matiere)
 
-    return render(request, 'modifier_matiere.html', {'form': form})
+    return render(request, 'modifier_matiere.html', {'form': form, 'responsable':responsable, 'matiere':matiere})
 
 def liste_matieres(request, responsable_id):
     responsable=get_object_or_404(ResponsableFiliere, id=responsable_id)
@@ -367,22 +367,25 @@ def parametre_filiere(request, responsable_id):
     
     return render(request, 'parametre_filiere.html', context)
 
-def ajouter_responsable_metier(request, responsable_id):
-    responsable = get_object_or_404(ResponsableFiliere, id=responsable_id)
+def ajouter_responsable_metier(request, admin_id):
+    administrateur = get_object_or_404(Administrateur, id=admin_id)
     if request.method == 'POST':
         form = ResponsableMetierForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('responsableMetier_list')
+            responsable_metier = form.save(commit=False)
+            responsable_metier.administrateur = administrateur 
+            responsable_metier.save()
+            return redirect('responsableMetier_list', admin_id=admin_id) 
     else:
         form = ResponsableMetierForm()
-    return render(request, 'ajouter_responsable_metier.html', {'form': form, 'responsable':responsable})
+    return render(request, 'ajouter_responsable_metier.html', {'form': form, 'administrateur': administrateur})
 
-def responsableMetier_list(request, responsable_id):
-    responsable = get_object_or_404(ResponsableFiliere, id=responsable_id)
-    responsableMetieRs = ResponsableMetier.objects.filter(responsable=responsable)
+def responsableMetier_list(request, admin_id):
+    administrateur = get_object_or_404(Administrateur, id=admin_id)
+    responsableMetiers = ResponsableMetier.objects.filter(administrateur=administrateur)
     
-    return render(request, 'responsable_metier.html', {'responsable':responsable, })
+    return render(request, 'responsable_metier.html', {'administrateur': administrateur, 'responsableMetiers': responsableMetiers})
+
 
 from .form import MediaForm
 
@@ -601,15 +604,21 @@ def prof_etudiant_list(request, teacher_id):
     }
     return render(request, 'prof_etudiant_list.html', context)
 
-def classes(request, classe_id):
-    classe = get_object_or_404(Classe, id=classe_id)
-    students = Student.objects.filter(classe=classe)
+def classes(request, teacher_id):
+    teacher = get_object_or_404(Teacher, id=teacher_id)
+    enseignements = Enseigner.objects.filter(teacher=teacher)
+    classes = [enseignement.classe for enseignement in enseignements]
+    students = Student.objects.filter(classe__in=classes)
+    
     context = {
-        'classe': classe,
+        'teacher': teacher,
+        'classes': classes,
         'students': students
     }
     
     return render(request, 'classes.html', context)
+
+
 
 def details_classe(request, classe_id):
     classe = get_object_or_404(Classe, id=classe_id)
@@ -887,8 +896,8 @@ def listes_cahiers(request, responsable_id):
     }
     return render(request, 'cahiers_responsable.html', context)
 
-def create_planning(request):
-    resp = ResponsableFiliere.objects.all()
+def create_planning(request, responsable_id):
+    responsable = get_object_or_404(ResponsableFiliere, id=responsable_id)
     if request.method == 'POST':
         form = PlanningForm(request.POST)
         if form.is_valid():
@@ -898,32 +907,41 @@ def create_planning(request):
                     premiere_heure=planning.premiere_heure,
                     deuxieme_heure=planning.deuxieme_heure,
                     troisieme_heure=planning.troisieme_heure,
-                    activite1=planning.activite1,
-                    activite2=planning.activite2,
-                    activite3=planning.activite3,
+                    matiere=planning.matiere,
                     classe=planning.classe,
                     salle=planning.salle,
                     professeur=planning.professeur,
                     responsable = planning.responsable
                 )
-            return redirect('planning_list') 
+            return redirect('planning_list', responsable_id=responsable_id ) 
     else:
         form = PlanningForm()
-    return render(request, 'creer_planning.html', {'form': form, 'resp':resp})
+    return render(request, 'creer_planning.html', {'form': form, 'responsable':responsable})
 
-def planning_list(request):
-    responsable = ResponsableFiliere.objects.all()
+def planning_list(request, responsable_id):
+    responsable = get_object_or_404(ResponsableFiliere, id=responsable_id)
     plannings = Planning.objects.all().order_by('-date')
     return render(request, 'planning_list.html', {
-        'plannings': plannings,
-        'responsable': responsable
+        'responsable': responsable,
+        'plannings': plannings
     })
 
-def planning_eleve(request):
+def planning_eleve(request, student_id):
+    student=get_object_or_404(Student, id=student_id)
     plannings = Planning.objects.all().order_by('-date')
-    return render(request, 'planning_eleve.html', {
+    return render(request, 'planning_eleve.html', { 
+        'student':student,
         'plannings': plannings,
     })
+
+def planning_prof(request, teacher_id):
+    teacher=get_object_or_404(Teacher, id=teacher_id)
+    plannings = Planning.objects.all().order_by('-date')
+    return render(request, 'planning_prof.html', {
+        'teacher':teacher,
+        'plannings': plannings,
+    })
+
 
 def edit_planning(request, pk):
     planning = get_object_or_404(Planning, id=pk)
@@ -931,7 +949,7 @@ def edit_planning(request, pk):
         form = EditPlanningForm(request.POST, instance=planning)
         if form.is_valid():
             form.save()
-            return redirect('planning_list')
+            return redirect('planning_list', id=responsable_id)
     else:
         form = EditPlanningForm(instance=planning)
     return render(request, 'edit_planning.html', {'form': form, 'planning':planning})
@@ -943,13 +961,14 @@ def delete_planning(request, pk):
         return redirect('planning_list')
     return render(request, 'supprimer_planning.html', {'planning': planning})
 
-def filter_planning(request):
+def filter_planning(request, responsable_id):
+    responsable=get_object_or_404(ResponsableFiliere, id=responsable_id)
     plannings = Planning.objects.all().order_by('-date')
     date = request.GET.get('date')
     
     if date:
         plannings = plannings.filter(date__icontains=date)
-    return render(request, 'filter_planning.html' , {'plannings':plannings})
+    return render(request, 'filter_planning.html' , {'responsable':responsable,'plannings':plannings})
 
 def pointage(request, teacher_id):
     teacher = get_object_or_404(Teacher, id=teacher_id)

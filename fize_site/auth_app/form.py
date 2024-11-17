@@ -51,7 +51,7 @@ class StudentForm(forms.ModelForm):
             'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Entrez le nom de famille'}),
             'filiere': forms.Select(attrs={'class': 'form-control'}),
             'classe': forms.Select(attrs={'class': 'form-control'}),
-            'metier': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Entrez le métier'}),
+            'metier': forms.Select(attrs={'class': 'form-control', 'placeholder': 'Entrez le métier'}),
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Entrez l\'email'}),
             'photo': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
@@ -290,14 +290,13 @@ class PlanningForm(forms.ModelForm):
             'premiere_heure': forms.TimeInput(attrs={'type': 'time'}),
             'deuxieme_heure': forms.TimeInput(attrs={'type': 'time'}),
             'troisieme_heure': forms.TimeInput(attrs={'type': 'time'}),
-            'activite1': forms.TextInput(attrs={'class': 'form-control'}),
-            'activite2': forms.TextInput(attrs={'class': 'form-control'}),
-            'activite3': forms.TextInput(attrs={'class': 'form-control'}),
+            'matiere': forms.Select(attrs={'class': 'form-control'}),
             'salle': forms.Select(attrs={'class': 'form-control'}),
             'classe': forms.Select(attrs={'class': 'form-control'}),
             'professeur': forms.Select(attrs={'class': 'form-control'}),
             'responsable': forms.Select(attrs={'class': 'form-control'}),
         }
+        
 
 class EditPlanningForm(forms.ModelForm):
     class Meta:
@@ -308,9 +307,7 @@ class EditPlanningForm(forms.ModelForm):
             'premiere_heure': forms.TimeInput(attrs={'type': 'time'}),
             'deuxieme_heure': forms.TimeInput(attrs={'type': 'time'}),
             'troisieme_heure': forms.TimeInput(attrs={'type': 'time'}),
-            'activite1': forms.TextInput(attrs={'class': 'form-control'}),
-            'activite2': forms.TextInput(attrs={'class': 'form-control'}),
-            'activite3': forms.TextInput(attrs={'class': 'form-control'}),
+            'matiere': forms.TextInput(attrs={'class': 'form-control'}),
             'salle': forms.Select(attrs={'class': 'form-control'}),
             'classe': forms.Select(attrs={'class': 'form-control'}),
             'professeur': forms.Select(attrs={'class': 'form-control'}),
@@ -407,17 +404,16 @@ from .models import Matiere
 class MatiereForm(forms.ModelForm):
     class Meta:
         model = Matiere
-        fields = ['code_matiere', 'nom_matiere', 'ue', 'credit', 'volume', 'semestre', 'filiere', 'teacher', 'responsable']
+        fields = ['code_matiere', 'nom_matiere', 'ue', 'credit', 'volume', 'semestre', 'filiere', 'teacher']
         widgets = {
             'code_matiere': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Code de la matière'}),
             'nom_matiere': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nom de la matière'}),
-            'ue': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Unité d\'enseignement'}),
+            'ue': forms.Select(attrs={'class': 'form-control', 'placeholder': 'Unité d\'enseignement'}),
             'credit': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Crédits'}),
-            'volume': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Volume horaire'}),
-            'semestre': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Semestre'}),
+            # 'volume': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Volume horaire'}),
+            'semestre': forms.Select(attrs={'class': 'form-control', 'placeholder': 'Semestre'}),
             'filiere': forms.Select(attrs={'class': 'form-control'}),
             'teacher': forms.Select(attrs={'class': 'form-control'}),
-            'responsable': forms.Select(attrs={'class': 'form-control'}),
         }
     
     def __init__(self, *args, **kwargs):

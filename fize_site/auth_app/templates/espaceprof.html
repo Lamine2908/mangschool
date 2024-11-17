@@ -86,15 +86,12 @@
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark">
-        <a class="navbar-brand" href="#"><marquee>Geschool</marquee></a>
+        <a class="navbar-brand" href="#">Geschool</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
-                {% comment %} <li class="nav-item">
-                    <a class="nav-link" href="{% url 'espaceprof' teacher.id %}">Accueil</a>
-                </li> {% endcomment %}
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="#"><marquee>{{teacher.first_name}} {{teacher.last_name}}</marquee></a>
                 </li>
@@ -114,27 +111,7 @@
 
     <main class="container my-5">
         <div class="row text-center">
-            <div class="col-md-4 mb-4">
-                <div class="card section-card">
-                    <div class="card-body">
-                        <i class="bi bi-journal-bookmark section-icon"></i>
-                        <h5 class="card-title">Liste de la classe</h5>
-                        <p class="card-text">Planifiez et organisez vos cours.</p>
-                        <a href="{% url 'prof_etudiant_list' teacher.id %}" class="btn btn-primary">Voir les Classes</a>
-                    </div>
-                </div>
-            </div>
-
-            {% comment %} <div class="col-md-4 mb-4">
-                <div class="card section-card">
-                    <div class="card-body">
-                        <i class="bi bi-file-earmark-text section-icon"></i>
-                        <h5 class="card-title">Suivi des Notes</h5>
-                        <p class="card-text">Enregistrez et consultez les notes des élèves.</p>
-                        <a href="{% url 'ajouter_notes' teacher.id%}" class="btn btn-primary">Voir les Notes</a>
-                    </div>
-                </div>
-            </div> {% endcomment %}
+            
 
             <div class="col-md-4 mb-4">
                 <div class="card section-card">
@@ -153,7 +130,7 @@
                         <i class="bi bi-calendar-check section-icon"></i>
                         <h5 class="card-title">Emploi du Temps</h5>
                         <p class="card-text">Gérez et consultez votre emploi du temps.</p>
-                        <a href="{% url 'filter_planning' %}" class="btn btn-primary">Voir les plannings</a>
+                        <a href="{% url 'planning_prof' teacher.id %}" class="btn btn-primary">Voir les plannings</a>
                     </div>
                 </div>
             </div>
@@ -164,7 +141,7 @@
                         <i class="bi bi-people section-icon"></i>
                         <h5 class="card-title">Pointer les eleves</h5>
                         <p class="card-text">Gérez les informations et les présences des élèves.</p>
-                        <a href="{% url 'pointage' teacher.id %}" class="btn btn-primary">Voir plus</a>
+                        <a href="#" class="btn btn-primary">Voir plus</a>
                     </div>
                 </div>
             </div>
@@ -212,6 +189,18 @@
                     </div>
                 </div>
             </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card section-card">
+                    <div class="card-body">
+                        <i class="bi bi-journal-bookmark section-icon"></i>
+                        <h5 class="card-title">Liste de la classe</h5>
+                        <p class="card-text">Planifiez et organisez vos cours.</p>
+                        <a href="{% url 'prof_etudiant_list' teacher.id %}" class="btn btn-primary">Voir les Classes</a>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </main>
 

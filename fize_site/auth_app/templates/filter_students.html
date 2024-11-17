@@ -14,7 +14,7 @@
     }
 
     .navbar {
-        background-color: #0d6efd;
+        background-color: #28a745; /* Vert pour la navbar */
     }
 
     .navbar-brand,
@@ -23,7 +23,7 @@
     }
 
     .navbar-nav .nav-link:hover {
-        color: #cce5ff !important;
+        color: #a8e6a1 !important; /* Vert plus clair au survol */
     }
 
     .hero {
@@ -60,7 +60,7 @@
 
     .section-icon {
         font-size: 2.5rem;
-        color: #d0690e; 
+        color: #28a745; /* Vert pour les icônes */
         margin-bottom: 15px;
     }
 
@@ -78,16 +78,16 @@
     }
 
     .section-card .btn {
-        background-color: #d0690e;
+        background-color: #28a745; /* Vert pour le bouton */
         color: #ffffff;
     }
 
     .section-card .btn:hover {
-        background-color: #d0690e; 
+        background-color: #218838; /* Vert foncé au survol */
     }
 
     .footer {
-        background-color: #d0690e; 
+        background-color: #28a745; /* Vert pour le footer */
         color: #ffffff;
         padding: 20px 0;
     }
@@ -105,21 +105,15 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
-               
                 <li class="nav-item">
-<a class="nav-link active" aria-current="page" href="{% if administrateur.id %}{% url 'espaceadmin' administrateur.id %}{% else %}#{% endif %}">Accueil</a>
+                    <a class="nav-link active" aria-current="page" href="{% url 'espaceadmin' administrateur.id %}">Accueil</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'student_list' %}">Lister les eleves</a>
+                    <a class="nav-link" href="{% url 'student_list' administrateur.id %}">Lister les eleves</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'filter_students_view' %}">Filtrer les eleves</a>
+                    <a class="nav-link" href="{% url 'filter_students_view' administrateur.id %}">Filtrer les eleves</a>
                 </li>
-                {% comment %} {% for student in students %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'edit_student' student.id %}">Modifier {{ student.first_name }}</a>
-                </li>
-            {% endfor %} {% endcomment %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'connexion' %}">Déconnexion</a>
                 </li>
@@ -141,20 +135,10 @@
                 </div>
 
                 <div class="col-md-2">
-                    <button type="submit" class="btn btn-primary">Filtrer</button>
-                    <a href="{% url 'student_list' %}" class="btn btn-secondary">Retour</a>
+                    <button type="submit" class="btn btn-success">Filtrer</button> <!-- Bouton vert -->
+                    <a href="{% url 'student_list' administrateur.id %}" class="btn btn-secondary">Retour</a>
                 </div>
-                <!-- Les champs filière et métier sont actuellement commentés -->
-                {% comment %}
-                <div class="col-md-3">
-                    <input type="text" name="filiere" class="form-control" placeholder="Filière" value="{{ request.GET.filiere }}">
-                </div>
-                <div class="col-md-3">
-                    <input type="text" name="metier" class="form-control" placeholder="Métier" value="{{ request.GET.metier }}">
-                </div>
-                {% endcomment %}
             </div>
-           
         </form>
 
         <table class="table table-striped">

@@ -15,7 +15,7 @@
         }
 
         .navbar {
-            background-color: #2C6B2F; /* Couleur de fond principale */
+            background-color: #2C6B2F;
         }
 
         .navbar-brand,
@@ -127,18 +127,15 @@
                     <a class="nav-link" href="{% url 'espaceadmin' administrateur.id %}">Accueil</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{% url 'espaceadmin' administrateur.id %}">Espace Administrateur</a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link" href="{% url 'connexion' %}">Déconnexion</a>
                 </li>
             </ul>
         </div>
     </nav>
 
-    <div class="container form-container">
-        <h2 class="form-title">Ajouter un Responsable de Métier</h2>
-        <form method="POST" action="{% url 'ajouter_responsable_metier' resposable_id.id %}" enctype="multipart/form-data">
+   <div class="container form-container">
+        <h2 class="form-title">Ajouter un Étudiant</h2>
+        <form method="POST" action="{% url 'ajouter_responsable_metier' administrateur.id %}" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="row">
                 <div class="col-md-6">
@@ -163,16 +160,11 @@
                 </div>
             </div>
             <div class="row">
+                
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label for="id_profession">Profession :</label>
+                        <label for="id_metier">Profession :</label>
                         {{ form.profession }}
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="id_grade">Status :</label>
-                        {{ form.status }}
                     </div>
                 </div>
             </div>
@@ -181,14 +173,10 @@
                 {{ form.email }}
             </div>
             <div class="form-group">
-                <label for="id_num_tel">Téléphone :</label>
-                {{ form.num_tel }}
-            </div>
-            <div class="form-group">
                 <label for="photo" class="form-label">Photo</label>
                 <input type="file" class="form-control" id="photo" name="photo" accept="image/*">
             </div>
-            <button type="submit" class="btn btn-custom btn-block">Ajouter le Responsable</button>
+            <button type="submit" class="btn btn-custom btn-block">Ajouter</button>
         </form>
     </div>
 

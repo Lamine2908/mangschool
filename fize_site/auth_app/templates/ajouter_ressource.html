@@ -5,46 +5,111 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ajouter une Ressource</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f4fdf1;
+            color: #333;
+        }
+
+        .navbar {
+            background-color: #4CAF50;
+        }
+
+        .navbar-brand, .nav-link {
+            color: white !important;
+        }
+
+        .navbar .nav-link.active {
+            color: #b1e6c1 !important;
+        }
+
+        .form-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+        }
+
+        .form-title {
+            color: #4CAF50;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-label {
+            color: #4CAF50;
+        }
+
+        .btn-primary {
+            background-color: #4CAF50;
+            border-color: #4CAF50;
+        }
+
+        .btn-primary:hover {
+            background-color: #45a049;
+            border-color: #45a049;
+        }
+
+        .form-container .form-control {
+            border-color: #4CAF50;
+            border-radius: 4px;
+        }
+
+        .form-container .form-control:focus {
+            border-color: #45a049;
+            box-shadow: 0 0 0 0.2rem rgba(72, 211, 126, 0.25);
+        }
+    </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="form-container">
-                <h2 class="form-title">Ajouter une Ressource pour {{ teacher.name }}</h2>
-                <form method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <div class="mb-3">
-                        <label for="title" class="form-label">Titre</label>
-                        {{ form.title }}
-                    </div>
-                    <div class="mb-3">
-                        <label for="description" class="form-label">Description</label>
-                        {{ form.description }}
-                    </div>
-                    <div class="mb-3">
-                        <label for="media_type" class="form-label">Type de Média</label>
-                        {{ form.media_type }}
-                    </div>
-                    <div class="mb-3">
-                        <label for="classe" class="form-label">Classe</label>
-                        {{ form.classe }}
-                    </div>
-                    <div class="mb-3">
-                        <label for="matiere" class="form-label">Matière</label>
-                        {{ form.matiere }}
-                    </div>
-                    <div class="mb-3">
-                        <label for="file" class="form-label">Fichier</label>
-                        {{ form.file }}
-                    </div>
-                    <button type="submit" class="btn btn-primary">Ajouter</button>
-                </form>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <a class="navbar-brand" href="#">Geschool</a>
+        <a class="nav-link" href="{% url 'espaceprof' teacher.id %}">Accueil</a>
+        <a class="nav-link active" href="#">
+            <marquee>{{ teacher.first_name }} {{ teacher.last_name }}</marquee>
+        </a>
+        <a class="nav-link" href="{% url 'connexion' %}">Déconnexion</a>
+    </nav>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="form-container">
+                    <h2 class="form-title">Ajouter une Ressource pour {{ teacher.name }}</h2>
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Titre</label>
+                            {{ form.title }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            {{ form.description }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="media_type" class="form-label">Type de Média</label>
+                            {{ form.media_type }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="classe" class="form-label">Classe</label>
+                            {{ form.classe }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="matiere" class="form-label">Matière</label>
+                            {{ form.matiere }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="file" class="form-label">Fichier</label>
+                            {{ form.file }}
+                        </div>
+                        <button type="submit" class="btn btn-primary">Ajouter</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 </body>
 </html>

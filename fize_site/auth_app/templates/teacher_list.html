@@ -2,18 +2,17 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Liste des Élèves</title>
+    <title>Liste des profs</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f8f9fa;
+            background-color: #e8f9e8;
             margin: 0;
         }
 
         .navbar {
-            background-color: #0d6efd;
-        }
+            background-color: #28a745;         }
 
         .navbar-brand,
         .nav-link {
@@ -21,7 +20,7 @@
         }
 
         .navbar-nav .nav-link:hover {
-            color: #cce5ff !important;
+            color: #a6f4a6 !important;
         }
 
         .hero {
@@ -58,7 +57,7 @@
 
         .section-icon {
             font-size: 2.5rem;
-            color: #d0690e; 
+            color: #28a745; 
             margin-bottom: 15px;
         }
 
@@ -76,16 +75,15 @@
         }
 
         .section-card .btn {
-            background-color: #d0690e;
+            background-color: #28a745;
             color: #ffffff;
         }
 
         .section-card .btn:hover {
-            background-color: #d0690e; 
-        }
+            background-color: #218838;         }
 
         .footer {
-            background-color: #d0690e; 
+            background-color: #28a745; 
             color: #ffffff;
             padding: 20px 0;
         }
@@ -109,19 +107,19 @@
                     <a class="nav-link active" aria-current="page" href="{% url 'espaceadmin' administrateur.id %}">Accueil</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#}">Filtrer les profs</a>
+                    <a class="nav-link" href="#">Filtrer les profs</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'connexion' %}">Déconnexion</a>
                 </li>
             </ul>
-            
         </div>
     </nav>
+
     <div class="container my-4">
         <h1 class="mb-4">Liste des Profs</h1>
-        <a href="{% url 'add_teacher' administrateur.id %}" class="btn btn-primary mb-3">Ajouter un Prof</a>
-        <a href="#" class="btn btn-primary mb-3">Rechercher un Prof </a>
+        <a href="{% url 'add_teacher' administrateur.id %}" class="btn btn-success mb-3">Ajouter un Prof</a>
+        <a href="#" class="btn btn-success mb-3">Rechercher un Prof</a>
 
         <table class="table table-striped">
             <thead>
@@ -132,7 +130,6 @@
                     <th>Profession</th>
                     <th>email</th>
                     <th>Action</th>
-                    
                 </tr>
             </thead>
             <tbody>
@@ -144,15 +141,14 @@
                     <td>{{ teacher.profession }}</td>
                     <td>{{ teacher.email }}</td>
                     <td>
-                        {% comment %} <a href="{% url 'affecter_prof' administrateur.id %}" class="btn btn-primary btn-sm">Afeccter classe</a> {% endcomment %}
-                        <a href="{% url 'update_teacher' teacher.id %}" class="btn btn-warning btn-sm">Modifier</a>
+                        <a href="{% url 'update_teacher' administrateur.id teacher.id %}" class="btn btn-warning btn-sm">Modifier</a>
                         <a href="{% url 'delete_teacher_by_id' teacher.id %}" class="btn btn-danger btn-sm">Supprimer</a>
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
-        
     </div>
+
 </body>
 </html>

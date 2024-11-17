@@ -42,12 +42,12 @@
         }
 
         .btn-custom {
-            background-color: #28a745; /* Couleur verte */
+            background-color: #28a745;
             color: #fff;
         }
 
         .btn-custom:hover {
-            background-color: #218838; /* Couleur verte plus foncée */
+            background-color: #218838; 
         }
 
         .footer {
@@ -96,7 +96,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'responsable_filiere' responsable.id %}">Accueil</a>
+                    <a class="nav-link" href="{% url 'parametre_filiere' responsable.id %}">Accueil</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="#"><marquee>{{responsable.first_name}} {{responsable.last_name}}</marquee></a>
@@ -194,12 +194,12 @@
                                     {{ form.responsable }}
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <!-- <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="id_classes" class="form-label">Classes</label>
                                     {{ form.classes }}
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                         
                         <button type="submit" class="btn btn-custom btn-block">Ajouter la matière</button>

@@ -16,13 +16,13 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            justify-content: center; /* Centre le contenu verticalement */
+            justify-content: center;
         }
 
         /* Navbar Styles */
         .navbar {
             background-color: #2C6B2F;
-            padding: 8px 20px; /* Réduit la hauteur de la barre de navigation */
+            padding: 8px 20px; 
         }
 
         .navbar-brand,
@@ -59,7 +59,7 @@
             margin: 20px auto;
             padding: 20px;
             flex: 1;
-            text-align: center; /* Centrer le formulaire */
+            text-align: center;
         }
 
         h1 {
@@ -72,7 +72,7 @@
             justify-content: space-between;
             margin-bottom: 20px;
             gap: 10px;
-            flex-wrap: wrap; /* Permet aux champs de se placer sous forme de lignes */
+            flex-wrap: wrap;
         }
 
         label {
@@ -105,15 +105,15 @@
         .table-wrapper {
             display: flex;
             justify-content: center;
-            flex-grow: 1; /* Permet de garder la table centrée même quand il y a du contenu sous */
+            flex-grow: 1;
             padding: 20px 0;
         }
 
         table {
-            width: 80%; /* Définit la largeur de la table */
-            max-width: 1200px; /* La table n'excède pas cette largeur */
+            width: 80%; 
+            max-width: 1200px; 
             border-collapse: collapse;
-            margin: 0 auto; /* Centre la table horizontalement */
+            margin: 0 auto; 
             text-align: center;
         }
 
@@ -176,11 +176,10 @@
             }
 
             table {
-                width: 100%; /* Sur petits écrans, la table prend toute la largeur */
+                width: 100%;
             }
         }
 
-        /* Button Adjustments */
         .btn-primary {
             background-color: #2C6B2F;
             border: none;
@@ -201,8 +200,7 @@
 
 <body>
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark">
+   <nav class="navbar navbar-expand-lg navbar-dark">
         <a class="navbar-brand" href="#">Geschool</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -211,19 +209,18 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Accueil</a>
+                    <a class="nav-link" href="{% url 'responsable_filiere' responsable.id %}">Accueil</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Espace Responsable</a>
+                    <a class="nav-link active" aria-current="page" href="#"><marquee>{{responsable.first_name}} {{responsable.last_name}}</marquee></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'connexion' %}">Déconnexion</a>
+                    <a class="nav-link" href="{% url 'index' %}">Déconnexion</a>
                 </li>
             </ul>
         </div>
     </nav>
 
-    <!-- Hero Section -->
     <div class="hero">
         <h1>Filtrer les Cahiers de Cours</h1>
         <p>Consultez et filtrez les cahiers de cours selon vos préférences.</p>
@@ -247,7 +244,6 @@
         <a href="{% url 'listes_cahiers' responsable.id %}" class="btn btn-primary">Retour</a>
     </div>
 
-    <!-- Table of Cahiers -->
     <div class="table-wrapper">
         <table>
             <thead>

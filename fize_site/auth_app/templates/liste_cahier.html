@@ -7,8 +7,9 @@
     <title>Filtrer les Cahiers de Cours</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f6f9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #343a40;
             margin: 0;
             padding: 0;
         }
@@ -16,116 +17,131 @@
         h1 {
             text-align: center;
             margin-top: 20px;
-            color: #343a40;
+            color: #28a745;
         }
 
         .container {
             width: 90%;
-            margin: 20px auto;
-            text-align: center;
+            margin: 30px auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         form {
             margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
         }
 
-        input[type="text"] {
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+        label {
+            font-weight: bold;
             margin-right: 10px;
         }
 
+        input[type="text"],
+        input[type="date"] {
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            width: 200px;
+        }
+
         button {
-            padding: 8px 12px;
+            padding: 10px 20px;
             border: none;
-            border-radius: 4px;
-            background-color: #007bff;
-            color: white;
+            border-radius: 5px;
+            background-color: #28a745;
+            color: #ffffff;
+            font-weight: bold;
             cursor: pointer;
+            transition: background-color 0.3s ease;
         }
 
         button:hover {
-            background-color: #0056b3;
+            background-color: #218838; 
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            background-color: #ffffff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
         }
 
         th, td {
             padding: 12px 15px;
             text-align: left;
-            border-bottom: 1px solid #ddd;
+            border: 1px solid #dee2e6;
         }
 
         th {
-            background-color: #007bff;
-            color: white;
+            background-color: #28a745;
+            color: #ffffff;
             text-transform: uppercase;
         }
 
         tr:nth-child(even) {
-            background-color: #f2f2f2;
+            background-color: #f8f9fa;
         }
 
         tr:hover {
-            background-color: #f1f1f1;
+            background-color: #e9ecef;
         }
 
         td {
-            color: #343a40;
+            color: #495057;
         }
 
         td[colspan="15"] {
             text-align: center;
             font-style: italic;
+            color: #868e96;
         }
 
-        @media (max-width: 600px) {
-            table, th, td {
-                display: block;
-                width: 100%;
-            }
+        a {
+            display: inline-block;
+            margin-top: 10px;
+            text-decoration: none;
+            color: #28a745;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
 
-            th, td {
-                box-sizing: border-box;
-                text-align: left;
-            }
+        a:hover {
+            color: #218838; 
+        }
 
-            th {
-                display: none;
-            }
+        .navbar {
+            background-color: #28a745;
+            padding: 10px 20px;
+        }
 
-            tr {
-                margin-bottom: 20px;
-                border-bottom: 2px solid #ddd;
-            }
+        .navbar a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: bold;
+            margin-right: 15px;
+            transition: color 0.3s ease;
+        }
 
-            tr:nth-child(even) {
-                background-color: transparent;
-            }
-
-            td {
-                display: flex;
-                justify-content: space-between;
-                padding: 10px;
-                font-size: 0.9em;
-            }
-
-            td:before {
-                content: attr(data-label);
-                font-weight: bold;
-                color: #007bff;
-            }
+        .navbar a:hover {
+            color: #c3e6cb;
         }
     </style>
 </head>
 
 <body>
+    <nav class="navbar">
+        <a class="navbar-brand" href="#">Geschool</a>
+        <a href="{% url 'espaceprof' teacher.id %}">Accueil</a>
+        <a href="#" class="active">
+            <marquee>{{ teacher.first_name }} {{ teacher.last_name }}</marquee>
+        </a>
+        <a href="{% url 'connexion' %}">Déconnexion</a>
+    </nav>
     <div class="container">
         <h1>Cahiers de Texte</h1>
         <form method="get" action="{% url 'liste_cahiers' teacher.id %}">
@@ -135,7 +151,6 @@
             <input type="text" id="competence" name="competence" value="{{ request.GET.competence }}">
             <button type="submit">Filtrer</button>
         </form>
-        <a href="{% url 'espaceprof' teacher.id %}">Retour</a>
         <table>
             <thead>
                 <tr>
@@ -159,21 +174,21 @@
             <tbody>
                 {% for cahier in cahiers %}
                 <tr>
-                    <td data-label="Date">{{ cahier.date }}</td>
-                    <td data-label="Compétence">{{ cahier.competence }}</td>
-                    <td data-label="UEA">{{ cahier.uea }}</td>
-                    <td data-label="Durée">{{ cahier.duree }}</td>
-                    <td data-label="Horaire">{{ cahier.horaire }}</td>
-                    <td data-label="Durée Théorie">{{ cahier.duree_theorie }}</td>
-                    <td data-label="Corpus Théorie">{{ cahier.corpus_theorie }}</td>
-                    <td data-label="Durée TD">{{ cahier.duree_td }}</td>
-                    <td data-label="Corpus TD">{{ cahier.corpus_td }}</td>
-                    <td data-label="Durée TP">{{ cahier.duree_tp }}</td>
-                    <td data-label="Corpus TP">{{ cahier.corpus_tp }}</td>
-                    <td data-label="Durée TPA">{{ cahier.duree_tpa }}</td>
-                    <td data-label="Corpus TPA">{{ cahier.corpus_tpa }}</td>
-                    <td data-label="Durée Stage">{{ cahier.duree_stage }}</td>
-                    <td data-label="Corpus Stage">{{ cahier.corpus_stage }}</td>
+                    <td>{{ cahier.date }}</td>
+                    <td>{{ cahier.competence }}</td>
+                    <td>{{ cahier.uea }}</td>
+                    <td>{{ cahier.duree }}</td>
+                    <td>{{ cahier.horaire }}</td>
+                    <td>{{ cahier.duree_theorie }}</td>
+                    <td>{{ cahier.corpus_theorie }}</td>
+                    <td>{{ cahier.duree_td }}</td>
+                    <td>{{ cahier.corpus_td }}</td>
+                    <td>{{ cahier.duree_tp }}</td>
+                    <td>{{ cahier.corpus_tp }}</td>
+                    <td>{{ cahier.duree_tpa }}</td>
+                    <td>{{ cahier.corpus_tpa }}</td>
+                    <td>{{ cahier.duree_stage }}</td>
+                    <td>{{ cahier.corpus_stage }}</td>
                 </tr>
                 {% empty %}
                 <tr>
