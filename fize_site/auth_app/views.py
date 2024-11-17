@@ -443,28 +443,39 @@ def liste_ressource(request, teacher_id):
 #     paiements = Paiement.objects.all()
 #     return render(request, 'paiement_liste.html', {'paiements': paiements}
 
+from django.core.exceptions import ValidationError
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
-from .form import NoteForm
 from .models import Teacher, Enseigner, Classe, Matiere, Student, Note
+from .form import NoteForm
 
 def ajouter_notes(request, teacher_id):
+    # Récupère l'enseignant à partir de son ID
     teacher = get_object_or_404(Teacher, id=teacher_id)
+
+    # Récupère les enseignements du professeur pour obtenir les classes et matières associées
     enseignements = Enseigner.objects.filter(teacher=teacher)
     classes = Classe.objects.filter(id__in=enseignements.values_list('classe_id', flat=True))
     matieres = Matiere.objects.filter(id__in=enseignements.values_list('matiere_id', flat=True))
     students = Student.objects.filter(classe__in=classes)
     
+    # Si la requête est de type POST (soumission du formulaire)
     if request.method == 'POST':
-        form = NoteForm(request.POST)
+        form = NoteForm(request.POST, valid_classes=classes)
         form.fields['student'].queryset = students
         form.fields['matiere'].queryset = matieres
+        form.fields['classe'].queryset = classes
+
         if form.is_valid():
             note = form.save(commit=False)
+            
+            # Vérifie si une note existe déjà pour cet étudiant et cette matière
             existence_note = Note.objects.filter(student=note.student, matiere=note.matiere, teacher=teacher).first()
-            if existence_note:
+            if (existence_note):
                 messages.error(request, f"Une note existe déjà pour {note.student} dans {note.matiere}. Veuillez accéder à la liste pour la modifier.")
                 return redirect('ajouter_notes', teacher_id=teacher_id)
+            
+            # Associe l'enseignant à la note
             try:
                 note.teacher = teacher
                 note.save()
@@ -473,12 +484,13 @@ def ajouter_notes(request, teacher_id):
             except ValidationError as e:
                 messages.error(request, e.messages[0])
         else:
-            messages.error(request, 'Erreur lors de l\'ajout de la note. Veuillez vérifier les informations.')
+            messages.error(request, f'Erreur lors de l\'ajout de la note. Veuillez vérifier les informations.')
     else:
-        form = NoteForm()
+        form = NoteForm(valid_classes=classes)
         form.fields['student'].queryset = students
         form.fields['matiere'].queryset = matieres
-    
+        form.fields['classe'].queryset = classes
+
     context = {
         'teacher': teacher,
         'classes': classes,
@@ -487,6 +499,8 @@ def ajouter_notes(request, teacher_id):
         'form': form
     }
     return render(request, 'ajouter_notes.html', context)
+
+
 
 def afficher_notes(request, teacher_id):
     teacher = get_object_or_404(Teacher, id=teacher_id)
@@ -630,22 +644,6 @@ def details_classe(request, classe_id):
 
     return render(request, 'details_classe.html', context)
 
-def liste_salles(request):
-    salles = Salle.objects.all()
-    return render(request, 'liste_salles.html', {'salles': salles})
-
-def ajouter_salle(request, admin_id):
-    administrateur=get_object_or_404(Administrateur, id=admin_id)
-    if request.method == 'POST':
-        form = SalleForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Salle ajoutée avec succès.')
-            return redirect('ajouter_salle')
-    else:
-        form = SalleForm()
-    
-    return render(request, 'ajouter_salle.html', {'form': form, 'administrateur':administrateur})
 
 def modifier_classe(request, id):
     classe = get_object_or_404(Classe, id=id)
@@ -667,36 +665,25 @@ def supprimer_classe(request, id):
     
     return render(request, 'supprimer_classe.html', {'classe': classe})
 
-def ajouter_salle(request):
-    if request.method == "POST":
-        form = SalleForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('liste_salles')
-    else:
-        form = SalleForm()
+# def modifier_salle(request, id):
+#     salle = get_object_or_404(Salle, id=id)
+#     if request.method == "POST":
+#         form = SalleForm(request.POST, instance=salle)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('liste_salles')
+#     else:
+#         form = SalleForm(instance=salle)
     
-    return render(request, 'ajouter_salle.html', {'form': form})
+#     return render(request, 'modifier_salle.html', {'form': form, 'salle': salle})
 
-def modifier_salle(request, id):
-    salle = get_object_or_404(Salle, id=id)
-    if request.method == "POST":
-        form = SalleForm(request.POST, instance=salle)
-        if form.is_valid():
-            form.save()
-            return redirect('liste_salles')
-    else:
-        form = SalleForm(instance=salle)
+# def supprimer_salle(request, id):
+#     salle = get_object_or_404(Salle, id=id)
+#     if request.method == "POST":
+#         salle.delete()
+#         return redirect('liste_salles')
     
-    return render(request, 'modifier_salle.html', {'form': form, 'salle': salle})
-
-def supprimer_salle(request, id):
-    salle = get_object_or_404(Salle, id=id)
-    if request.method == "POST":
-        salle.delete()
-        return redirect('liste_salles')
-    
-    return render(request, 'supprimer_salle.html', {'salle': salle})
+#     return render(request, 'supprimer_salle.html', {'salle': salle})
 
 def class_info(request):
     classes = Classe.objects.all()
@@ -811,19 +798,36 @@ def affecter_professeur(request, responsable_id):
                 teacher=professeur,
                 matiere=matiere,
                 classe=classe,
-                responsable=responsable
             )
 
-            return redirect('teacher_class', id=responsable_id)
+            return redirect('teacher_class', responsable_id=responsable_id)
     else:
         form = AffecterProfesseurForm()
 
     return render(request, 'affecter_professeur.html', {'form': form, 'responsable': responsable})
 
 def teacher_class(request, responsable_id):
-    responsable=get_object_or_404(ResponsableFiliere, id=responsable_id)
-    teachers = Teacher.objects.prefetch_related('enseignements__classe').all()
-    return render(request, 'teacher_classe.html', {'responsable':responsable, 'teachers': teachers})
+    responsable = get_object_or_404(ResponsableFiliere, id=responsable_id)
+    teachers = Teacher.objects.prefetch_related('enseignements__classe', 'enseignements__matiere').all()
+
+    teachers_data = []
+    for teacher in teachers:
+        unique_classes = []
+        unique_matieres = []
+
+        for enseignement in teacher.enseignements.all():
+            if enseignement.classe.name not in unique_classes:
+                unique_classes.append(enseignement.classe.name)
+            if enseignement.matiere.nom_matiere not in unique_matieres:
+                unique_matieres.append(enseignement.matiere.nom_matiere)
+
+        teachers_data.append({
+            'teacher': teacher,
+            'unique_classes': unique_classes,
+            'unique_matieres': unique_matieres,
+        })
+
+    return render(request, 'teacher_classe.html', {'responsable': responsable, 'teachers_data': teachers_data})
 
 def liste_classe(request):
     students = Student.objects.filter(classe__isnull=False)
@@ -911,7 +915,6 @@ def create_planning(request, responsable_id):
                     classe=planning.classe,
                     salle=planning.salle,
                     professeur=planning.professeur,
-                    responsable = planning.responsable
                 )
             return redirect('planning_list', responsable_id=responsable_id ) 
     else:
@@ -943,16 +946,17 @@ def planning_prof(request, teacher_id):
     })
 
 
-def edit_planning(request, pk):
+def edit_planning(request, responsable_id, pk):
+    responsable=get_object_or_404(ResponsableFiliere, id=responsable_id)
     planning = get_object_or_404(Planning, id=pk)
     if request.method == 'POST':
         form = EditPlanningForm(request.POST, instance=planning)
         if form.is_valid():
             form.save()
-            return redirect('planning_list', id=responsable_id)
+            return redirect('planning_list', responsable_id=responsable_id)
     else:
         form = EditPlanningForm(instance=planning)
-    return render(request, 'edit_planning.html', {'form': form, 'planning':planning})
+    return render(request, 'edit_planning.html', {'form': form, 'responsable':responsable, 'planning':planning})
 
 def delete_planning(request, pk):
     planning = get_object_or_404(Planning, id=pk)

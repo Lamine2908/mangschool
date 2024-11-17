@@ -151,7 +151,7 @@
                         <td>{{ planning.classe }}</td>
                         <td>{{ planning.professeur }}</td>
                         <td>
-                            <a href="{% url 'edit_planning' planning.id %}" class="btn btn-sm btn-warning">Modifier</a>
+                            <a href="{% url 'edit_planning' responsable.id planning.id %}" class="btn btn-sm btn-warning">Modifier</a>
                             <a href="{% url 'delete_planning' planning.id %}" class="btn btn-sm btn-danger">Supprimer</a>
                         </td>
                     </tr>

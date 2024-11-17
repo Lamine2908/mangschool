@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import Student, Note, Paiement, CahierDeCours, ResponsableMetier, Projet, Pointage, Classe, Salle, Comptable, Teacher, Planning,ResponsableClasse, ResponsableFiliere, CahierDeCours, Bulletin
+from .models import Student, Note, Paiement, CahierDeCours, ResponsableMetier, Projet, Pointage, Classe, Comptable, Teacher, Planning,ResponsableClasse, ResponsableFiliere, CahierDeCours, Bulletin
 from django.contrib.auth import get_user_model
 
 
@@ -211,15 +211,16 @@ class ClasseForm(forms.ModelForm):
         model = Classe
         fields =  ['name', 'promo', 'description', 'filiere']
 
-
 from django import forms
 from django.core.exceptions import ValidationError
+from .models import Note, Student
 
 class NoteForm(forms.ModelForm):
     class Meta:
         model = Note
-        fields = ['student', 'matiere', 'note_eva1', 'note_eva2', 'integration']
+        fields = ['classe', 'student', 'matiere', 'note_eva1', 'note_eva2', 'integration']
         widgets = {
+            'classe': forms.Select(attrs={'class': 'form-control'}),
             'student': forms.Select(attrs={'class': 'form-control'}),
             'matiere': forms.Select(attrs={'class': 'form-control'}),
             'note_eva1': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Note évaluation 1'}),
@@ -229,17 +230,24 @@ class NoteForm(forms.ModelForm):
 
     def __init__(self, *args, valid_classes=None, **kwargs):
         super(NoteForm, self).__init__(*args, **kwargs)
-        self.valid_classes = valid_classes  # Liste des classes valides
+        self.valid_classes = valid_classes
 
+        # Filtrer les étudiants pour n'afficher que ceux qui sont dans les classes valides
+        if self.valid_classes:
+            self.fields['student'].queryset = Student.objects.filter(classe__in=self.valid_classes)
+        
         for field in self.fields.values():
             field.widget.attrs.update({'class': 'form-control'})
 
     def clean_student(self):
         student = self.cleaned_data.get('student')
+        classe = self.cleaned_data.get('classe')
         if self.valid_classes and student.classe not in self.valid_classes:
+            raise ValidationError(f"L'étudiant {student} ne fait pas partie d'une classe valide.")
+        if student.classe != classe:
             raise ValidationError(f"L'étudiant {student} ne fait pas partie de la classe sélectionnée.")
-
         return student
+
 
 class ModifierNoteForm(forms.ModelForm):
     class Meta:
@@ -262,14 +270,14 @@ class BulletinForm(forms.Form):
         for field in self.fields.values():
             field.widget.attrs.update({'class': 'form-control'}) 
             
-class SalleForm(forms.ModelForm):
-    class Meta:
-        model = Salle
-        fields = ['numero', 'name']
-        widgets = {
-            'numero': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Numéro de la salle'}),
-            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nom de la salle'}),
-        }
+# class SalleForm(forms.ModelForm):
+#     class Meta:
+#         model = Salle
+#         fields = ['numero', 'name']
+#         widgets = {
+#             'numero': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Numéro de la salle'}),
+#             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nom de la salle'}),
+#         }
         
 class PointageForm(forms.ModelForm):
     class Meta:
@@ -284,7 +292,7 @@ class PointageForm(forms.ModelForm):
 class PlanningForm(forms.ModelForm):
     class Meta:
         model = Planning
-        fields = '__all__'
+        fields = ['date','premiere_heure', 'deuxieme_heure', 'troisieme_heure', 'matiere', 'salle', 'classe', 'professeur']
         widgets = {
             'date': forms.DateInput(attrs={'type': 'date'}),
             'premiere_heure': forms.TimeInput(attrs={'type': 'time'}),
@@ -294,25 +302,24 @@ class PlanningForm(forms.ModelForm):
             'salle': forms.Select(attrs={'class': 'form-control'}),
             'classe': forms.Select(attrs={'class': 'form-control'}),
             'professeur': forms.Select(attrs={'class': 'form-control'}),
-            'responsable': forms.Select(attrs={'class': 'form-control'}),
         }
         
 
 class EditPlanningForm(forms.ModelForm):
     class Meta:
         model = Planning
-        fields = '__all__'
+        fields = ['date','premiere_heure', 'deuxieme_heure', 'troisieme_heure', 'matiere', 'salle', 'classe', 'professeur']
         widgets = {
             'date': forms.DateInput(attrs={'type': 'date'}),
             'premiere_heure': forms.TimeInput(attrs={'type': 'time'}),
             'deuxieme_heure': forms.TimeInput(attrs={'type': 'time'}),
             'troisieme_heure': forms.TimeInput(attrs={'type': 'time'}),
-            'matiere': forms.TextInput(attrs={'class': 'form-control'}),
+            'matiere': forms.Select(attrs={'class': 'form-control'}),
             'salle': forms.Select(attrs={'class': 'form-control'}),
             'classe': forms.Select(attrs={'class': 'form-control'}),
             'professeur': forms.Select(attrs={'class': 'form-control'}),
-            'responsable': forms.Select(attrs={'class': 'form-control'}),
         }
+        
 
 class ComptableForm(forms.ModelForm):
     teachers = forms.ModelMultipleChoiceField(queryset=Teacher.objects.all(), required=False, label="Professeurs payés")
@@ -358,7 +365,7 @@ from .models import Enseigner, Classe, Matiere
 class AffecterProfesseurForm(forms.ModelForm):
     class Meta:
         model = Enseigner
-        fields = ['teacher', 'classe', 'matiere', 'responsable']
+        fields = ['teacher', 'classe', 'matiere']
 
 
 class AssignClassForm(forms.ModelForm):

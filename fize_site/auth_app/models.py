@@ -35,14 +35,9 @@ class Administrateur(models.Model):
     def generate_qr_code_data(self):
         return f'{self.id}-{self.first_name}-{self.last_name}'
     
-class Salle(models.Model):
-    id = models.AutoField(primary_key=True, unique=True)
-    numero = models.IntegerField(null=True, blank=True)
-    name = models.CharField(max_length=20, null=True)
-    administrateur = models.ForeignKey(Administrateur, on_delete=models.CASCADE, null=True)
-
-    def __str__(self):
-        return f"{self.numero}"
+salle = [
+    ('310', '310'), ('311', '311'), ('312', '312'), ('313', '313'), ('314', '314')
+]
 
 class ResponsableFiliere(models.Model):
     id = models.AutoField(primary_key=True)
@@ -250,14 +245,13 @@ class Note(models.Model):
     def __str__(self):
         return f"{self.student} - {self.matiere}"
 
+    def save(self, *args, **kwargs): 
+        if self.student.classe != self.classe: 
+            raise ValidationError(f"L'élève {self.student} n'appartient pas à la classe {self.classe}.")
+
     def save(self, *args, **kwargs):
         self.moyen_semes = round((self.note_eva1 + self.note_eva2 + self.integration) / 3, 2)
         super(Note, self).save(*args, **kwargs)
-        
-     # def save(self, *args, **kwargs):
-    #     if self.matiere not in self.teacher.matieres.all():
-    #         raise ValidationError("Le professeur ne peut pas saisir de note pour cette matière.")
-    
 
 class Bulletin(models.Model):
     id = models.AutoField(primary_key=True, unique=True)
@@ -378,7 +372,7 @@ class Planning(models.Model):
     deuxieme_heure = models.TimeField(default='11:00')
     troisieme_heure = models.TimeField(default='14:00')
     matiere=models.ForeignKey(Matiere, on_delete=models.CASCADE, null=True)
-    salle = models.ForeignKey(Salle, on_delete=models.CASCADE, null=True)
+    salle = models.CharField(max_length=4,choices=salle, null=True)
     classe = models.ForeignKey(Classe, on_delete=models.CASCADE, null=True)
     professeur = models.ForeignKey(Teacher, on_delete=models.CASCADE, null=True)
     responsable = models.ForeignKey(ResponsableFiliere, on_delete=models.CASCADE, null=True)
