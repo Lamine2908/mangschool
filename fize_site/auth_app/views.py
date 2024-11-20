@@ -272,18 +272,19 @@ def update_responsable(request, admin_id):
     return render(request, 'modifier_responsable.html', {'form': form, 'admin': admin})
 
 @login_required
-def update_student(request, student_id):
+def update_student(request, admin_id,student_id):
+    administrateur=get_object_or_404(Administrateur, id=admin_id)
     if request.method == 'POST':
         student = get_object_or_404(Student, id=student_id)
         form = StudentUpdateForm(request.POST, instance=student)
         if form.is_valid():
             form.save()
-            return redirect('student_list')
+            return redirect('student_list', admin_id=admin_id)
     else: 
         student = get_object_or_404(Student, id=student_id)
         form = StudentUpdateForm(request.POST, instance=student)
         
-    return render(request, 'update_student.html', {'form': form, 'student': student})
+    return render(request, 'update_student.html', {'form': form, 'administrateur':administrateur, 'student': student})
 
 def student_detail(request, student_id):
     student = get_object_or_404(Student, id=student_id)
@@ -509,10 +510,13 @@ def afficher_notes(request, teacher_id):
     students = Student.objects.filter(classe__in=classes).distinct()
     notes = Note.objects.filter(student__in=students, teacher=teacher)
 
+    # filter_matricule = request.GET.get('matricule', '')
     filter_student = request.GET.get('student', '')
     filter_lastname = request.GET.get('lastname', '')
     filter_class = request.GET.get('classe', '')
 
+    # if filter_student:
+    #     notes = notes.filter(student__matricule__icontains=filter_matricule)
     if filter_student:
         notes = notes.filter(student__first_name__icontains=filter_student)
     if filter_lastname:
@@ -974,120 +978,34 @@ def filter_planning(request, responsable_id):
         plannings = plannings.filter(date__icontains=date)
     return render(request, 'filter_planning.html' , {'responsable':responsable,'plannings':plannings})
 
-def pointage(request, teacher_id):
-    teacher = get_object_or_404(Teacher, id=teacher_id)
-    
+def upload_media(request, teacher_id):
+    teacher = get_object_or_404(Teacher, pk=teacher_id)
+
     if request.method == 'POST':
-        form = PointageForm(request.POST)
+        form = MediaForm(request.POST, request.FILES)
         if form.is_valid():
-            student = form.cleaned_data['student']
-            today = timezone.now().date()
+            media = form.save(commit=False)
+            media.teacher = teacher  # Associe l'enseignant à la ressource téléchargée
+            media.save()
 
-            pointage_existant = Pointage.objects.filter(student=student, teacher=teacher, date__date=today).exists()
-
-            if not pointage_existant:
-                pointage = form.save(commit=False)
-                pointage.teacher = teacher 
-                pointage.date = timezone.now()
-                
-                arrivee = pointage.arrivee
-                sortie = pointage.sortie
-                pointage.total = (sortie.hour * 60 + sortie.minute) - (arrivee.hour * 60 + arrivee.minute)
-      
-                pointage.save()
-
-                return redirect('success_page')
-            else:
-                form.add_error(None, "Le pointage pour cet élève a déjà été effectué aujourd'hui.")
+            # Rediriger vers la liste des ressources de l'enseignant
+            return redirect('media_list', teacher_id=teacher.id)  # Utiliser teacher_id pour rediriger vers les ressources de l'enseignant
     else:
-        form = PointageForm()
-    return render(request, 'pointage.html', {'form': form, 'teacher': teacher})
+        form = MediaForm()
 
-def success_page(request):
-    return render(request, 'success.html')
+    return render(request, 'upload_media.html', {'form': form, 'teacher': teacher})
 
-def liste_pointages(request, teacher_id):
-    teacher = get_object_or_404(Teacher, id=teacher_id)
-    pointages = Pointage.objects.filter(teacher=teacher)
-    
-    pointages_par_etudiant = {}
-    for pointage in pointages:
-        student_id = pointage.student.id
-        if student_id not in pointages_par_etudiant:
-            pointages_par_etudiant[student_id] = {
-                'student': pointage.student,
-                'total_heures': 0
-            }
-            
-        pointages_par_etudiant[student_id]['total_heures'] += pointage.total
 
-    return render(request, 'liste_pointages.html', {
-        'pointages_par_etudiant': pointages_par_etudiant.values(), 
-        'teacher': teacher
-    })
+def media_list(request, teacher_id=None, student_id=None):
+    if teacher_id:
+        # Cas où on affiche les ressources pour un enseignant
+        teacher = get_object_or_404(Teacher, pk=teacher_id)
+        media = Media.objects.filter(teacher=teacher)  # Filtrer les médias de l'enseignant
+    elif student_id:
+        # Cas où on affiche les ressources pour un étudiant
+        student = get_object_or_404(Student, pk=student_id)
+        student_class_ids = student.classes.values_list('id', flat=True)  # Récupère les classes de l'étudiant
+        media = Media.objects.filter(classe__id__in=student_class_ids)  # Filtrer les médias associés aux classes de l'étudiant
 
-from django.shortcuts import render, redirect
-from PIL import Image
-from .form import ImageUploadForm
-from django.conf import settings
-import os
+    return render(request, 'media_list.html', {'media': media})
 
-def upload_and_resize_image(request):
-    if request.method == 'POST':
-        form = ImageUploadForm(request.POST, request.FILES)
-        if form.is_valid():
-            image = form.cleaned_data['image']
-            img = Image.open(image)
-
-            if img.mode == 'RGBA':
-                img = img.convert('RGB')
-                
-            img_resized = img.resize((600, 600))
-
-            file_name = os.path.splitext(image.name)[0] + ".jpeg"
-            save_path = os.path.join(settings.MEDIA_ROOT, 'student_photos', file_name)
-
-            img_resized.save(save_path, format="JPEG") 
-
-            return redirect('success_page')
-    else:
-        form = ImageUploadForm()
-
-    return render(request, 'upload_image.html', {'form': form})
-
-from django.core.mail import send_mail
-from django.shortcuts import render
-from django.http import HttpResponse
-
-def envoyer_email(request):
-    if request.method == 'POST':
-        nom = request.POST.get('nom')
-        subject = request.POST.get('subject')
-        email = request.POST.get('email')
-        message = request.POST.get('message')
-        
-        data = {
-            'nom': nom,
-            'email': email,
-            'subject': subject,
-            'message': message
-        }
-        
-        corps = f"""
-        Nouveau message de {data['nom']} :
-        
-        Message : {data['message']}
-        
-        Depuis l'email : {data['email']}
-        """
-        
-        send_mail(
-            data['subject'],
-            corps,               
-            '',                    
-            ['laminfal29@gmail.com'] 
-        )
-        
-        return HttpResponse("Email envoyé avec succès!")
-    
-    return render(request, 'mail.html', {})

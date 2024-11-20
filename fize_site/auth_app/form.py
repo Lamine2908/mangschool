@@ -278,15 +278,7 @@ class BulletinForm(forms.Form):
 #             'numero': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Numéro de la salle'}),
 #             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nom de la salle'}),
 #         }
-        
-class PointageForm(forms.ModelForm):
-    class Meta:
-        model = Pointage
-        fields = ['teacher','student', 'date', 'arrivee', 'sortie']
-        widgets = {
-            'arrivee': forms.HiddenInput(),
-            'sortie': forms.HiddenInput(),
-        }
+
 
             
 class PlanningForm(forms.ModelForm):
@@ -433,35 +425,6 @@ class MatiereForm(forms.ModelForm):
 class ImageUploadForm(forms.Form):
     image = forms.ImageField()
 
-from django import forms
-from .models import Media, Enseigner, Classe, Matiere
-
-class MediaForm(forms.ModelForm):
-    class Meta:
-        model = Media
-        fields = ['title','file']
-
-    def __init__(self, *args, **kwargs):
-        teacher = kwargs.pop('teacher', None)
-        super(MediaForm, self).__init__(*args, **kwargs)
-        
-        if teacher:
-            enseignements = Enseigner.objects.filter(matiere__teacher=teacher)
-            
-            self.fields['classe'] = forms.ModelChoiceField(
-                queryset=Classe.objects.filter(id__in=enseignements.values_list('classe_id', flat=True)),
-                widget=forms.Select(attrs={'class': 'form-control'}),
-                label="Classe"
-            )
-            self.fields['matiere'] = forms.ModelChoiceField(
-                queryset=Matiere.objects.filter(id__in=enseignements.values_list('matiere_id', flat=True)),
-                widget=forms.Select(attrs={'class': 'form-control'}),
-                label="Matière"
-            )
-
-        for field in self.fields.values():
-            field.widget.attrs.update({'class': 'form-control'})
-
 class ProjetForm(forms.Form):
     class Meta :
         Model = Projet
@@ -471,3 +434,36 @@ class ResponsableMetierForm(forms.Form):
     class Meta :
         Model = ResponsableMetier
         field = ['matricule', 'first_name', 'last_name', 'profession', 'status', 'email', 'num_tel'] 
+
+class PointageForm(forms.ModelForm):
+    class Meta:
+        model = Pointage
+        fields = ['date', 'arrivee', 'sortie', 'student', 'classe']
+
+    def __init__(self, *args, teacher=None, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        if teacher:
+            self.fields['classe'].queryset = Classe.objects.filter(enseignements__teacher=teacher).distinct()
+
+            self.fields['student'].queryset = Student.objects.filter(
+                classe__in=self.fields['classe'].queryset
+            ).distinct()
+
+from django import forms
+from .models import Media
+
+MEDIA_TYPE_CHOICES = [
+        ('book', 'Livre'),
+        ('pdf', 'PDF'),
+        ('video', 'Vidéo'),
+    ]
+
+class MediaForm(forms.ModelForm):
+    class Meta:
+        model = Media
+        fields = ['title', 'description', 'media_type', 'file', 'classe']  # L'enseignant choisit la classe
+
+    media_type = forms.ChoiceField(choices=MEDIA_TYPE_CHOICES, widget=forms.Select())
+    file = forms.FileField()
+    classe = forms.ModelChoiceField(queryset=Classe.objects.all())  # Permet à l'enseignant de choisir une classe

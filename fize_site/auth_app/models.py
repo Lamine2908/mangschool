@@ -7,7 +7,7 @@ from io import BytesIO
 from django.core.files import File
 from django.core.exceptions import ValidationError
 from django.utils import timezone
-from datetime import time
+from datetime import time, timedelta
 
 class Administrateur(models.Model):
     id = models.AutoField(primary_key=True)
@@ -216,18 +216,31 @@ class Student(models.Model):
     def generate_qr_code_data(self):
         return f'{self.id}-{self.first_name}-{self.last_name}'
     
-class Pointage(models.Model):    
+class Pointage(models.Model):
     id = models.AutoField(primary_key=True, unique=True)
     date = models.DateField(default=timezone.now)
-    arrivee = models.TimeField(default=timezone.now)
-    sortie = models.TimeField(default=timezone.now)
-    total = models.IntegerField(default=0, null=True)
+    arrivee = models.TimeField(null=True, blank=True)  
+    sortie = models.TimeField(null=True, blank=True) 
+    total = models.DurationField(default=timedelta(0), null=True, blank=True) 
     student = models.ForeignKey(Student, on_delete=models.CASCADE, null=True)
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, null=True)
-    responsable = models.ForeignKey(ResponsableFiliere, on_delete=models.CASCADE, null=True)
-    
+    classe = models.ForeignKey(Classe, on_delete=models.CASCADE, null=True)
+
+    def calculer_total(self):
+        if self.arrivee and self.sortie:
+            arrivee_datetime = datetime.combine(self.date, self.arrivee)
+            sortie_datetime = datetime.combine(self.date, self.sortie)
+            self.total = sortie_datetime - arrivee_datetime
+        else:
+            self.total = timedelta(0)
+
+    def save(self, *args, **kwargs):
+        self.calculer_total()
+        super().save(*args, **kwargs)
+
     def __str__(self):
-        return f'{self.student}'
+        return f"{self.student} - {self.date}"
+
     
 class Note(models.Model):
     id = models.AutoField(primary_key=True, unique=True)
