@@ -212,14 +212,14 @@ class ClasseForm(forms.ModelForm):
         model = Classe
         fields = '__all__'
 
-from django import forms
 from django.core.exceptions import ValidationError
 
 class NoteForm(forms.ModelForm):
     class Meta:
         model = Note
-        fields = ['student', 'matiere', 'note_eva1', 'note_eva2', 'integration']
+        fields = ['classe', 'student', 'matiere', 'note_eva1', 'note_eva2', 'integration']
         widgets = {
+            'classe': forms.Select(attrs={'class': 'form-control'}),
             'student': forms.Select(attrs={'class': 'form-control'}),
             'matiere': forms.Select(attrs={'class': 'form-control'}),
             'note_eva1': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Note évaluation 1'}),
@@ -227,20 +227,7 @@ class NoteForm(forms.ModelForm):
             'integration': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Intégration'}),
         }
 
-    def __init__(self, *args, valid_classes=None, **kwargs):
-        super(NoteForm, self).__init__(*args, **kwargs)
-        self.valid_classes = valid_classes  # Liste des classes valides
-
-        for field in self.fields.values():
-            field.widget.attrs.update({'class': 'form-control'})
-
-    def clean_student(self):
-        student = self.cleaned_data.get('student')
-        if self.valid_classes and student.classe not in self.valid_classes:
-            raise ValidationError(f"L'étudiant {student} ne fait pas partie de la classe sélectionnée.")
-
-        return student
-
+    
 class ModifierNoteForm(forms.ModelForm):
     class Meta:
         model = Note
@@ -274,13 +261,13 @@ class SalleForm(forms.ModelForm):
 class PointageForm(forms.ModelForm):
     class Meta:
         model = Pointage
-        fields = ['teacher','student', 'date', 'arrivee', 'sortie']
+        fields = ['arrivee', 'sortie', 'student', 'teacher']
         widgets = {
-            'arrivee': forms.HiddenInput(),
-            'sortie': forms.HiddenInput(),
+            'arrivee': forms.TimeInput(attrs={'type': 'time', 'class': 'form-control'}),
+            'sortie': forms.TimeInput(attrs={'type': 'time', 'class': 'form-control'}),
+            'student': forms.HiddenInput()
         }
-
-            
+        
 class PlanningForm(forms.ModelForm):
     class Meta:
         model = Planning
@@ -360,12 +347,11 @@ from .models import Enseigner, Classe, Matiere
 
 class AffecterProfesseurForm(forms.ModelForm):
     classe = forms.ModelChoiceField(queryset=Classe.objects.all(), label="Classe")
-    matiere = forms.ModelChoiceField(queryset=Matiere.objects.all(), label="Matière")
+    teacher = forms.ModelChoiceField(queryset=Teacher.objects.all(), label="Prof")
 
     class Meta:
         model = Enseigner
-        fields = ['teacher', 'classe', 'matiere']
-
+        fields = ['teacher', 'classe']
 
 class AssignClassForm(forms.ModelForm):
     class Meta:

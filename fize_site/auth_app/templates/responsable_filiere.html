@@ -120,7 +120,7 @@
 
     <header class="hero">
         <div class="container position-relative">
-            <h1>Bienvenue {{responsableFiliere.first_name}} {{responsableFiliere.last_name}}</h1>
+            <h1><marquee>Bienvenue {{responsableFiliere.first_name}} {{responsableFiliere.last_name}}</marquee></h1>
             <p>Gérez et suivez les activités pédagogiques de votre filière.</p>
         </div>
     </header>
@@ -149,7 +149,7 @@
                 </div>
             </div>
 
-            <div class="col-md-4 mb-4">
+            {% comment %} <div class="col-md-4 mb-4">
                 <div class="card section-card">
                     <div class="card-body">
                         <i class="bi bi-person-check section-icon"></i>
@@ -158,7 +158,7 @@
                         <a href="{% url 'affecter_professeur' responsableFiliere.id %}" class="btn btn-primary">Gérer les Enseignants</a>
                     </div>
                 </div>
-            </div>
+            </div> {% endcomment %}
 
             <div class="col-md-4 mb-4">
                 <div class="card section-card">
@@ -182,7 +182,7 @@
                 </div>
             </div>
 
-            <div class="col-md-4 mb-4">
+            {% comment %} <div class="col-md-4 mb-4">
                 <div class="card section-card">
                     <div class="card-body">
                         <i class="bi bi-file-earmark-text section-icon"></i>
@@ -203,7 +203,7 @@
                         <a href="{% url 'moyenne_par_classe' responsableFiliere.id %}" class="btn btn-primary">Voir les Dossiers</a>
                     </div>
                 </div>
-            </div>
+            </div> {% endcomment %}
 
             <div class="col-md-4 mb-4">
                 <div class="card section-card">

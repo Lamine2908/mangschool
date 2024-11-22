@@ -95,7 +95,7 @@
 </head>
 <body>
     <h1>Notes de la filiere de {{responsable.first_name}} {{responsable.last_name}}</h1>
-    <form method="get" action="{% url 'notes_filiere' responsable.id %}">
+    <form method="get" action="{% url 'notes_filiere' responsableFiliere.id %}">
         <label for="student">Apprenant:</label>
         <input type="text" id="student" name="student" value="{{ request.GET.student }}">
         <label for="lastname">Nom:</label>
@@ -104,7 +104,7 @@
         <input type="text" id="classe" name="classe" value="{{ request.GET.classe }}">
         <div style="text-align: center; margin-top: 20px;">
             <button type="submit" class="btn btn-primary" style="margin-right: 10px;">Filtrer</button> 
-            <a href="{% url 'responsable_filiere' responsable.id %}" class="btn btn-secondary">Retour</a>
+            <a href="{% url 'responsable_filiere' responsableFiliere.id %}" class="btn btn-secondary">Retour</a>
         </div>
         
     </form>
@@ -128,6 +128,6 @@
             {% endfor %}
         </tbody>
     </table>
-    <a href="{% url 'responsable_filiere' responsable.id %}" class="btn btn-secondary">Retour</a>
+    <a href="{% url 'responsable_filiere' responsableFiliere.id %}" class="btn btn-secondary">Retour</a>
 </body>
 </html>

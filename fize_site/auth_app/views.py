@@ -15,37 +15,36 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 def navigation(request):
     return render(request, 'navigation.html')
 
-@login_required
+  
 def espaceeleve(request, student_id):
     student = get_object_or_404(Student, id=student_id)
     return render(request, 'espaceeleve.html', {'student': student})
 
-@login_required
+  
 def espaceadmin(request, admin_id):
     administrateur = get_object_or_404(Administrateur, id=admin_id)
     return render(request, 'espaceadmin.html', {'administrateur': administrateur})
 
-@login_required
+  
 def espaceadmins(request):
     administrateur = Administrateur.objects.all()
     return render(request, 'espaceadmin.html', {'administrateur': administrateur})
 
-@login_required
 def responsable_filiere(request, responsable_id):
     responsableFiliere = get_object_or_404(ResponsableFiliere, id=responsable_id)
     return render(request, 'responsable_filiere.html', {'responsableFiliere': responsableFiliere})
 
-@login_required
+  
 def responsable_metier(request, responsable_id):
     responsableMetier = get_object_or_404(ResponsableMetier, id=responsable_id)
     return render(request, 'responsable_metier.html', {'responsableMetier': responsableMetier})
 
-@login_required
+  
 def espaceprof(request, teacher_id):
     teacher = get_object_or_404(Teacher, id=teacher_id)
     return render(request, 'espaceprof.html', {'teacher': teacher})
 
-@login_required
+  
 def inscription(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
@@ -56,16 +55,16 @@ def inscription(request):
         form = CustomUserCreationForm()
     return render(request, 'inscription.html', {'form': form})
 
-@login_required
+  
 def espaceresponsableclasse(request):
     return render(request, 'responsableClasse.html')
 
-@login_required
+  
 def responsableclasse(request, responsable_id):
     responsableClasse = get_object_or_404(ResponsableClasse, id=responsable_id)
     return render(request, 'responsableClasse.html', {'responsableClasse': responsableClasse})
 
-@login_required
+  
 def espacecomptable(request, comptable_id):
     comptables = get_object_or_404(Comptable, id=comptable_id)
     return render(request, 'espacecomptable.html', {'comptables': comptables})
@@ -150,12 +149,13 @@ def student_detail(request, student_id):
     student = get_object_or_404(Student, id=student_id)
     return render(request, 'student_detail.html', {'student': student})
 
+  
 def teacher_list(request, admin_id):
     administrateur = get_object_or_404(Administrateur, id=admin_id)
     teachers = Teacher.objects.all()
     return render(request, 'teacher_list.html', {'administrateur':administrateur, 'teachers': teachers})
 
-@login_required
+  
 def responsableFiliere_list(request):
     responsables = ResponsableFiliere.objects.all()
     return render(request, 'responsableFiliere_list.html', {'responsables': responsables})
@@ -171,7 +171,7 @@ def add_student(request):
     return render(request, 'add_student.html', {'form': form})
 
 
-@login_required
+  
 def delete_student_by_id(request, student_id):
     student = get_object_or_404(Student, id=student_id)
 
@@ -257,6 +257,7 @@ def filter_teacher(request):
         
     return render(request, 'filter_teachers.html', {'teachers': teachers})
 
+  
 def update_teacher(request, teacher_id):
     if request.method == 'POST':
         teacher = get_object_or_404(Teacher, id=teacher_id)
@@ -283,7 +284,7 @@ def update_responsable(request, admin_id):
     
     return render(request, 'modifier_responsable.html', {'form': form, 'admin': admin})
 
-@login_required
+ 
 def update_student(request, student_id):
     if request.method == 'POST':
         student = get_object_or_404(Student, id=student_id)
@@ -447,10 +448,11 @@ def liste_ressource(request, teacher_id):
 #     paiements = Paiement.objects.all()
 #     return render(request, 'paiement_liste.html', {'paiements': paiements}
 
+
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
-from .form import NoteForm
 from .models import Teacher, Enseigner, Classe, Matiere, Student, Note
+from .form import NoteForm
 
 def ajouter_notes(request, teacher_id):
     teacher = get_object_or_404(Teacher, id=teacher_id)
@@ -458,39 +460,39 @@ def ajouter_notes(request, teacher_id):
     classes = Classe.objects.filter(id__in=enseignements.values_list('classe_id', flat=True))
     matieres = Matiere.objects.filter(id__in=enseignements.values_list('matiere_id', flat=True))
     students = Student.objects.filter(classe__in=classes)
-    
+
     if request.method == 'POST':
         form = NoteForm(request.POST)
+        form.fields['classe'].queryset = classes
         form.fields['student'].queryset = students
         form.fields['matiere'].queryset = matieres
+
         if form.is_valid():
             note = form.save(commit=False)
+
             existence_note = Note.objects.filter(student=note.student, matiere=note.matiere, teacher=teacher).first()
             if existence_note:
                 messages.error(request, f"Une note existe déjà pour {note.student} dans {note.matiere}. Veuillez accéder à la liste pour la modifier.")
                 return redirect('ajouter_notes', teacher_id=teacher_id)
-            try:
-                note.teacher = teacher
-                note.save()
-                messages.success(request, 'Note ajoutée avec succès.')
-                return redirect('afficher_notes', teacher_id=teacher_id)
-            except ValidationError as e:
-                messages.error(request, e.messages[0])
+            
+            note.teacher = teacher
+            note.save()
+            messages.success(request, 'Note ajoutée avec succès.')
+            return redirect('afficher_notes', teacher_id=teacher_id)
         else:
             messages.error(request, 'Erreur lors de l\'ajout de la note. Veuillez vérifier les informations.')
     else:
         form = NoteForm()
+        form.fields['classe'].queryset = classes
         form.fields['student'].queryset = students
         form.fields['matiere'].queryset = matieres
     
     context = {
         'teacher': teacher,
-        'classes': classes,
-        'matieres': matieres,
-        'students': students,
         'form': form
     }
     return render(request, 'ajouter_notes.html', context)
+
 
 def afficher_notes(request, teacher_id):
     teacher = get_object_or_404(Teacher, id=teacher_id)
@@ -596,7 +598,7 @@ from django.shortcuts import render, get_object_or_404
 from django.core.exceptions import ValidationError
 from .models import Teacher, Student, Enseigner, Classe
 
-@login_required
+  
 def prof_etudiant_list(request, teacher_id):
     teacher = get_object_or_404(Teacher, id=teacher_id)
     enseignements = Enseigner.objects.filter(teacher=teacher)
@@ -610,7 +612,7 @@ def prof_etudiant_list(request, teacher_id):
     }
     return render(request, 'prof_etudiant_list.html', context)
 
-@login_required
+  
 def classes(request, classe_id):
     classe = get_object_or_404(Classe, id=classe_id)
     students = Student.objects.filter(classe=classe)
@@ -716,10 +718,9 @@ def class_list(request):
     classes = Classe.objects.all()
     return render(request, 'class_info.html', {'classes': classes})
 
-
 def notes_filiere(request, responsable_id):
-    responsable = get_object_or_404(ResponsableFiliere, id=responsable_id)
-    classes = Classe.objects.filter(filiere__responsable=responsable)
+    responsableFiliere = get_object_or_404(ResponsableFiliere, id=responsable_id)
+    classes = Classe.objects.filter(filiere__responsable=responsableFiliere)
     students = Student.objects.filter(classe__in=classes)
     notes = Note.objects.filter(student__in=students)
     
@@ -735,12 +736,13 @@ def notes_filiere(request, responsable_id):
         notes = notes.filter(student__classe__name__icontains=filter_classe)
 
     context = {
-        'responsable': responsable,
+        'responsableFiliere': responsableFiliere,
         'classes': classes,
         'students': students,
         'notes': notes,
     }
     return render(request, 'notes_filiere.html', context)
+
 
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Avg
@@ -956,57 +958,11 @@ def filter_planning(request):
         plannings = plannings.filter(date__icontains=date)
     return render(request, 'filter_planning.html' , {'plannings':plannings})
 
-def pointage(request, teacher_id):
-    teacher = get_object_or_404(Teacher, id=teacher_id)
-    
-    if request.method == 'POST':
-        form = PointageForm(request.POST)
-        if form.is_valid():
-            student = form.cleaned_data['student']
-            today = timezone.now().date()
 
-            pointage_existant = Pointage.objects.filter(student=student, teacher=teacher, date__date=today).exists()
-
-            if not pointage_existant:
-                pointage = form.save(commit=False)
-                pointage.teacher = teacher 
-                pointage.date = timezone.now()
-                
-                arrivee = pointage.arrivee
-                sortie = pointage.sortie
-                pointage.total = (sortie.hour * 60 + sortie.minute) - (arrivee.hour * 60 + arrivee.minute)
-      
-                pointage.save()
-
-                return redirect('success_page')
-            else:
-                form.add_error(None, "Le pointage pour cet élève a déjà été effectué aujourd'hui.")
-    else:
-        form = PointageForm()
-    return render(request, 'pointage.html', {'form': form, 'teacher': teacher})
 
 def success_page(request):
     return render(request, 'success.html')
 
-def liste_pointages(request, teacher_id):
-    teacher = get_object_or_404(Teacher, id=teacher_id)
-    pointages = Pointage.objects.filter(teacher=teacher)
-    
-    pointages_par_etudiant = {}
-    for pointage in pointages:
-        student_id = pointage.student.id
-        if student_id not in pointages_par_etudiant:
-            pointages_par_etudiant[student_id] = {
-                'student': pointage.student,
-                'total_heures': 0
-            }
-            
-        pointages_par_etudiant[student_id]['total_heures'] += pointage.total
-
-    return render(request, 'liste_pointages.html', {
-        'pointages_par_etudiant': pointages_par_etudiant.values(), 
-        'teacher': teacher
-    })
 
 from django.shortcuts import render, redirect
 from PIL import Image
@@ -1073,3 +1029,58 @@ def envoyer_email(request):
         return HttpResponse("Email envoyé avec succès!")
     
     return render(request, 'mail.html', {})
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.utils import timezone
+from django.contrib import messages
+from .models import Student, Pointage
+
+def pointage_view(request, teacher_id):
+    teacher =get_object_or_404(Teacher, id=teacher_id)
+    if request.method == 'POST':
+        qr_data = request.POST.get('qr_data')  
+
+        if not qr_data:
+           
+            messages.error(request, "QR code invalide ou non scanné.")
+            return render(request, 'pointage.html')
+
+        try:
+            student_id = qr_data.split('-')[0]
+
+            if not student_id.isdigit():
+                raise ValueError("ID étudiant non valide")
+
+            student = get_object_or_404(Student, id=int(student_id))
+            
+            pointage, created = Pointage.objects.get_or_create(
+                student=student,
+                date=timezone.now().date(),
+                defaults={'arrivee': timezone.now()}
+            )
+            
+            if not created:
+                current_time = timezone.now()
+                time_diff_seconds = (current_time - pointage.arrivee).total_seconds()
+                
+                if time_diff_seconds > 5: 
+                    messages.warning(request, "Temps de pointage dépassé !")
+                    return redirect('confirmation_pointage')
+                
+                pointage.sortie = current_time
+                pointage.total = time_diff_seconds // 3600  # En heures
+                pointage.save()
+                messages.success(request, "Pointage de sortie enregistré avec succès.")
+            else:
+                messages.success(request, "Pointage d'arrivée enregistré avec succès.")
+            
+            return redirect('confirmation_pointage')
+        except (IndexError, ValueError, Student.DoesNotExist):
+            return render(request, 'error.html', {'message': 'QR code invalide ou étudiant non trouvé'})
+
+    return render(request, 'pointage.html', {'teacher':teacher})
+
+def confirmation_pointage(request):
+    return render(request, 'confirmation_pointage.html')
+
+

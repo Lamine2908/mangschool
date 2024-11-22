@@ -28,13 +28,6 @@
             font-weight: bold;
             margin-bottom: 5px;
         }
-        .form-control, .form-select {
-            width: 100%;
-            padding: 10px;
-            margin: 5px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
         .btn {
             background-color: #007bff;
             color: white;
@@ -58,13 +51,6 @@
             margin-bottom: 20px;
             text-align: center;
         }
-        .alert-custom p {
-            margin-bottom: 0;
-        }
-        .row > .col {
-            padding-left: 15px;
-            padding-right: 15px;
-        }
     </style>
 </head>
 <body>
@@ -72,6 +58,7 @@
         <h2>Ajouter une Note</h2>
         <form method="post" class="needs-validation" novalidate>
             {% csrf_token %}
+
             {% if messages %}
             <div class="alert alert-custom">
                 {% for message in messages %}
@@ -79,49 +66,55 @@
                 {% endfor %}
             </div>
             {% endif %}
+
             <div class="row mb-3">
                 <div class="col-md-4">
-                    <label for="classe" class="form-label">Classe</label>
-                    <select name="classe" id="classe" class="form-select">
-                        <option value="">Sélectionnez une classe</option>
-                        {% for classe in classes %}
-                        <option value="{{ classe.id }}">{{ classe.name }}</option>
-                        {% endfor %}
-                    </select>
+                    <label for="id_classe" class="form-label">{{ form.classe.label }}</label>
+                    {{ form.classe }}
+                    {% if form.classe.errors %}
+                        <div class="text-danger">{{ form.classe.errors }}</div>
+                    {% endif %}
                 </div>
                 <div class="col-md-4">
-                    <label for="student" class="form-label">Étudiant</label>
-                    <select name="student" id="student" class="form-select" required>
-                        <option value="">Sélectionnez un étudiant</option>
-                        {% for student in students %}
-                        <option value="{{ student.id }}">{{ student.first_name }} {{ student.last_name }}</option>
-                        {% endfor %}
-                    </select>
+                    <label for="id_student" class="form-label">{{ form.student.label }}</label>
+                    {{ form.student }}
+                    {% if form.student.errors %}
+                        <div class="text-danger">{{ form.student.errors }}</div>
+                    {% endif %}
                 </div>
                 <div class="col-md-4">
-                    <label for="matiere" class="form-label">Matière</label>
-                    <select name="matiere" id="matiere" class="form-select" required>
-                        <option value="">Sélectionnez une matière</option>
-                        {% for matiere in matieres %}
-                        <option value="{{ matiere.id }}">{{ matiere.nom_matiere }}</option>
-                        {% endfor %}
-                    </select>
+                    <label for="id_matiere" class="form-label">{{ form.matiere.label }}</label>
+                    {{ form.matiere }}
+                    {% if form.matiere.errors %}
+                        <div class="text-danger">{{ form.matiere.errors }}</div>
+                    {% endif %}
                 </div>
             </div>
+
             <div class="row mb-3">
                 <div class="col-md-4">
-                    <label for="note_eva1" class="form-label">{{ form.note_eva1.label }}</label>
+                    <label for="id_note_eva1" class="form-label">{{ form.note_eva1.label }}</label>
                     {{ form.note_eva1 }}
+                    {% if form.note_eva1.errors %}
+                        <div class="text-danger">{{ form.note_eva1.errors }}</div>
+                    {% endif %}
                 </div>
                 <div class="col-md-4">
-                    <label for="note_eva2" class="form-label">{{ form.note_eva2.label }}</label>
+                    <label for="id_note_eva2" class="form-label">{{ form.note_eva2.label }}</label>
                     {{ form.note_eva2 }}
+                    {% if form.note_eva2.errors %}
+                        <div class="text-danger">{{ form.note_eva2.errors }}</div>
+                    {% endif %}
                 </div>
                 <div class="col-md-4">
-                    <label for="integration" class="form-label">{{ form.integration.label }}</label>
+                    <label for="id_integration" class="form-label">{{ form.integration.label }}</label>
                     {{ form.integration }}
+                    {% if form.integration.errors %}
+                        <div class="text-danger">{{ form.integration.errors }}</div>
+                    {% endif %}
                 </div>
             </div>
+
             <button type="submit" class="btn">Ajouter la note</button>
         </form>
     </div>
