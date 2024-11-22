@@ -448,7 +448,6 @@ def liste_ressource(request, teacher_id):
 #     paiements = Paiement.objects.all()
 #     return render(request, 'paiement_liste.html', {'paiements': paiements}
 
-
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
 from .models import Teacher, Enseigner, Classe, Matiere, Student, Note
@@ -743,7 +742,6 @@ def notes_filiere(request, responsable_id):
     }
     return render(request, 'notes_filiere.html', context)
 
-
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Avg
 from .models import ResponsableFiliere, Classe, Note, Student
@@ -768,7 +766,6 @@ def moyenne_par_classe(request, responsable_id):
     }
     return render(request, 'moyenne_par_classe.html', context)
 
-
 # def affecter_prof(request, responsable_id):
 #     responsable = get_object_or_404(ResponsableFiliere, id=responsable_id)
     
@@ -788,6 +785,10 @@ def teacher_class(request):
     teachers = Teacher.objects.prefetch_related('classes').all()
     return render(request, 'teacher_classe.html', {'teachers': teachers})
 
+# def teacher_class(request):
+#     responsable=get_object_or_404(ResponsableFiliere, id=responsable_id)
+#     teachers = Teacher.objects.prefetch_related('classes').all()
+#     return render(request, 'teacher_classe.html', {'responsable':responsable,'teachers': teachers})
 
 def Affecter_eleve(request, admin_id):
     administrateur = get_object_or_404(Administrateur, id=admin_id)
@@ -852,7 +853,6 @@ def remplir_cahier(request, teacher_id):
         form = CahierDeCoursForm()
 
     return render(request, 'remplir_cahier.html', {'form': form, 'teacher': teacher, 'classes': classes})
-
 
 def liste_cahiers(request, teacher_id):
     teacher = get_object_or_404(Teacher, id=teacher_id)
@@ -1082,5 +1082,4 @@ def pointage_view(request, teacher_id):
 
 def confirmation_pointage(request):
     return render(request, 'confirmation_pointage.html')
-
 
