@@ -1,107 +1,188 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ajouter Professeur</title>
-  
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  
-  <style>
-    body {
-      background-color: #f8f9fa;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajouter un Professeur</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f9fbfd;
+            color: #333;
+        }
 
-    .login-container {
-      max-width: 400px;
-      margin: auto;
-      margin-top: 100px;
-      padding: 20px;
-      background: #fff;
-      border-radius: 10px;
-      box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
-      animation: fadeIn 1s ease-in-out;
-    }
+        .navbar {
+            background-color: #2C6B2F; /* Couleur de fond principale */
+        }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+        .navbar-brand,
+        .nav-link {
+            color: #ffffff !important;
+        }
 
-    h2 {
-      color: #343a40;
-      font-weight: 600;
-    }
+        .navbar-nav .nav-link:hover {
+            background-color: #56A755;
+            color: #fff !important;
+        }
 
-    input[type="submit"], .btn {
-      width: 100%;
-      padding: 10px;
-      background-color: #007bff;
-      border: none;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-      border-radius: 5px;
-      transition: background-color 0.3s ease;
-    }
+        .hero {
+            background-color: #d0690e;
+            color: #ffffff;
+            padding: 30px 1;
+            text-align: center;
+            position: relative;
+        }
 
-    input[type="submit"]:hover, .btn:hover {
-      background-color: #0056b3;
-    }
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            color: yellow;
+        }
 
-    .alert {
-      margin-bottom: 20px;
-      opacity: 0;
-      animation: slideDown 0.6s forwards;
-    }
+        .hero p {
+            font-size: 2rem;
+            color: white;
+        }
 
-    @keyframes slideDown {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+        .footer {
+            background-color: #2C6B2F;
+            color: #ffffff;
+            padding: 20px 0;
+        }
 
-    .form-control {
-      margin-bottom: 15px;
-      transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    }
+        .footer p {
+            margin: 0;
+        }
 
-    .form-control:focus {
-      border-color: #007bff;
-      box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-    }
+        /* Formulaire */
+        .form-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
 
-    .btn-primary {
-      margin-top: 10px;
-      text-align: center;
-    }
-  </style>
+        .form-title {
+            font-size: 2rem;
+            color: #2C6B2F;
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-top: 5px;
+            font-size: 1rem;
+        }
+
+        .form-group input[type="file"] {
+            padding: 10px;
+        }
+
+        .btn-custom {
+            background-color: #2C6B2F;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            width: 100%;
+            border: none;
+            font-size: 1.1rem;
+        }
+
+        .btn-custom:hover {
+            background-color: #56A755;
+        }
+
+        /* Styling pour les autres éléments */
+        .navbar-brand marquee {
+            font-size: 1.5rem;
+            color: yellow;
+        }
+        
+    </style>
 </head>
+
 <body>
 
-  <div class="container">
-    <div class="login-container">
-      <h2 class="text-center mb-4">Ajouter un Professeur</h2>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="#"><marquee>Geschool</marquee></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'espaceadmin' administrateur.id %}">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="{% url 'espaceadmin' administrateur.id %}">Espace Administrateur</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'connexion' %}">Déconnexion</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
 
-      {% if messages %}
-      <div class="alert alert-info alert-dismissible fade show" role="alert">
-        {% for message in messages %}
-        <p class="mb-0">{{ message }}</p>
-        {% endfor %}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-      {% endif %}
-
-      <form action="{% url 'add_teacher' %}" method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Enregistrer" class="btn btn-primary">
-      </form>
-
-      <a href="{% url 'espaceadmins' %}" class="btn btn-secondary mt-3">Accueil</a>
+    <div class="container form-container">
+        <h2 class="form-title">Ajouter un Professeur</h2>
+        <form method="POST" action="{% url 'add_teacher' administrateur.id %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="id_first_name">Prénom :</label>
+                        {{ form.first_name }}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="id_last_name">Nom :</label>
+                        {{ form.last_name }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="id_matricule">Matricule :</label>
+                        {{ form.matricule }}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="id_filiere">Profession :</label>
+                        {{ form.profession }}
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="id_email">Email :</label>
+                {{ form.email }}
+            </div>
+            <div class="form-group">
+                <label for="photo" class="form-label">Photo</label>
+                <input type="file" class="form-control" id="photo" name="photo" accept="image/*">
+            </div>
+            <button type="submit" class="btn btn-custom">Ajouter le Professeur</button>
+        </form>
     </div>
-  </div>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+
 </html>

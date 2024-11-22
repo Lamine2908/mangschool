@@ -8,7 +8,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
+            background-color: #e9f7ef; /* Couleur de fond vert clair */
             color: #333;
         }
         .container {
@@ -22,14 +22,21 @@
         h2 {
             text-align: center;
             margin-bottom: 20px;
-            color: #007bff;
+            color: #28a745; /* Vert pour les titres */
         }
         .form-label {
             font-weight: bold;
             margin-bottom: 5px;
         }
+        .form-control, .form-select {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
         .btn {
-            background-color: #007bff;
+            background-color: #28a745; /* Vert pour le bouton */
             color: white;
             border: none;
             padding: 10px 15px;
@@ -40,25 +47,52 @@
             transition: background-color 0.3s;
         }
         .btn:hover {
-            background-color: #0056b3;
+            background-color: #218838; /* Vert plus foncé au survol */
         }
         .alert-custom {
-            background-color: #ffc107;
-            color: #856404;
-            border: 1px solid #ffc107;
+            background-color: #d4edda; /* Vert pâle pour les alertes */
+            color: #155724; /* Vert plus foncé pour le texte */
+            border: 1px solid #c3e6cb;
             border-radius: 5px;
             padding: 10px;
             margin-bottom: 20px;
             text-align: center;
         }
+        .alert-custom p {
+            margin-bottom: 0;
+        }
+        .row > .col {
+            padding-left: 15px;
+            padding-right: 15px;
+        }
     </style>
 </head>
 <body>
+    
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #28a745;"> <!-- Barre de navigation en vert -->
+        <a class="navbar-brand" href="#">Geschool</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="{% url 'espaceprof' teacher.id %}">Acceuil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#"><marquee>{{teacher.first_name}} {{teacher.last_name}}</marquee></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'connexion' %}">Déconnexion</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
     <div class="container mt-5">
         <h2>Ajouter une Note</h2>
         <form method="post" class="needs-validation" novalidate>
             {% csrf_token %}
-
             {% if messages %}
             <div class="alert alert-custom">
                 {% for message in messages %}
@@ -66,58 +100,53 @@
                 {% endfor %}
             </div>
             {% endif %}
-
             <div class="row mb-3">
                 <div class="col-md-4">
-                    <label for="id_classe" class="form-label">{{ form.classe.label }}</label>
-                    {{ form.classe }}
-                    {% if form.classe.errors %}
-                        <div class="text-danger">{{ form.classe.errors }}</div>
-                    {% endif %}
+                    <label for="classe" class="form-label">Classe</label>
+                    <select name="classe" id="classe" class="form-select">
+                        <option value="">Sélectionnez une classe</option>
+                        {% for classe in classes %}
+                        <option value="{{ classe.id }}">{{ classe.name }}</option>
+                        {% endfor %}
+                    </select>
                 </div>
                 <div class="col-md-4">
-                    <label for="id_student" class="form-label">{{ form.student.label }}</label>
-                    {{ form.student }}
-                    {% if form.student.errors %}
-                        <div class="text-danger">{{ form.student.errors }}</div>
-                    {% endif %}
+                    <label for="student" class="form-label">Étudiant</label>
+                    <select name="student" id="student" class="form-select" required>
+                        <option value="">Sélectionnez un étudiant</option>
+                        {% for student in students %}
+                        <option value="{{ student.id }}">{{ student.first_name }} {{ student.last_name }}</option>
+                        {% endfor %}
+                    </select>
                 </div>
                 <div class="col-md-4">
-                    <label for="id_matiere" class="form-label">{{ form.matiere.label }}</label>
-                    {{ form.matiere }}
-                    {% if form.matiere.errors %}
-                        <div class="text-danger">{{ form.matiere.errors }}</div>
-                    {% endif %}
+                    <label for="matiere" class="form-label">Matière</label>
+                    <select name="matiere" id="matiere" class="form-select" required>
+                        <option value="">Sélectionnez une matière</option>
+                        {% for matiere in matieres %}
+                        <option value="{{ matiere.id }}">{{ matiere.nom_matiere }}</option>
+                        {% endfor %}
+                    </select>
                 </div>
             </div>
-
             <div class="row mb-3">
                 <div class="col-md-4">
-                    <label for="id_note_eva1" class="form-label">{{ form.note_eva1.label }}</label>
+                    <label for="note_eva1" class="form-label">{{ form.note_eva1.label }}</label>
                     {{ form.note_eva1 }}
-                    {% if form.note_eva1.errors %}
-                        <div class="text-danger">{{ form.note_eva1.errors }}</div>
-                    {% endif %}
                 </div>
                 <div class="col-md-4">
-                    <label for="id_note_eva2" class="form-label">{{ form.note_eva2.label }}</label>
+                    <label for="note_eva2" class="form-label">{{ form.note_eva2.label }}</label>
                     {{ form.note_eva2 }}
-                    {% if form.note_eva2.errors %}
-                        <div class="text-danger">{{ form.note_eva2.errors }}</div>
-                    {% endif %}
                 </div>
                 <div class="col-md-4">
-                    <label for="id_integration" class="form-label">{{ form.integration.label }}</label>
+                    <label for="integration" class="form-label">{{ form.integration.label }}</label>
                     {{ form.integration }}
-                    {% if form.integration.errors %}
-                        <div class="text-danger">{{ form.integration.errors }}</div>
-                    {% endif %}
                 </div>
             </div>
-
             <button type="submit" class="btn">Ajouter la note</button>
         </form>
     </div>
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

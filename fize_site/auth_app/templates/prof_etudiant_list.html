@@ -7,7 +7,23 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
+<<<<<<< HEAD
             background-color: #e9ecef;
+=======
+            background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+        }
+        .navbar {
+            background-color: #28a745;
+        }
+        .navbar-brand,
+        .nav-link {
+            color: #ffffff !important;
+        }
+        .navbar-nav .nav-link.active {
+            color: #fff !important;
+            background-color: #218838 !important;
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
         }
         .container {
             margin-top: 30px;
@@ -25,9 +41,29 @@
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
         }
         .class-card h2 {
+<<<<<<< HEAD
             color: #007bff;
             font-weight: bold;
         }
+=======
+            color: #28a745;
+            font-weight: bold;
+        }
+        .class-card p {
+            font-size: 1.1rem;
+            color: #333;
+        }
+        .class-card a {
+            text-decoration: none;
+            color: #28a745;
+            font-weight: bold;
+            display: inline-block;
+            margin-top: 15px;
+        }
+        .class-card a:hover {
+            text-decoration: underline;
+        }
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
         .student-table {
             width: 100%;
             border-collapse: collapse;
@@ -39,7 +75,11 @@
             text-align: left;
         }
         .student-table th {
+<<<<<<< HEAD
             background-color: #007bff;
+=======
+            background-color: #28a745;
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
             color: #ffffff;
             font-weight: bold;
         }
@@ -50,6 +90,7 @@
         .student-table tr:nth-child(even) {
             background-color: #f8f9fa;
         }
+<<<<<<< HEAD
     </style>
 </head>
 <body>
@@ -86,11 +127,43 @@
                             {% endfor %}
                         </tbody>
                     </table> {% endcomment %}
+=======
+        .card-columns {
+            column-count: 2;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <a class="navbar-brand" href="#">Geschool</a>
+        <a class="nav-link" href="{% url 'espaceprof' teacher.id %}">Accueil</a>
+        <a class="nav-link active" href="#">
+            <marquee>{{ teacher.first_name }} {{ teacher.last_name }}</marquee>
+        </a>
+        <a class="nav-link" href="{% url 'connexion' %}">Déconnexion</a>
+    </nav>
+
+    <div class="container">
+        <h1 class="mb-5 text-center text-success display-4">Classes de {{ teacher.first_name }} {{ teacher.last_name }}</h1>
+
+        <div class="row">
+            {% for classe, students in students_by_class.items %}
+            <div class="col-md-6 mb-4">
+                <div class="class-card">
+                    <h2 class="text-center text-success">{{ classe.name }}</h2>
+                    <p class="text-center text-muted">{{ classe.description }}</p>
+                    <a href="{% url 'classes' teacher.id %}" class="d-block text-center">Voir les étudiants</a>
+                    
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
                 </div>
             </div>
             {% endfor %}
         </div>
     </div>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

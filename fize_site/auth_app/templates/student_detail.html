@@ -9,7 +9,11 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+<<<<<<< HEAD
             background-color: #f4f4f4;
+=======
+            background-color: #f2f8f3;
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
             color: #333;
             margin: 0;
             padding: 20px;
@@ -20,7 +24,11 @@
             margin: 20px auto;
             padding: 20px;
             background: #fff;
+<<<<<<< HEAD
             border: 1px solid #ddd;
+=======
+            border: 1px solid #e0e0e0;
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             transition: transform 0.2s ease;
@@ -33,7 +41,11 @@
         .student-info h1 {
             font-size: 28px;
             margin-bottom: 20px;
+<<<<<<< HEAD
             color: #4a90e2;
+=======
+            color: #4CAF50;
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
             text-align: center;
         }
 
@@ -49,7 +61,11 @@
             object-fit: cover;
             margin: 0 auto 20px auto;
             display: block;
+<<<<<<< HEAD
             border: 2px solid #4a90e2;
+=======
+            border: 2px solid #4CAF50;
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
             transition: transform 0.3s ease;
             cursor: pointer;
         }
@@ -78,23 +94,36 @@
         .container {
             display: flex;
             justify-content: space-between;
+<<<<<<< HEAD
             align-items: flex-start; /* Alignement du haut */
             gap: 20px;
         }
 
         /* Masquer l'input de fichier */
+=======
+            align-items: flex-start;
+            gap: 20px;
+        }
+
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
         .hidden-file-input {
             display: none;
         }
 
+<<<<<<< HEAD
         /* Style du label pour qu'il agisse comme un bouton de chargement */
+=======
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
         label {
             cursor: pointer;
             display: inline-block;
             text-align: center;
         }
 
+<<<<<<< HEAD
         /* Style du bouton de soumission (caché) */
+=======
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
         button {
             display: none;
         }
@@ -112,10 +141,77 @@
         .fade-in {
             animation: fadeIn 0.5s ease-in-out;
         }
+<<<<<<< HEAD
+=======
+
+        nav {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .navbar-brand {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .navbar-nav {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .navbar-nav .nav-item {
+            margin-right: 20px;
+        }
+
+        .navbar-nav .nav-link {
+            color: white;
+            padding: 8px 15px;
+            font-size: 18px;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+        }
+
+        .navbar-nav .nav-link:hover {
+            background-color: #45a049;
+            color: #fff;
+        }
+
+        .navbar-nav .nav-item .nav-link.active {
+            background-color: #388e3c;
+            color: #fff;
+        }
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
     </style>
 </head>
 
 <body>
+<<<<<<< HEAD
+=======
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'espaceeleve' student.id %}">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'student_detail' student.id %}">{{ student.first_name }} {{ student.last_name }}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'connexion' %}">Déconnexion</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
     <div class="student-info fade-in">
         <h1>Détails de l'Étudiant</h1>
         <div class="container">
@@ -134,7 +230,10 @@
                 <p>Pas de photo disponible</p>
                 {% endif %}
             </div>
+<<<<<<< HEAD
             
+=======
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
         </div>
 
         <p><span class="info-label">Prénom:</span> {{ student.first_name }}</p>
@@ -146,7 +245,10 @@
     </div>
 
     <script>
+<<<<<<< HEAD
         // Prévisualisation de la photo sélectionnée
+=======
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
         document.getElementById('photo').addEventListener('change', function(event) {
             const file = event.target.files[0];
             if (file) {

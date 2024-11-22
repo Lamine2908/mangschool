@@ -6,9 +6,8 @@ import qrcode
 from io import BytesIO
 from django.core.files import File
 from django.core.exceptions import ValidationError
-from django.contrib.auth.models import User
 from django.utils import timezone
-from datetime import time
+from datetime import time, timedelta, datetime
 
 class Administrateur(models.Model):
     id = models.AutoField(primary_key=True)
@@ -20,7 +19,7 @@ class Administrateur(models.Model):
     email = models.EmailField(unique=True, null=False, blank=False)
     qr_code = models.ImageField(upload_to='qr_codes/students', blank=True, null=True)
     photo = models.ImageField(upload_to='photos/admin', blank=True, null=True)  
-    
+     
     
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
@@ -36,13 +35,9 @@ class Administrateur(models.Model):
     def generate_qr_code_data(self):
         return f'{self.id}-{self.first_name}-{self.last_name}'
     
-class Salle(models.Model):
-    id = models.AutoField(primary_key=True)
-    numero = models.IntegerField(null=True, blank=True)
-    name = models.CharField(max_length=255, null=True)
-    
-    def __str__(self):
-        return f"{self.numero}"
+salle = [
+    ('310', '310'), ('311', '311'), ('312', '312'), ('313', '313'), ('314', '314')
+]
 
 class ResponsableFiliere(models.Model):
     id = models.AutoField(primary_key=True)
@@ -55,7 +50,7 @@ class ResponsableFiliere(models.Model):
     grade = models.CharField(max_length=20, blank=True)
     qr_code = models.ImageField(upload_to='qr_codes/students', blank=True, null=True)
     photo = models.ImageField(upload_to='photos/responsable', blank=True, null=True)  
-    
+     
     
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
@@ -83,7 +78,7 @@ class Teacher(models.Model):
     responsable = models.ForeignKey(ResponsableFiliere, on_delete=models.CASCADE, null=True, blank=True)
     comptable = models.ForeignKey('Comptable', on_delete=models.CASCADE, null=True, blank=True)
     qr_code = models.ImageField(upload_to='qr_codes/teacher', blank=True, null=True)
-    
+     
     
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
@@ -114,21 +109,44 @@ class Associer(models.Model): #Filiere
     def __srt__(self):
         return f'{self.teacher}'
 
+UniteEnseignement = [
+    ('Appliquer les bases en informatique', 'Appliquer les bases en informatique'),
+    ('Initialisation au Génie Logiciel', 'Initialisation au Génie Logiciel'),
+    ('Découvrir le milieu professionnel', 'Découvrir le milieu professionnel'),
+    ('bases en mathématiques', 'bases en mathématiques'),
+    ('Gérer un projet professionnel', 'Gérer un projet professionnel'),
+    ('évelopper une solution BI', 'Développer une solution BI'),
+    ('Assurer la haute disponibilité', 'Assurer la haute disponibilité'),
+    ('Exploitation de données', 'Exploitation de données'),
+    ('Administrer un serveur', 'Administrer un serveur'),
+    ('Conception de Bases de données', 'Conception de Bases de données')
+]
+
+semestres = [
+    ('Semestre 1', 'Semestre 1'),
+    ('Semestre 2', 'Semestre 2'),
+    ('Semestre 3', 'Semestre 3'),
+    ('Semestre 4', 'Semestre 4'),
+]
+    
 class Matiere(models.Model):
     id = models.AutoField(primary_key=True)
     code_matiere = models.CharField(max_length=20, unique=True)
     nom_matiere = models.CharField(max_length=100)
-    ue = models.CharField(max_length=100, default='ue')
-    credit = models.IntegerField(default=0)
-    volume = models.CharField(max_length=5, default='0')
-    semestre = models.CharField(max_length=10, default='semestre')
+    credit = models.IntegerField(default=0, null=True, blank=True)
+    volume = models.IntegerField(default=0, null=True)
+    semestre = models.CharField(max_length=10, choices=semestres, null=True)
     filiere = models.ForeignKey(Filiere, on_delete=models.CASCADE, related_name='matieres', null=True)
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, null=True)
     responsable = models.ForeignKey(ResponsableFiliere, on_delete=models.CASCADE, null=True)
-    
+    ue = models.CharField(max_length=100, choices=UniteEnseignement ,null=True)
+
     def __str__(self):
         return f'{self.nom_matiere}'
     
+    def save(self, *args, **kwargs):
+        self.volume = self.credit * 20
+        super(Matiere, self).save(*args, **kwargs)  
 
 class ResponsableMetier(models.Model):
     id = models.AutoField(primary_key=True, unique=True)
@@ -139,11 +157,12 @@ class ResponsableMetier(models.Model):
     email = models.EmailField(unique=True, null=True, blank=True)
     num_tel = models.IntegerField(unique=True, blank=True, null=True)
     status = models.CharField(max_length=20, blank=True, null=True)
-    responsable = models.ForeignKey(ResponsableFiliere, on_delete=models.CASCADE, null=True, blank=True)
-    
+    administrateur=models.ForeignKey(Administrateur, on_delete=models.CASCADE, null=True)
+    responsable = models.ForeignKey(ResponsableFiliere, on_delete=models.CASCADE, null=True)
+     
     
     def __str__(self):
-        return f'{self.first_name} : {self.last_name}'
+        return f'{self.first_name} {self.last_name}'
 
 class Classe(models.Model):
     id = models.AutoField(primary_key=True, unique=True)
@@ -156,6 +175,15 @@ class Classe(models.Model):
     def __str__(self):
         return f'{self.name}-P{self.promo}'
 
+METIER_TYPE_CHOICES = [
+    ('DB_ADMIN', 'Administration de bases de données'),
+    ('DIGITAL_PERFORMANCE', 'Analyse de performance digitale'),
+    ('FRONTEND_DEV', 'Développement Front-End'),
+    ('BACKEND_DEV', 'Développement Back-End'),
+    ('SECURITY_CLOUD', 'Système, sécurité et cloud'),
+    ('NETWORK_IOT', 'Réseau et Internet des objets'),
+]
+
 class Student(models.Model):
     id = models.AutoField(primary_key=True, unique=True)
     matricule = models.CharField(max_length=20, default='modifier')
@@ -163,14 +191,19 @@ class Student(models.Model):
     last_name = models.CharField(max_length=50)
     filiere = models.ForeignKey(Filiere, on_delete=models.SET_NULL, null=True, blank=True)
     classe = models.ForeignKey(Classe, on_delete=models.SET_NULL, null=True, blank=True)
-    metier = models.CharField(max_length=100, blank=True, null=True)
+    metier = models.CharField(
+        max_length=50, 
+        choices=METIER_TYPE_CHOICES, 
+        null=True, 
+        blank=True
+    )
     email = models.EmailField(unique=True, null=True, blank=True)
     qr_code = models.ImageField(upload_to='qr_codes/students', blank=True, null=True)
-    photo = models.ImageField(upload_to='photos/', blank=True, null=True)  
-    
-    
+    photo = models.ImageField(upload_to='photos/', blank=True, null=True)
+
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
+
 
     def save(self, *args, **kwargs):
         if not self.qr_code:
@@ -183,18 +216,31 @@ class Student(models.Model):
     def generate_qr_code_data(self):
         return f'{self.id}-{self.first_name}-{self.last_name}'
     
-class Pointage(models.Model):    
+class Pointage(models.Model):
     id = models.AutoField(primary_key=True, unique=True)
     date = models.DateField(default=timezone.now)
-    arrivee = models.TimeField(default=timezone.now)
-    sortie = models.TimeField(default=timezone.now)
-    total = models.IntegerField(default=0, null=True)
+    arrivee = models.TimeField(null=True, blank=True)  
+    sortie = models.TimeField(null=True, blank=True) 
+    total = models.DurationField(default=timedelta(0), null=True, blank=True) 
     student = models.ForeignKey(Student, on_delete=models.CASCADE, null=True)
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, null=True)
-    responsable = models.ForeignKey(ResponsableFiliere, on_delete=models.CASCADE, null=True)
-    
+    classe = models.ForeignKey(Classe, on_delete=models.CASCADE, null=True)
+
+    def calculer_total(self):
+        if self.arrivee and self.sortie:
+            arrivee_datetime = datetime.combine(self.date, self.arrivee)
+            sortie_datetime = datetime.combine(self.date, self.sortie)
+            self.total = sortie_datetime - arrivee_datetime
+        else:
+            self.total = timedelta(0)
+
+    def save(self, *args, **kwargs):
+        self.calculer_total()
+        super().save(*args, **kwargs)
+
     def __str__(self):
-        return f'{self.student}'
+        return f"{self.student} - {self.date}"
+
     
 class Note(models.Model):
     id = models.AutoField(primary_key=True, unique=True)
@@ -202,8 +248,8 @@ class Note(models.Model):
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, null=True)
     matiere = models.ForeignKey(Matiere, on_delete=models.CASCADE, null=True)
     classe = models.ForeignKey(Classe, on_delete=models.CASCADE, null=True)
-    administrateur = models.ForeignKey(Administrateur, on_delete=models.CASCADE, null=True, blank=True)
-    responsableFiliere = models.ForeignKey(ResponsableFiliere, on_delete=models.CASCADE, null=True, blank=True)    
+    administrateur = models.ForeignKey(Administrateur, on_delete=models.CASCADE, null=True)
+    responsable = models.ForeignKey(ResponsableFiliere, on_delete=models.CASCADE, null=True)    
     note_eva1 = models.FloatField(default=0)
     note_eva2 = models.FloatField(default=0)
     integration = models.FloatField(default=0)
@@ -212,14 +258,13 @@ class Note(models.Model):
     def __str__(self):
         return f"{self.student} - {self.matiere}"
 
+    def save(self, *args, **kwargs): 
+        if self.student.classe != self.classe: 
+            raise ValidationError(f"L'élève {self.student} n'appartient pas à la classe {self.classe}.")
+
     def save(self, *args, **kwargs):
         self.moyen_semes = round((self.note_eva1 + self.note_eva2 + self.integration) / 3, 2)
         super(Note, self).save(*args, **kwargs)
-        
-     # def save(self, *args, **kwargs):
-    #     if self.matiere not in self.teacher.matieres.all():
-    #         raise ValidationError("Le professeur ne peut pas saisir de note pour cette matière.")
-    
 
 class Bulletin(models.Model):
     id = models.AutoField(primary_key=True, unique=True)
@@ -275,7 +320,7 @@ class Comptable(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.EmailField(unique=True)
-    
+     
     
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
@@ -327,7 +372,7 @@ class CahierDeCours(models.Model):
     corpus_stage = models.TextField(blank=True, null=True)
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, null=True)
     classe = models.ForeignKey(Classe, on_delete=models.CASCADE, null=True)
-    responsable = models.ForeignKey(ResponsableClasse, on_delete=models.CASCADE, null=True)
+    responsable = models.ForeignKey(ResponsableFiliere, on_delete=models.CASCADE, null=True)
     adjoint = models.ForeignKey(AdjointClasse, on_delete=models.CASCADE, null=True)
     
     def __str__(self):
@@ -339,16 +384,11 @@ class Planning(models.Model):
     premiere_heure = models.TimeField(default='08:30')
     deuxieme_heure = models.TimeField(default='11:00')
     troisieme_heure = models.TimeField(default='14:00')
-    activite1 = models.CharField(max_length=100, null=True)
-    activite2 = models.CharField(max_length=100, null=True)
-    activite3 = models.CharField(max_length=100, null=True)
-    salle = models.ForeignKey(Salle, on_delete=models.CASCADE, null=True)
+    matiere=models.ForeignKey(Matiere, on_delete=models.CASCADE, null=True)
+    salle = models.CharField(max_length=4,choices=salle, null=True)
     classe = models.ForeignKey(Classe, on_delete=models.CASCADE, null=True)
     professeur = models.ForeignKey(Teacher, on_delete=models.CASCADE, null=True)
     responsable = models.ForeignKey(ResponsableFiliere, on_delete=models.CASCADE, null=True)
-
-    def __str__(self):
-        return f"{self.date})"
 
 class Consulter_planning(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE, null=True)

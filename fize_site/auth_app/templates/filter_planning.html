@@ -14,7 +14,7 @@
     }
 
     .navbar {
-        background-color: #0d6efd;
+        background-color: #28a745;
     }
 
     .navbar-brand,
@@ -23,7 +23,7 @@
     }
 
     .navbar-nav .nav-link:hover {
-        color: #cce5ff !important;
+        color: #c8e6c9 !important;
     }
 
     .hero {
@@ -60,7 +60,7 @@
 
     .section-icon {
         font-size: 2.5rem;
-        color: #d0690e; 
+        color: #4caf50;
         margin-bottom: 15px;
     }
 
@@ -78,16 +78,16 @@
     }
 
     .section-card .btn {
-        background-color: #d0690e;
+        background-color: #4caf50;
         color: #ffffff;
     }
 
     .section-card .btn:hover {
-        background-color: #d0690e; 
+        background-color: #388e3c;
     }
 
     .footer {
-        background-color: #d0690e; 
+        background-color: #4caf50;
         color: #ffffff;
         padding: 20px 0;
     }
@@ -106,11 +106,12 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'planning_list' %}">Lister les eleves</a>
-                </li>
+                <a class="nav-link" href="{% url 'responsable_filiere' responsable.id %}">Accueil</a>
+            </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'filter_planning' %}">Filtrer les plannings</a>
+                    <a class="nav-link" href="{% url 'planning_list' responsable.id %}">Lister les plannings</a>
                 </li>
+
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'connexion' %}">Déconnexion</a>
                 </li>
@@ -125,9 +126,8 @@
                     <input type="date" name="date" class="form-control" placeholder="Date" value="{{ request.GET.date }}">
                 </div>
                 <div class="col-md-2">
-                    <button type="submit" class="btn btn-primary">Filtrer</button>
+                    <button type="submit" class="btn btn-success">Filtrer</button>
                 </div>
-                
                 
             </div>
            

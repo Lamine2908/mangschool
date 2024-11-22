@@ -11,98 +11,156 @@
             font-family: 'Roboto', sans-serif;
             background-color: #f9fbfd;
             color: #333;
-            animation: fadeInBody 1s ease-in-out;
         }
 
+        .navbar {
+            background-color: #2C6B2F; 
+        }
+
+        .navbar-brand,
+        .nav-link {
+            color: #ffffff !important;
+        }
+
+        .navbar-nav .nav-link:hover {
+            background-color: #56A755;
+            color: #fff !important;
+        }
+
+        .hero {
+            background-color: #d0690e;
+            color: #ffffff;
+            padding: 30px 1;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            color: yellow;
+        }
+
+        .hero p {
+            font-size: 2rem;
+            color: white;
+        }
+
+        .footer {
+            background-color: #2C6B2F;
+            color: #ffffff;
+            padding: 20px 0;
+        }
+
+        .footer p {
+            margin: 0;
+        }
+
+        /* Formulaire */
         .form-container {
-            max-width: 650px;
-            margin: 60px auto;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 30px;
             background-color: #ffffff;
-            padding: 45px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .form-container:hover {
-            transform: scale(1.01);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         .form-title {
-            font-size: 28px;
-            font-weight: bold;
-            margin-bottom: 30px;
-            color: #003366;
-            text-align: center;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .form-group {
+            font-size: 2rem;
+            color: #2C6B2F;
             margin-bottom: 20px;
         }
 
-        .form-control {
-            border-radius: 10px;
-            border: 1px solid #ced4da;
-            transition: all 0.3s ease;
+        .form-group label {
+            font-weight: bold;
         }
 
-        .form-control:focus {
-            border-color: #007bff;
-            box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
-            transform: scale(1.02);
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-top: 5px;
+            font-size: 1rem;
+        }
+
+        .form-group input[type="file"] {
+            padding: 10px;
         }
 
         .btn-custom {
-            background-color: #003366;
+            background-color: #2C6B2F;
             color: white;
-            padding: 12px 18px;
-            font-size: 16px;
-            font-weight: bold;
-            border-radius: 10px;
-            transition: background-color 0.3s ease, transform 0.3s ease;
+            padding: 10px 20px;
+            border-radius: 5px;
+            width: 100%;
             border: none;
+            font-size: 1.1rem;
         }
 
         .btn-custom:hover {
-            background-color: #002244;
-            transform: translateY(-4px);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+            background-color: #56A755;
         }
 
-        .btn-custom:focus {
-            outline: none;
-            box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+        /* Styling pour les autres éléments */
+        .navbar-brand marquee {
+            font-size: 1.5rem;
+            color: yellow;
         }
 
-        label {
-            font-weight: bold;
-            color: #555;
+        /* Cards */
+        .section-card {
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
         }
 
-        .form-text {
-            color: #888;
+        .section-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
         }
 
-        /* Animations */
-        @keyframes fadeInBody {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
+        .section-card .btn {
+            background-color: #d0690e;
+            color: #ffffff;
+        }
+
+        .section-card .btn:hover {
+            background-color: #c56f08;
         }
     </style>
 </head>
 
 <body>
 
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="#"><marquee>Geschool</marquee></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'espaceadmin' administrateur.id %}">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="{% url 'espaceadmin' administrateur.id %}">Espace Administrateur</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'connexion' %}">Déconnexion</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
     <div class="container form-container">
         <h2 class="form-title">Ajouter un Étudiant</h2>
-        <form method="POST" action="{% url 'add_student' %}" enctype="multipart/form-data">
+        <form method="POST" action="{% url 'add_student' administrateur.id %}" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="row">
                 <div class="col-md-6">
