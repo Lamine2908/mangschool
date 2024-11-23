@@ -191,14 +191,13 @@ def ajouter_responsable(request, admin_id):
         form = ResponsableFiliereForm()
     return render(request, 'ajouter_responsable_filiere.html', {'form': form, 'administrateur':administrateur})
 
-def delete_teacher_by_id(request, admin_id, teacher_id):
-    administrateur=get_object_or_404(Administrateur, id=admin_id)
+def delete_teacher_by_id(request, teacher_id):
     teacher = get_object_or_404(Teacher, id=teacher_id)
 
     if request.method == 'POST':
         teacher.delete()
         messages.success(request, "Le professeur a été supprimé avec succès.")
-        return redirect('teacher_list', admin_id=administrateur)
+        return redirect('teacher_list', admin_id=administrateur.id)
 
     return render(request, 'delete_teachers.html', {'teacher': teacher})
 
@@ -499,6 +498,7 @@ def ajouter_notes(request, teacher_id):
         'form': form
     }
     return render(request, 'ajouter_notes.html', context)
+
 
 
 def afficher_notes(request, teacher_id):

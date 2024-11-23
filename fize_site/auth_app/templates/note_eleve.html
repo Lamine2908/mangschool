@@ -2,60 +2,6 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-<<<<<<< HEAD
-    <title>Notes de l'élève</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 0;
-        }
-        h1 {
-            text-align: center;
-            color: #61FF44;
-            margin-top: 20px;
-        }
-        table {
-            width: 90%;
-            margin: 20px auto;
-            border-collapse: collapse;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        }
-        th, td {
-            padding: 15px;
-            text-align: center;
-            border-bottom: 4px solid yellow;
-        }
-        th {
-            background-color: #4CAF50;
-            color: white;
-        }
-        tr:hover {
-            background-color: #f1f1f1;
-        }
-        a {
-            display: block;
-            width: 200px;
-            margin: 20px auto;
-            padding: 10px;
-            text-align: center;
-            background-color: #4CAF50;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-        }
-        a:hover {
-            background-color: #45a049;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        table, h1, a {
-            animation: fadeIn 1s ease-in-out;
-=======
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Notes de l'élève</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -103,38 +49,10 @@
             .table td, .table th {
                 font-size: 0.7rem;
             }
->>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
         }
     </style>
 </head>
 <body>
-<<<<<<< HEAD
-    <h1>Notes de {{ student.first_name }} {{student.last_name}}</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Matière</th>
-                <th>Evaluation 1</th>
-                <th>Evaluation 2</th>
-                <th>Integration</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for note in notes %}
-            <tr>
-                <td>{{ note.matiere }}</td>
-                <td>{{ note.note_eva1 }}</td>
-                <td>{{ note.note_eva2 }}</td>
-                <td>{{ note.integration }}</td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="3">Aucune note disponible pour cet élève.</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-=======
     <nav class="navbar navbar-expand-lg navbar-dark">
         <a class="navbar-brand" href="#">Geschool</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -185,6 +103,5 @@
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
->>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
 </body>
 </html>

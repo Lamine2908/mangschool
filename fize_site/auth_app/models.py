@@ -7,7 +7,7 @@ from io import BytesIO
 from django.core.files import File
 from django.core.exceptions import ValidationError
 from django.utils import timezone
-from datetime import time, timedelta, datetime
+from datetime import time, timedelta
 
 class Administrateur(models.Model):
     id = models.AutoField(primary_key=True)

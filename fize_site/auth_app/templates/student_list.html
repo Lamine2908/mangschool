@@ -12,11 +12,7 @@
         }
 
         .navbar {
-<<<<<<< HEAD
-            background-color: #0d6efd;
-=======
             background-color: #28a745; /* Vert */
->>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
         }
 
         .navbar-brand,
@@ -29,11 +25,7 @@
         }
 
         .hero {
-<<<<<<< HEAD
-            background: url('https://images.ctfassets.net/63bmaubptoky/sZriYkvztFPUnfxy83p_SiPo-cUxTL2x5XzyC5FRwvs/e37799a95f714bd48891d63c91c930be/logiciel-de-gestion-etablissement-scolaire-FR-Capterra-Header.png?w=2200') no-repeat center center;
-=======
             background: url('https://images.ctfassets.net/63bmaubptoky/sZriYkvztFPUnfxy83p_SiPo-cUxTL2x5XzyC5FRwvs/e37799a95f714bd48891d63c91c930be/logiciel-de-gestion-etablissement-scolaire-FR-Capterra-Header.png?w=2200') no-repeat center center; 
->>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
             background-size: cover;
             color: #ffffff;
             padding: 120px 0;
@@ -66,11 +58,7 @@
 
         .section-icon {
             font-size: 2.5rem;
-<<<<<<< HEAD
-            color: #d0690e; 
-=======
             color: #28a745; /* Vert */
->>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
             margin-bottom: 15px;
         }
 
@@ -88,28 +76,16 @@
         }
 
         .section-card .btn {
-<<<<<<< HEAD
-            background-color: #d0690e;
-=======
             background-color: #28a745;
->>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
             color: #ffffff;
         }
 
         .section-card .btn:hover {
-<<<<<<< HEAD
-            background-color: #d0690e; 
-        }
-
-        .footer {
-            background-color: #d0690e; 
-=======
             background-color: #218838; 
         }
 
         .footer {
             background-color: #28a745;
->>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
             color: #ffffff;
             padding: 20px 0;
         }
@@ -117,8 +93,6 @@
         .footer p {
             margin: 0;
         }
-<<<<<<< HEAD
-=======
 
         .btn-primary {
             background-color: #28a745; 
@@ -129,7 +103,6 @@
             background-color: #218838; 
             border-color: #1e7e34;
         }
->>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
     </style>
 </head>
 
@@ -143,31 +116,15 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-<<<<<<< HEAD
-                    <a class="nav-link active" aria-current="page" href="#">Accueil</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'filter_students_view' %}">Filtrer les élèves</a>
-=======
                     <a class="nav-link" href="{% url 'espaceadmin' administrateur.id %}">Accueil</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'filter_students_view' administrateur.id %}">Filtrer les élèves</a>
->>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'connexion' %}">Déconnexion</a>
                 </li>
             </ul>
-<<<<<<< HEAD
-            
-        </div>
-    </nav>
-    <div class="container my-4">
-        <h1 class="mb-4">Liste des Élèves</h1>
-        <a href="{% url 'add_student' %}" class="btn btn-primary mb-3">Ajouter un Élève</a>
-        <a href="{% url 'filter_students_view' %}" class="btn btn-primary mb-3">Rechercher un Élève</a>
-=======
         </div>
     </nav>
 
@@ -175,7 +132,6 @@
         <h1 class="mb-4">Liste des Élèves</h1>
         <a href="{% url 'add_student' administrateur.id %}" class="btn btn-primary mb-3">Ajouter un Élève</a>
         <a href="{% url 'filter_students_view' administrateur.id %}" class="btn btn-primary mb-3">Rechercher un Élève</a>
->>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
 
         <table class="table table-striped">
             <thead>
@@ -188,10 +144,6 @@
                     <th>Métier</th>
                     <th>email</th>
                     <th>Action</th>
-<<<<<<< HEAD
-                    
-=======
->>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
                 </tr>
             </thead>
             <tbody>
@@ -206,21 +158,13 @@
                     <td>{{ student.email }}</td>
                     <td>
                         <a href="{% url 'Affecter_eleve' student.id %}" class="btn btn-primary btn-sm">Affecter</a>
-<<<<<<< HEAD
-                        <a href="{% url 'update_student' student.id %}" class="btn btn-warning btn-sm">Modifier</a>
-=======
                         <a href="{% url 'update_student' administrateur.id student.id %}" class="btn btn-warning btn-sm">Modifier</a>
->>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
                         <a href="{% url 'delete_student_by_id' student.id %}" class="btn btn-danger btn-sm">Suppr</a>
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
-<<<<<<< HEAD
-        
-=======
->>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
     </div>
 </body>
 </html>

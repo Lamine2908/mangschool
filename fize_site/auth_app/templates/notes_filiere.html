@@ -14,11 +14,7 @@
         }
         h1 {
             text-align: center;
-<<<<<<< HEAD
-            color: #007bff;
-=======
             color: #28a745;
->>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
             margin-top: 20px;
             animation: fadeIn 1s ease-in-out;
         }
@@ -35,11 +31,7 @@
         label {
             margin: 0 10px;
             font-weight: bold;
-<<<<<<< HEAD
-            color: #007bff;
-=======
             color: #28a745;
->>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
         }
         input[type="text"] {
             padding: 5px;
@@ -49,11 +41,7 @@
         }
         button {
             padding: 5px 10px;
-<<<<<<< HEAD
-            background-color: #007bff;
-=======
             background-color: #28a745;
->>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
             color: white;
             border: none;
             border-radius: 4px;
@@ -61,11 +49,7 @@
             transition: background-color 0.3s ease;
         }
         button:hover {
-<<<<<<< HEAD
-            background-color: #0056b3;
-=======
             background-color: #218838;
->>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
         }
         table {
             width: 90%;
@@ -82,19 +66,11 @@
             border-bottom: 1px solid #dee2e6;
         }
         th {
-<<<<<<< HEAD
-            background-color: #007bff;
-            color: white;
-        }
-        tr:hover {
-            background-color: #e9f5f5;
-=======
             background-color: #28a745;
             color: white;
         }
         tr:hover {
             background-color: #e9f5e9;
->>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
         }
         a.btn {
             display: block;
@@ -118,10 +94,6 @@
     </style>
 </head>
 <body>
-<<<<<<< HEAD
-    <h1>Notes de la filiere de {{responsable.first_name}} {{responsable.last_name}}</h1>
-    <form method="get" action="{% url 'notes_filiere' responsableFiliere.id %}">
-=======
 
  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #28a745;">
     <a class="navbar-brand" href="#">Geschool</a>
@@ -146,7 +118,6 @@
 
     <h1>Notes de la filière de {{responsable.first_name}} {{responsable.last_name}}</h1>
     <form method="get" action="{% url 'notes_filiere' responsable.id %}">
->>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
         <label for="student">Apprenant:</label>
         <input type="text" id="student" name="student" value="{{ request.GET.student }}">
         <label for="lastname">Nom:</label>
@@ -155,14 +126,8 @@
         <input type="text" id="classe" name="classe" value="{{ request.GET.classe }}">
         <div style="text-align: center; margin-top: 20px;">
             <button type="submit" class="btn btn-primary" style="margin-right: 10px;">Filtrer</button> 
-<<<<<<< HEAD
-            <a href="{% url 'responsable_filiere' responsableFiliere.id %}" class="btn btn-secondary">Retour</a>
-        </div>
-        
-=======
             <a href="{% url 'responsable_filiere' responsable.id %}" class="btn btn-secondary">Retour</a>
         </div>
->>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
     </form>
     <table class="table table-hover table-bordered">
         <thead class="table-light">
@@ -184,10 +149,6 @@
             {% endfor %}
         </tbody>
     </table>
-<<<<<<< HEAD
-    <a href="{% url 'responsable_filiere' responsableFiliere.id %}" class="btn btn-secondary">Retour</a>
-=======
     <a href="{% url 'responsable_filiere' responsable.id %}" class="btn btn-secondary">Retour</a>
->>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
 </body>
 </html>
