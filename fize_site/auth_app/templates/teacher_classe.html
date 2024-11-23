@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="fr">
+<<<<<<< HEAD
+=======
 
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,6 +16,14 @@
             margin: 0;
             padding: 0;
         }
+<<<<<<< HEAD
+        h2 {
+            text-align: center;
+            color: #17a2b8;
+            margin-top: 20px;
+            animation: slideIn 1.5s ease-out;
+        }
+=======
 
         h2 {
             text-align: center;
@@ -21,6 +32,7 @@
             animation: slideIn 1.5s ease-out;
         }
 
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
         table {
             width: 90%;
             margin: 20px auto;
@@ -28,6 +40,17 @@
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
             animation: fadeIn 2s ease-in-out;
         }
+<<<<<<< HEAD
+        th, td {
+            padding: 15px;
+            text-align: center;
+            border-bottom: 2px solid #17a2b8;
+        }
+        th {
+            background-color: #28a745;
+            color: green;
+        }
+=======
 
         th,
         td {
@@ -41,11 +64,15 @@
             color: white;
         }
 
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
         tr:hover {
             background-color: #e9f5f5;
             transition: background-color 0.3s ease;
         }
+<<<<<<< HEAD
+=======
 
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
         a {
             display: block;
             width: 200px;
@@ -58,6 +85,26 @@
             border-radius: 5px;
             transition: background-color 0.3s ease;
         }
+<<<<<<< HEAD
+        a:hover {
+            background-color: #218838;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideIn {
+            from { transform: translateX(-100%); }
+            to { transform: translateX(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Classes des Professeurs</h2>
+        <table class="table table-hover table-bordered align-middle">
+            <thead class="table-light">
+=======
 
         a:hover {
             background-color: #218838;
@@ -112,10 +159,32 @@
 
         <table class="table table-hover table-bordered align-middle">
             <thead>
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
                 <tr>
                     <th scope="col">Prénom</th>
                     <th scope="col">Nom</th>
                     <th scope="col">Classes Gérées</th>
+<<<<<<< HEAD
+                </tr>
+            </thead>
+            <tbody>
+                {% for teacher in teachers %}
+                <tr>
+                    <td>{{ teacher.first_name }}</td>
+                    <td>{{ teacher.last_name }}</td>
+                    <td>
+                        {% for enseignement in teacher.enseignements.all %}
+                            {{ enseignement.classe.name }}
+                            {% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+=======
                     <th scope="col">Matière Enseignée</th>
                 </tr>
             </thead>
@@ -143,4 +212,5 @@
     </div>
 </body>
 
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
 </html>

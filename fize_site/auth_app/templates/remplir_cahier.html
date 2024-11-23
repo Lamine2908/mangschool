@@ -15,8 +15,12 @@
         }
 
         .container {
+<<<<<<< HEAD
+            max-width: 700px;
+=======
             max-width: 900px;
             margin-top: 30px;
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
             animation: fadeIn 1s ease-in-out;
         }
 
@@ -29,6 +33,15 @@
             }
         }
 
+<<<<<<< HEAD
+        .form-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #ffffff;
+            animation: slideIn 0.5s ease-in-out;
+=======
         .navbar {
             background-color: #28a745;
             padding: 15px 20px;
@@ -57,11 +70,16 @@
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             animation: slideIn 0.7s ease-in-out;
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
         }
 
         @keyframes slideIn {
             from {
+<<<<<<< HEAD
+                transform: translateY(10px);
+=======
                 transform: translateY(20px);
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
                 opacity: 0;
             }
             to {
@@ -71,6 +89,65 @@
         }
 
         .form-section h5 {
+<<<<<<< HEAD
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            color: #343a40;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+        }
+
+        .form-section h5 i {
+            margin-right: 10px;
+            color: #007bff;
+        }
+
+        label {
+            font-weight: bold;
+            color: #495057;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+        }
+
+        label i {
+            margin-right: 8px;
+            color: #6c757d;
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            padding: 8px 16px;
+            font-size: 1rem;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+
+        .btn-secondary {
+            padding: 8px 16px;
+            font-size: 1rem;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-block {
+            margin-top: 20px;
+        }
+
+        .text-center {
+            margin-bottom: 20px;
+=======
             color: #343a40;
             font-size: 1.3rem;
             text-transform: uppercase;
@@ -95,6 +172,7 @@
             border-radius: 5px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             width: 100%; /* Ajuster la largeur des champs */
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
         }
 
         .form-row .col-md-6 {
@@ -106,6 +184,8 @@
             margin-right: 0;
         }
 
+<<<<<<< HEAD
+=======
         .form-row .col-md-4 {
             max-width: 31%; /* Champs encore plus petits et côte à côte */
             margin-right: 2%;
@@ -145,18 +225,33 @@
             margin-bottom: 30px;
         }
 
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
         .form-group textarea {
             resize: vertical;
         }
 
+<<<<<<< HEAD
+        .form-group i {
+            color: #17a2b8;
+=======
         .form-group .custom-select {
             border-radius: 5px;
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
         }
 
     </style>
 </head>
 
 <body>
+<<<<<<< HEAD
+    <div class="container mt-4">
+        <h2 class="mb-3 text-center">Remplir le Cahier de Texte</h2>
+
+        
+        <form method="post">
+            {% csrf_token %}
+       
+=======
     <nav class="navbar navbar-expand-lg navbar-light">
         <a href="#">Geschool</a>
         <a href="{% url 'espaceprof' teacher.id %}">Accueil</a>
@@ -172,6 +267,7 @@
         <form method="post">
             {% csrf_token %}
             
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
             {% if messages %}
                 <div class="alert alert-danger" role="alert">
                     {% for message in messages %}
@@ -183,12 +279,22 @@
             <div class="form-section">
                 <h5><i class="fas fa-info-circle"></i> Informations Générales</h5>
                 <div class="form-row">
+<<<<<<< HEAD
+                   
+                    <div class="form-group col-md-6">
+=======
                     <div class="form-group col-md-4">
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
                         <label for="teacher_name"><i class="fas fa-user"></i> Professeur</label>
                         <input type="text" class="form-control" id="teacher_name" value="{{ teacher.first_name }} {{ teacher.last_name }}" readonly>
                     </div>
 
+<<<<<<< HEAD
+                    
+                    <div class="form-group col-md-6">
+=======
                     <div class="form-group col-md-4">
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
                         <label for="classe"><i class="fas fa-chalkboard"></i> Classe</label>
                         <select name="classe" id="classe" class="form-control" required>
                             <option value="">Sélectionnez une classe</option>
@@ -197,15 +303,37 @@
                             {% endfor %}
                         </select>
                     </div>
+<<<<<<< HEAD
+=======
                     
                     <div class="form-group col-md-4">
                         <label for="id_date"><i class="fas fa-calendar-alt"></i> Date</label>
                         {{ form.date }}
                     </div>
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
                 </div>
             </div>
 
             <div class="form-row">
+<<<<<<< HEAD
+                <div class="form-group col-md-6">
+                    <label for="id_date"><i class="fas fa-calendar-alt"></i> Date</label>
+                    {{ form.date }}
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="id_horaire"><i class="fas fa-clock"></i> Horaire</label>
+                    {{ form.horaire }}
+                </div>
+            </div>
+
+          
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="id_duree"><i class="fas fa-hourglass-half"></i> Durée</label>
+                    {{ form.duree }}
+                </div>
+                <div class="form-group col-md-6">
+=======
                 <div class="form-group col-md-4">
                     <label for="id_horaire"><i class="fas fa-clock"></i> Horaire</label>
                     {{ form.horaire }}
@@ -217,22 +345,41 @@
                 </div>
 
                 <div class="form-group col-md-4">
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
                     <label for="id_competence"><i class="fas fa-book"></i> Compétence</label>
                     {{ form.competence }}
                 </div>
             </div>
 
+<<<<<<< HEAD
+         
+=======
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
             <div class="form-group">
                 <label for="id_uea"><i class="fas fa-layer-group"></i> UEA</label>
                 {{ form.uea }}
             </div>
+<<<<<<< HEAD
+=======
 
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
             <div class="form-group">
                 <label for="id_elements_constituifs"><i class="fas fa-puzzle-piece"></i> Éléments Constitutifs</label>
                 {{ form.elements_constituifs }}
             </div>
         </div>
 
+<<<<<<< HEAD
+  
+        <div class="form-section">
+            <h5><i class="fas fa-book-reader"></i> Théorie</h5>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="id_duree_theorie"><i class="fas fa-hourglass-start"></i> Durée de la Théorie</label>
+                    {{ form.duree_theorie }}
+                </div>
+                <div class="form-group col-md-6">
+=======
         <div class="form-section">
             <h5><i class="fas fa-book-reader"></i> Théorie</h5>
             <div class="form-row">
@@ -242,12 +389,24 @@
                 </div>
                 
                 <div class="form-group col-md-4">
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
                     <label for="id_corpus_theorie"><i class="fas fa-scroll"></i> Corpus de la Théorie</label>
                     {{ form.corpus_theorie }}
                 </div>
             </div>
         </div>
 
+<<<<<<< HEAD
+     
+        <div class="form-section">
+            <h5><i class="fas fa-chalkboard-teacher"></i> Travaux Dirigés (TD)</h5>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="id_duree_td"><i class="fas fa-hourglass"></i> Durée des TD</label>
+                    {{ form.duree_td }}
+                </div>
+                <div class="form-group col-md-6">
+=======
         <div class="form-section">
             <h5><i class="fas fa-chalkboard-teacher"></i> Travaux Dirigés (TD)</h5>
             <div class="form-row">
@@ -257,6 +416,7 @@
                 </div>
 
                 <div class="form-group col-md-4">
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
                     <label for="id_corpus_td"><i class="fas fa-file-alt"></i> Corpus des TD</label>
                     {{ form.corpus_td }}
                 </div>
@@ -266,6 +426,14 @@
         <div class="form-section">
             <h5><i class="fas fa-flask"></i> Travaux Pratiques (TP)</h5>
             <div class="form-row">
+<<<<<<< HEAD
+                <div class="form-group col-md-6">
+                    <label for="id_duree_tp"><i class="fas fa-hourglass-end"></i> Durée des TP</label>
+                    {{ form.duree_tp }}
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="id_corpus_tp"><i class="fas fa-vials"></i> Corpus des TP</label>
+=======
                 <div class="form-group col-md-4">
                     <label for="id_duree_tp"><i class="fas fa-clock"></i> Durée des TP</label>
                     {{ form.duree_tp }}
@@ -273,11 +441,41 @@
 
                 <div class="form-group col-md-4">
                     <label for="id_corpus_tp"><i class="fas fa-clipboard"></i> Corpus des TP</label>
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
                     {{ form.corpus_tp }}
                 </div>
             </div>
         </div>
 
+<<<<<<< HEAD
+        <!-- Section pour les travaux personnels autonomes (TPA) -->
+        <div class="form-section">
+            <h5><i class="fas fa-laptop-house"></i> Travaux Personnels Autonomes (TPA)</h5>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="id_duree_tpa"><i class="fas fa-hourglass-start"></i> Durée des TPA</label>
+                    {{ form.duree_tpa }}
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="id_corpus_tpa"><i class="fas fa-file-invoice"></i> Corpus des TPA</label>
+                    {{ form.corpus_tpa }}
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary">Valider le Cahier de Cours</button>
+            <a href="{% url 'liste_cahiers' teacher.id %}" class="btn btn-secondary">Retourner à la Liste</a>
+        </div>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+=======
         <div class="text-center">
             <button type="submit" class="btn btn-primary">Enregistrer</button>
         </div>
@@ -289,4 +487,5 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 </body>
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
 </html>

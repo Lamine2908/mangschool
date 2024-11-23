@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Monthly Statistics</title>
+</head>
+<body>
+    <h2>Monthly Statistics for {{ student.first_name }} {{ student.last_name }}</h2>
+    <ul>
+        <li>Total Days: {{ stats.total_days }}</li>
+        <li>Total Present: {{ stats.total_present }}</li>
+        <li>Total Absent: {{ stats.total_absent }}</li>
+        <li>Total Late Morning: {{ stats.total_late_morning }}</li>
+        <li>Total Late Evening: {{ stats.total_late_evening }}</li>
+    </ul>
+</body>
+</html>

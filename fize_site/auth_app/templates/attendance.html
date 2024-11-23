@@ -1,0 +1,31 @@
+<!-- attendance.html -->
+{% extends 'navigation.html' %}
+
+{% block content %}
+<h2>Pointage des étudiants</h2>
+
+<form method="POST">
+    {% csrf_token %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Présent</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in students %}
+            <tr>
+                <td>{{ student.last_name }}</td>
+                <td>{{ student.first_name }}</td>
+                <td>
+                    <input type="checkbox" name="students" value="{{ student.id }}" {% if student.is_present %}checked{% endif %}>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <button type="submit" class="btn btn-primary">Enregistrer</button>
+</form>
+{% endblock %}

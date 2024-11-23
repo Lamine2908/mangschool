@@ -2,17 +2,30 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+<<<<<<< HEAD
+    <title>Liste des Élèves</title>
+=======
     <title>Liste des profs</title>
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+<<<<<<< HEAD
+            background-color: #f8f9fa;
+=======
             background-color: #e8f9e8;
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
             margin: 0;
         }
 
         .navbar {
+<<<<<<< HEAD
+            background-color: #0d6efd;
+        }
+=======
             background-color: #28a745;         }
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
 
         .navbar-brand,
         .nav-link {
@@ -20,7 +33,11 @@
         }
 
         .navbar-nav .nav-link:hover {
+<<<<<<< HEAD
+            color: #cce5ff !important;
+=======
             color: #a6f4a6 !important;
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
         }
 
         .hero {
@@ -57,7 +74,11 @@
 
         .section-icon {
             font-size: 2.5rem;
+<<<<<<< HEAD
+            color: #d0690e; 
+=======
             color: #28a745; 
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
             margin-bottom: 15px;
         }
 
@@ -75,15 +96,27 @@
         }
 
         .section-card .btn {
+<<<<<<< HEAD
+            background-color: #d0690e;
+=======
             background-color: #28a745;
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
             color: #ffffff;
         }
 
         .section-card .btn:hover {
+<<<<<<< HEAD
+            background-color: #d0690e; 
+        }
+
+        .footer {
+            background-color: #d0690e; 
+=======
             background-color: #218838;         }
 
         .footer {
             background-color: #28a745; 
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
             color: #ffffff;
             padding: 20px 0;
         }
@@ -107,12 +140,25 @@
                     <a class="nav-link active" aria-current="page" href="{% url 'espaceadmin' administrateur.id %}">Accueil</a>
                 </li>
                 <li class="nav-item">
+<<<<<<< HEAD
+                    <a class="nav-link" href="#}">Filtrer les profs</a>
+=======
                     <a class="nav-link" href="#">Filtrer les profs</a>
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'connexion' %}">Déconnexion</a>
                 </li>
             </ul>
+<<<<<<< HEAD
+            
+        </div>
+    </nav>
+    <div class="container my-4">
+        <h1 class="mb-4">Liste des Profs</h1>
+        <a href="{% url 'add_teacher' %}" class="btn btn-primary mb-3">Ajouter un Prof</a>
+        <a href="#" class="btn btn-primary mb-3">Rechercher un Prof </a>
+=======
         </div>
     </nav>
 
@@ -120,6 +166,7 @@
         <h1 class="mb-4">Liste des Profs</h1>
         <a href="{% url 'add_teacher' administrateur.id %}" class="btn btn-success mb-3">Ajouter un Prof</a>
         <a href="#" class="btn btn-success mb-3">Rechercher un Prof</a>
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
 
         <table class="table table-striped">
             <thead>
@@ -130,6 +177,10 @@
                     <th>Profession</th>
                     <th>email</th>
                     <th>Action</th>
+<<<<<<< HEAD
+                    
+=======
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
                 </tr>
             </thead>
             <tbody>
@@ -141,14 +192,24 @@
                     <td>{{ teacher.profession }}</td>
                     <td>{{ teacher.email }}</td>
                     <td>
+<<<<<<< HEAD
+                        {% comment %} <a href="{% url 'affecter_prof' administrateur.id %}" class="btn btn-primary btn-sm">Afeccter classe</a> {% endcomment %}
+                        <a href="{% url 'update_teacher' teacher.id %}" class="btn btn-warning btn-sm">Modifier</a>
+=======
                         <a href="{% url 'update_teacher' administrateur.id teacher.id %}" class="btn btn-warning btn-sm">Modifier</a>
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
                         <a href="{% url 'delete_teacher_by_id' teacher.id %}" class="btn btn-danger btn-sm">Supprimer</a>
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
+<<<<<<< HEAD
+        
+    </div>
+=======
     </div>
 
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
 </body>
 </html>

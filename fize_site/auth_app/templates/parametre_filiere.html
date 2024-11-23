@@ -9,7 +9,11 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <style>
         .navbar {
+<<<<<<< HEAD
+            background-color: #d0690e;
+=======
             background-color: #28a745;
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
         }
 
         .navbar-brand,
@@ -18,7 +22,11 @@
         }
 
         .navbar-nav .nav-link:hover {
+<<<<<<< HEAD
+            color: #cce5ff !important;
+=======
             color: #d4edda !important;
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
         }
 
         .hero {
@@ -55,7 +63,11 @@
 
         .section-icon {
             font-size: 2.5rem;
+<<<<<<< HEAD
+            color: #d0690e;
+=======
             color: #28a745;
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
             margin-bottom: 15px;
         }
 
@@ -73,16 +85,28 @@
         }
 
         .section-card .btn {
+<<<<<<< HEAD
+            background-color: #d0690e;
+=======
             background-color: #28a745;
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
             color: #ffffff;
         }
 
         .section-card .btn:hover {
+<<<<<<< HEAD
+            background-color: #d0690e;
+        }
+
+        .footer {
+            background-color: #d0690e;
+=======
             background-color: #218838;
         }
 
         .footer {
             background-color: #28a745;
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
             color: #ffffff;
             padding: 20px 0;
         }
@@ -103,10 +127,17 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
+<<<<<<< HEAD
+                    <a class="nav-link" href="#">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Espace Responsable</a>
+=======
                     <a class="nav-link" href="{% url 'responsable_filiere' responsable.id %}">Accueil</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="#"><marquee>{{responsable.first_name}} {{responsable.last_name}}</marquee></a>
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'index' %}">Déconnexion</a>
@@ -122,7 +153,11 @@
                     <i class="bi bi-book section-icon"></i>
                     <h3>Affecter les professeurs</h3>
                     <p>Gerer les professeurs de votre filiere.</p>
+<<<<<<< HEAD
+                    <a href="{% url 'affecter_professeur' responsable.id %}" class="btn btn-primary">Affectre</a>
+=======
                     <a href="{% url 'affecter_professeur' responsable.id %}" class="btn btn-primary">Affecter</a>
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
                 </div>
             </div>
             <div class="col-md-4 mb-4">
@@ -130,15 +165,24 @@
                     <i class="bi bi-journal section-icon"></i>
                     <h3>Gestion des Matières</h3>
                     <p>Gérez les matières et les cours de votre filière.</p>
+<<<<<<< HEAD
+                    <a href="{% url 'ajouter_matiere' %}" class="btn btn-primary">Ajouter</a>
+=======
                     <a href="{% url 'ajouter_matiere' responsable.id %}" class="btn btn-primary">Ajouter</a>
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
                 </div>
             </div>
             <div class="col-md-4 mb-4">
                 <div class="section-card p-4">
                     <i class="bi bi-journal section-icon"></i>
                     <h3>Liste des Matières</h3>
+<<<<<<< HEAD
+                    <p>Lister les matières votre filière.</p>
+                    <a href="{% url 'liste_matieres' %}" class="btn btn-primary">Lister</a>
+=======
                     <p>Lister les matières de votre filière.</p>
                     <a href="{% url 'liste_matieres' responsable.id %}" class="btn btn-primary">Lister</a>
+>>>>>>> 4b5eeaf52d70ed0d86fc6714ff9412c430ac9616
                 </div>
             </div>
             <div class="col-md-4 mb-4">
