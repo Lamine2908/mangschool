@@ -63,7 +63,9 @@
         <input type="text" id="classe" name="classe" value="{{ request.GET.classe }}">
         <button type="submit">Filtrer</button>
     </form>
-    <a href="{% url 'ajouter_notes' teacher.id %}" class="btn btn-warning btn-sm">Ajouter une nouvelle note</a>
+    <center>    <a href="{% url 'ajouter_notes' teacher.id %}" class="btn btn-warning btn-sm">Ajouter une nouvelle note</a>
+</center>
+<br>
     <table class="table table-hover table-bordered">
         <thead class="table-light">
             <tr>
@@ -90,7 +92,7 @@
                 <td>{{ note.integration }}</td>
                 <td>{{ note.moyen_semes }}</td>
                 <td>
-                    <a href="{% url 'modifier_notes' note.id %}" class="btn btn-warning btn-sm">Modifier</a>
+                    <a href="{% url 'modifier_notes' teacher.id note.id %}" class="btn btn-warning btn-sm">Modifier</a>
                 </td>
             </tr>
             {% endfor %}

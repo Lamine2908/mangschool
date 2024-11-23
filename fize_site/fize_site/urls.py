@@ -67,7 +67,7 @@ urlpatterns = [
     path('ajouter_note/<int:teacher_id>/', views.ajouter_notes, name='ajouter_notes'),
     path('afficher_notes/<int:teacher_id>/', views.afficher_notes, name='afficher_notes'),
     path('note/<int:student_id>/', views.note_eleve, name='note_eleve'),
-    path('modifier_notes/<int:note_id>/', views.modifier_notes, name='modifier_notes'),
+    path('modifier_notes<int:teacher_id>/<int:note_id>/', views.modifier_notes, name='modifier_notes'),
     path('note/<int:teacher_id>/', views.filtrer_notes, name='filtrer_notes'),
     path('ajouter_classe/<int:administrateur_id>/', views.ajouter_classe, name='ajouter_classe'),
     path('classes/modifier/<int:id>/', views.modifier_classe, name='modifier_classe'),
@@ -93,8 +93,5 @@ urlpatterns = [
     path('liste_matieres/<int:responsable_id>/', views.liste_matieres, name='liste_matieres'),
     path('classe/<int:classe_id>/', views.details_classe, name='details_classe'),
     path('classes/<int:teacher_id>/', views.classes, name='classes'),
-    path('upload_media/<int:teacher_id>/', views.upload_media, name='upload_media'),
-    path('media_list/<int:student_id>/', views.media_list, name='media_list'),
-    path('media_list/<int:teacher_id>/', views.media_list, name='media_list'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

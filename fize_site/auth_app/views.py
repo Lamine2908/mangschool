@@ -271,7 +271,7 @@ def update_responsable(request, admin_id):
     
     return render(request, 'modifier_responsable.html', {'form': form, 'admin': admin})
 
-@login_required
+
 def update_student(request, admin_id,student_id):
     administrateur=get_object_or_404(Administrateur, id=admin_id)
     if request.method == 'POST':
@@ -470,13 +470,11 @@ def ajouter_notes(request, teacher_id):
         if form.is_valid():
             note = form.save(commit=False)
             
-            # Vérifie si une note existe déjà pour cet étudiant et cette matière
             existence_note = Note.objects.filter(student=note.student, matiere=note.matiere, teacher=teacher).first()
             if (existence_note):
                 messages.error(request, f"Une note existe déjà pour {note.student} dans {note.matiere}. Veuillez accéder à la liste pour la modifier.")
                 return redirect('ajouter_notes', teacher_id=teacher_id)
             
-            # Associe l'enseignant à la note
             try:
                 note.teacher = teacher
                 note.save()
@@ -567,7 +565,8 @@ def note_eleve(request, student_id):
 
 from .form import ModifierNoteForm
 
-def modifier_notes(request, note_id):
+def modifier_notes(request, teacher_id, note_id):
+    teacher=get_object_or_404(Teacher, id=teacher_id)
     note = get_object_or_404(Note, id=note_id)
     
     if request.method == "POST":
@@ -579,6 +578,7 @@ def modifier_notes(request, note_id):
         form = ModifierNoteForm(instance=note)
     
     context = {
+        'teacher':teacher,
         'form': form,
         'note': note,
         'student_name': f"{note.student.first_name} {note.student.last_name}",
@@ -978,34 +978,4 @@ def filter_planning(request, responsable_id):
         plannings = plannings.filter(date__icontains=date)
     return render(request, 'filter_planning.html' , {'responsable':responsable,'plannings':plannings})
 
-def upload_media(request, teacher_id):
-    teacher = get_object_or_404(Teacher, pk=teacher_id)
-
-    if request.method == 'POST':
-        form = MediaForm(request.POST, request.FILES)
-        if form.is_valid():
-            media = form.save(commit=False)
-            media.teacher = teacher  # Associe l'enseignant à la ressource téléchargée
-            media.save()
-
-            # Rediriger vers la liste des ressources de l'enseignant
-            return redirect('media_list', teacher_id=teacher.id)  # Utiliser teacher_id pour rediriger vers les ressources de l'enseignant
-    else:
-        form = MediaForm()
-
-    return render(request, 'upload_media.html', {'form': form, 'teacher': teacher})
-
-
-def media_list(request, teacher_id=None, student_id=None):
-    if teacher_id:
-        # Cas où on affiche les ressources pour un enseignant
-        teacher = get_object_or_404(Teacher, pk=teacher_id)
-        media = Media.objects.filter(teacher=teacher)  # Filtrer les médias de l'enseignant
-    elif student_id:
-        # Cas où on affiche les ressources pour un étudiant
-        student = get_object_or_404(Student, pk=student_id)
-        student_class_ids = student.classes.values_list('id', flat=True)  # Récupère les classes de l'étudiant
-        media = Media.objects.filter(classe__id__in=student_class_ids)  # Filtrer les médias associés aux classes de l'étudiant
-
-    return render(request, 'media_list.html', {'media': media})
 
