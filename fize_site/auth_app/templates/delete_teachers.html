@@ -39,7 +39,7 @@
             </div>
             {% endif %}
 
-            <form action="{% url 'delete_teacher_by_id' teacher.id %}" method="POST">
+            <form action="{% url 'delete_teacher_by_id' administrateur.id teacher.id %}" method="POST">
                 {% csrf_token %}
                 
                 <div class="teacher-list">

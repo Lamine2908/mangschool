@@ -7,11 +7,16 @@ from io import BytesIO
 from django.core.files import File
 from django.core.exceptions import ValidationError
 from django.utils import timezone
-from datetime import time, timedelta
+from datetime import time, timedelta, datetime
+import uuid,random, string
+from django.db import IntegrityError
+
+def generate_unique_matricule():
+       return ''.join(random.choices(string.ascii_letters + string.digits, k=10)).upper()
 
 class Administrateur(models.Model):
     id = models.AutoField(primary_key=True)
-    matricule = models.CharField(max_length=20 ,unique=True, null=True)
+    matricule = models.CharField(max_length=20, unique=True, default=generate_unique_matricule, null=True)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     adresse = models.CharField(max_length=100, default="adresse")
@@ -19,7 +24,7 @@ class Administrateur(models.Model):
     email = models.EmailField(unique=True, null=False, blank=False)
     qr_code = models.ImageField(upload_to='qr_codes/students', blank=True, null=True)
     photo = models.ImageField(upload_to='photos/admin', blank=True, null=True)  
-     
+    mot_de_passe = models.CharField(max_length=50, null=True)
     
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
@@ -35,22 +40,37 @@ class Administrateur(models.Model):
     def generate_qr_code_data(self):
         return f'{self.id}-{self.first_name}-{self.last_name}'
     
+    def save(self, *args, **kwargs):
+       if not self.matricule:
+           self.matricule = generate_unique_matricule()
+       try:
+           super(Administrateur, self).save(*args, **kwargs)
+       except IntegrityError:
+           self.matricule = generate_unique_matricule()
+           super(Administrateur, self).save(*args, **kwargs)
+
 salle = [
     ('310', '310'), ('311', '311'), ('312', '312'), ('313', '313'), ('314', '314')
 ]
 
+filiere = [
+    ('Mécanique', 'Mecanique'),
+    ('TIC', 'TIC')
+]
+
 class ResponsableFiliere(models.Model):
     id = models.AutoField(primary_key=True)
-    matricule = models.CharField(max_length=20, default='modifier')
+    matricule = models.CharField(max_length=20, unique=True, default=generate_unique_matricule, null=True)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     profession = models.CharField(max_length=100, null=True)
-    email = models.EmailField(unique=True, null=True)
+    email = models.EmailField(null=True)
     num_tel = models.IntegerField(unique=True, null=True)
-    grade = models.CharField(max_length=20, blank=True)
     qr_code = models.ImageField(upload_to='qr_codes/students', blank=True, null=True)
+    office = models.CharField(max_length=20, null=True)
+    prise_de_fonction = models.DateField(null=True)
     photo = models.ImageField(upload_to='photos/responsable', blank=True, null=True)  
-     
+    mot_de_passe = models.CharField(max_length=50, null=True) 
     
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
@@ -68,17 +88,17 @@ class ResponsableFiliere(models.Model):
     
 class Teacher(models.Model):
     id = models.AutoField(primary_key=True, unique=True)
-    matricule = models.CharField(max_length=20, default='matricule')
+    matricule = models.CharField(max_length=20, unique=True, default=generate_unique_matricule, null=True)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     profession = models.CharField(max_length=100, blank=True, null=True)
-    email = models.EmailField(unique=True, null=True, blank=True)
+    email = models.EmailField( null=True, blank=True)
     num_tel = models.IntegerField(unique=True, blank=True, null=True)
     status = models.CharField(max_length=20, blank=True, null=True)
     responsable = models.ForeignKey(ResponsableFiliere, on_delete=models.CASCADE, null=True, blank=True)
     comptable = models.ForeignKey('Comptable', on_delete=models.CASCADE, null=True, blank=True)
     qr_code = models.ImageField(upload_to='qr_codes/teacher', blank=True, null=True)
-     
+    mot_de_passe = models.CharField(max_length=50, null=True)
     
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
@@ -94,9 +114,18 @@ class Teacher(models.Model):
     def generate_qr_code_data(self):
         return f'{self.id}-{self.first_name}-{self.last_name}'
     
+    def save(self, *args, **kwargs):
+       if not self.matricule:
+           self.matricule = generate_unique_matricule()
+       try:
+           super(Teacher, self).save(*args, **kwargs)
+       except IntegrityError:
+           self.matricule = generate_unique_matricule()
+           super(Teacher, self).save(*args, **kwargs)
+
 class Filiere(models.Model):
     id = models.AutoField(primary_key=True, unique=True)
-    nom = models.CharField(max_length=100)
+    nom = models.CharField(max_length=100, choices=filiere, null=True)
     responsable = models.ForeignKey(ResponsableFiliere, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
@@ -136,7 +165,7 @@ class Matiere(models.Model):
     credit = models.IntegerField(default=0, null=True, blank=True)
     volume = models.IntegerField(default=0, null=True)
     semestre = models.CharField(max_length=10, choices=semestres, null=True)
-    filiere = models.ForeignKey(Filiere, on_delete=models.CASCADE, related_name='matieres', null=True)
+    filiere = models.ForeignKey(Filiere, on_delete=models.CASCADE, related_name='matieres',  choices=filiere, null=True)
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, null=True)
     responsable = models.ForeignKey(ResponsableFiliere, on_delete=models.CASCADE, null=True)
     ue = models.CharField(max_length=100, choices=UniteEnseignement ,null=True)
@@ -150,19 +179,28 @@ class Matiere(models.Model):
 
 class ResponsableMetier(models.Model):
     id = models.AutoField(primary_key=True, unique=True)
-    matricule = models.CharField(max_length=20, default='matricule')
+    matricule = models.CharField(max_length=20, unique=True, default=generate_unique_matricule, null=True)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     profession = models.CharField(max_length=100, blank=True, null=True)
-    email = models.EmailField(unique=True, null=True, blank=True)
+    email = models.EmailField(null=True, blank=True)
     num_tel = models.IntegerField(unique=True, blank=True, null=True)
     status = models.CharField(max_length=20, blank=True, null=True)
     administrateur=models.ForeignKey(Administrateur, on_delete=models.CASCADE, null=True)
     responsable = models.ForeignKey(ResponsableFiliere, on_delete=models.CASCADE, null=True)
-     
+    mot_de_passe = models.CharField(max_length=50, null=True)
     
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
+    
+    def save(self, *args, **kwargs):
+       if not self.matricule:
+           self.matricule = generate_unique_matricule()
+       try:
+           super(ResponsableMetier, self).save(*args, **kwargs)
+       except IntegrityError:
+           self.matricule = generate_unique_matricule()
+           super(ResponsableMetier, self).save(*args, **kwargs)
 
 class Classe(models.Model):
     id = models.AutoField(primary_key=True, unique=True)
@@ -176,19 +214,23 @@ class Classe(models.Model):
         return f'{self.name}-P{self.promo}'
 
 METIER_TYPE_CHOICES = [
-    ('DB_ADMIN', 'Administration de bases de données'),
-    ('DIGITAL_PERFORMANCE', 'Analyse de performance digitale'),
-    ('FRONTEND_DEV', 'Développement Front-End'),
-    ('BACKEND_DEV', 'Développement Back-End'),
-    ('SECURITY_CLOUD', 'Système, sécurité et cloud'),
-    ('NETWORK_IOT', 'Réseau et Internet des objets'),
+    ('Administration de bases de données', 'Administration de bases de données'),
+    ('Analyse de performance digitale', 'Analyse de performance digitale'),
+    ('Développement Front-End', 'Développement Front-End'),
+    ('Développement Back-End', 'Développement Back-End'),
+    ('Système, sécurité et cloud', 'Système, sécurité et cloud'),
+    ('Réseau et Internet des objets', 'Réseau et Internet des objets'),
 ]
 
 class Student(models.Model):
     id = models.AutoField(primary_key=True, unique=True)
-    matricule = models.CharField(max_length=20, default='modifier')
+    matricule = models.CharField(max_length=20, unique=True, default=generate_unique_matricule, null=True)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
+    date_naissance = models.DateField(null=True)
+    lieu_naissance = models.CharField(max_length=50, null=True)
+    nin = models.IntegerField(null=True)
+    adresse = models.CharField(max_length=100, null=True, blank=True)
     filiere = models.ForeignKey(Filiere, on_delete=models.SET_NULL, null=True, blank=True)
     classe = models.ForeignKey(Classe, on_delete=models.SET_NULL, null=True, blank=True)
     metier = models.CharField(
@@ -197,10 +239,10 @@ class Student(models.Model):
         null=True, 
         blank=True
     )
-    email = models.EmailField(unique=True, null=True, blank=True)
+    email = models.EmailField( null=True, blank=True)
     qr_code = models.ImageField(upload_to='qr_codes/students', blank=True, null=True)
     photo = models.ImageField(upload_to='photos/', blank=True, null=True)
-
+    mot_de_passe = models.CharField(max_length=50, null=True)
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
 
@@ -216,6 +258,15 @@ class Student(models.Model):
     def generate_qr_code_data(self):
         return f'{self.id}-{self.first_name}-{self.last_name}'
     
+    def save(self, *args, **kwargs):
+       if not self.matricule:
+           self.matricule = generate_unique_matricule()
+       try:
+           super(Student, self).save(*args, **kwargs)
+       except IntegrityError:
+           self.matricule = generate_unique_matricule()
+           super(Student, self).save(*args, **kwargs)
+
 class Pointage(models.Model):
     id = models.AutoField(primary_key=True, unique=True)
     date = models.DateField(default=timezone.now)
@@ -316,15 +367,24 @@ class Paiement(models.Model):
 
 class Comptable(models.Model):
     id = models.AutoField(primary_key=True)
-    matricule = models.CharField(max_length=20, default='modifier')
+    matricule = models.CharField(max_length=20, unique=True, default=generate_unique_matricule, null=True)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.EmailField(unique=True)
-     
+    mot_de_passe = models.CharField(max_length=50, null=True)
     
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
     
+    def save(self, *args, **kwargs):
+       if not self.matricule:
+           self.matricule = generate_unique_matricule()
+       try:
+           super(Comptable, self).save(*args, **kwargs)
+       except IntegrityError:
+           self.matricule = generate_unique_matricule()
+           super(Comptable, self).save(*args, **kwargs)
+
 class Oberver_paiement(models.Model):
     comptable = models.ForeignKey(Comptable, on_delete=models.CASCADE, null=True)
     paiement = models.ForeignKey(Paiement, on_delete=models.CASCADE, null=True)
@@ -334,23 +394,43 @@ class Oberver_paiement(models.Model):
 
 class ResponsableClasse(models.Model):
     id = models.AutoField(primary_key=True)
-    matricule = models.CharField(max_length=20, default='modifier')
+    matricule = models.CharField(max_length=20, unique=True, default=generate_unique_matricule, null=True)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.EmailField(unique=True, null=True, blank=True)
-
+    mot_de_passe = models.CharField(max_length=50, null=True)
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
+
+    def save(self, *args, **kwargs):
+       if not self.matricule:
+           self.matricule = generate_unique_matricule()
+       try:
+           super(ResponsableClasse, self).save(*args, **kwargs)
+       except IntegrityError:
+           self.matricule = generate_unique_matricule()
+           super(ResponsableClasse, self).save(*args, **kwargs)
 
 class AdjointClasse(models.Model):
     id = models.AutoField(primary_key=True)
-    matricule = models.CharField(max_length=20, default='modifier')
+    matricule = models.CharField(max_length=20, unique=True, default=generate_unique_matricule, null=True)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.EmailField(unique=True, null=True, blank=True)
-
+    mot_de_passe = models.CharField(max_length=50, null=True)
+    
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
+
+    def save(self, *args, **kwargs):
+       if not self.matricule:
+           self.matricule = generate_unique_matricule()
+       try:
+           super(AdjointClasse, self).save(*args, **kwargs)
+       except IntegrityError:
+           self.matricule = generate_unique_matricule()
+           super(AdjointClasse, self).save(*args, **kwargs)
+
 
 class CahierDeCours(models.Model):
     id = models.AutoField(primary_key=True, unique=True)

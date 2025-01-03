@@ -120,9 +120,6 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'espaceadmin' administrateur.id %}">Accueil</a>
                 </li>
-                <!-- <li class="nav-item">
-                    <a class="nav-link" href="{% url 'filter_students_view' administrateur.id %}">Filtrer les élèves</a>
-                </li> -->
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'connexion' %}">Déconnexion</a>
                 </li>
@@ -148,12 +145,7 @@
                                         {{ error }}
                                     {% endfor %}
                                 </div>
-                            {% endif %}
-
-                            <div class="mb-3">
-                                <label for="matricule" class="form-label">Matricule</label>
-                                {{ form.matricule }}
-                            </div>   
+                            {% endif %} 
 
                             <div class="mb-3">
                                 <label for="first_name" class="form-label">Prénom</label>

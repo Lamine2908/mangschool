@@ -111,9 +111,7 @@
                 <li class="nav-item">
                     <a class="nav-link" href="#">Filtrer les élèves</a>
                 </li>
-                {% comment %} <li class="nav-item">
-                    <a class="nav-link" href="{% url 'student_detail' student.id %}">Modifier un Élève</a>
-                </li> {% endcomment %}
+                
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'connexion' %}">Déconnexion</a>
                 </li>
@@ -123,7 +121,7 @@
     </nav>
     <div class="container my-4">
         <h1 class="mb-4">Liste des Responsables de filieres</h1>
-        <a href="{% url 'ajouter_responsable' %}" class="btn btn-primary mb-3">Ajouter un responsable</a>
+        <a href="{% url 'ajouter_responsable' administrateur.id %}" class="btn btn-primary mb-3">Ajouter un responsable</a>
         <a href="#" class="btn btn-primary mb-3">Rechercher un responsable</a>
 
         <table class="table table-striped">
@@ -133,7 +131,6 @@
                     <th>Prénom</th>
                     <th>Nom</th>
                     <th>Profession</th>
-                    <th>Grade</th>
                     <th>Email</th>
                     <th>Telephone</th>
                     <th>Action</th>
@@ -147,12 +144,10 @@
                     <td>{{ responsable.first_name }}</td>
                     <td>{{ responsable.last_name }}</td>
                     <td>{{ responsable.profession}}</td>
-                    <td>{{ responsable.grade }}</td>
                     <td>{{ responsable.email }}</td>
                     <td>{{ responsable.num_tel }}</td>
                     <td>
-                        {% comment %} <a href="{% url 'Affecter_eleve' student.id %}" class="btn btn-primary btn-sm">Affecter</a> {% endcomment %}
-                        <a href="{% url 'update_responsable' responsable.id %}" class="btn btn-warning btn-sm">Modifier</a>
+                        <a href="{% url 'update_responsable' administrateur.id responsable.id %}" class="btn btn-warning btn-sm">Modifier</a>
                         <a href="#" class="btn btn-danger btn-sm">Suppr</a>
                     </td>
                 </tr>

@@ -1,8 +1,7 @@
 from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import logout
-from django.contrib.auth.decorators import login_required
 from .models import *
 from .form import *
 from django.core.mail import send_mail
@@ -10,7 +9,17 @@ from django.core.exceptions import ValidationError
 
 from django.utils import timezone
 
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import user_passes_test
+
+def incription(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('connexion')
+    else:
+        form = CustomUserCreationForm()
+    return render(request, 'inscription.html', {'form': form})
 
 def navigation(request):
     return render(request, 'navigation.html')
@@ -61,49 +70,49 @@ def connexion(request):
         form = ConnexionForm(request.POST)
 
         if form.is_valid():
-            matricule = form.cleaned_data.get('matricule')
+            mot_de_passe = form.cleaned_data.get('mot_de_passe')
             email = form.cleaned_data.get('email')
             
             user_found = False
 
             try:
                 
-                student = Student.objects.get(matricule=matricule, email=email)
+                student = Student.objects.get(mot_de_passe=mot_de_passe, email=email)
                 user_found = True
                 return render(request, 'espaceeleve.html', {'student': student})
             except Student.DoesNotExist:
                 pass
 
             try:
-                teacher = Teacher.objects.get(matricule=matricule, email=email)
+                teacher = Teacher.objects.get(mot_de_passe=mot_de_passe, email=email)
                 user_found = True
                 return render(request, 'espaceprof.html', {'teacher': teacher})
             except Teacher.DoesNotExist:
                 pass
 
             try:
-                administrateur = Administrateur.objects.get(matricule=matricule, email=email)
+                administrateur = Administrateur.objects.get(mot_de_passe=mot_de_passe, email=email)
                 user_found = True
                 return render(request, 'espaceadmin.html', {'administrateur': administrateur})
             except Administrateur.DoesNotExist:
                 pass
 
             try:
-                responsableFiliere = ResponsableFiliere.objects.get(matricule=matricule, email=email)
+                responsableFiliere = ResponsableFiliere.objects.get(mot_de_passe=mot_de_passe, email=email)
                 user_found = True
                 return render(request, 'responsable_filiere.html', {'responsable_filiere': responsableFiliere})
             except ResponsableFiliere.DoesNotExist:
                 pass 
             
             try:
-                responsableMetier = ResponsableMetier.objects.get(matricule=matricule, email=email)
+                responsableMetier = ResponsableMetier.objects.get(mot_de_passe=mot_de_passe, email=email)
                 user_found = True
                 return render(request, 'responsable_metier.html', {'responsable_metier': responsableMetier})
             except ResponsableMetier.DoesNotExist:
                 pass
 
             try:
-                comptable = Comptable.objects.get(matricule=matricule, email=email)
+                comptable = Comptable.objects.get(mot_de_passe=mot_de_passe, email=email)
                 user_found = True
                 return render(request, 'espacecomptable.html', {'comptable': comptable})
             except Comptable.DoesNotExist:
@@ -191,15 +200,16 @@ def ajouter_responsable(request, admin_id):
         form = ResponsableFiliereForm()
     return render(request, 'ajouter_responsable_filiere.html', {'form': form, 'administrateur':administrateur})
 
-def delete_teacher_by_id(request, teacher_id):
+def delete_teacher_by_id(request, admin_id, teacher_id):
+    administrateur = get_object_or_404(Administrateur, id=admin_id)
     teacher = get_object_or_404(Teacher, id=teacher_id)
-
     if request.method == 'POST':
         teacher.delete()
         messages.success(request, "Le professeur a été supprimé avec succès.")
+        
         return redirect('teacher_list', admin_id=administrateur.id)
 
-    return render(request, 'delete_teachers.html', {'teacher': teacher})
+    return render(request, 'delete_teachers.html', {'administrateur':administrateur ,'teacher': teacher})
 
 def delete_student_by_id(request, student_id):
     student = get_object_or_404(Student, id=student_id)
@@ -215,12 +225,12 @@ def filter_students_view(request, admin_id):
     administrateur=get_object_or_404(Administrateur, id=admin_id)
     students = Student.objects.all()
 
-    id = request.GET.get('id')
+    matricule = request.GET.get('matricule')
     first_name = request.GET.get('first_name')
     last_name = request.GET.get('last_name')
 
-    if id:
-        students = students.filter(id=id)
+    if matricule:
+        students = students.filter(matricule=matricule)
     elif first_name:
         students = students.filter(first_name__icontains=first_name)
     elif last_name:
@@ -228,21 +238,22 @@ def filter_students_view(request, admin_id):
 
     return render(request, 'filter_students.html', {'administrateur':administrateur ,'students': students})
 
-def filter_teacher(request):
+def filter_teachers(request, admin_id):
+    administrateur = get_object_or_404(Administrateur, id=admin_id)
     teachers = Teacher.objects.all()
     
-    id=request.GET.get('id')
+    matricule=request.GET.get('matricule')
     first_name= request.GET.get('first_name')
     last_name = request.GET.get('last_name')
     
-    if id:
-        teachers = teachers.filter(id=id)
+    if matricule:
+        teachers = teachers.filter(matricule=matricule)
     elif first_name:
         teachers = teachers.filter(first_name__icontains=first_name)
     elif last_name:
         teachers = teachers.filter(last_name__icontains = last_name)
         
-    return render(request, 'filter_teachers.html', {'teachers': teachers})
+    return render(request, 'filter_teachers.html', {'administrateur':administrateur,'teachers': teachers})
 
 def update_teacher(request, admin_id, teacher_id):
     administrateur=get_object_or_404(Administrateur, id=admin_id)
@@ -258,31 +269,31 @@ def update_teacher(request, admin_id, teacher_id):
     
     return render(request, 'modifier_prof.html', {'form': form, 'administrateur':administrateur, 'teacher': teacher})
 
-def update_responsable(request, admin_id):
-    admin = get_object_or_404(ResponsableFiliere, id=admin_id)
-    
+def update_responsable(request, admin_id, responsable_id):
+    admin = get_object_or_404(Administrateur, id=admin_id)
+    responsableFiliere = get_object_or_404(ResponsableFiliere, id=responsable_id)
+
     if request.method == 'POST':
-        form = ResponsableUpdateForm(request.POST, instance=admin)
+        form = ResponsableUpdateForm(request.POST, instance=responsableFiliere)
         if form.is_valid():
             form.save()
-            return redirect('responsableFiliere_list')
+            return redirect('responsableFiliere_list', admin_id=admin_id)
     else:
-        form = ResponsableUpdateForm(instance=admin)
+        form = ResponsableUpdateForm(instance=responsableFiliere)
     
-    return render(request, 'modifier_responsable.html', {'form': form, 'admin': admin})
+    return render(request, 'modifier_responsable.html', {'form': form, 'admin': admin, 'responsableFiliere':responsableFiliere})
 
 
-def update_student(request, admin_id,student_id):
+def update_student(request, admin_id, student_id):
     administrateur=get_object_or_404(Administrateur, id=admin_id)
+    student = get_object_or_404(Student, id=student_id)
     if request.method == 'POST':
-        student = get_object_or_404(Student, id=student_id)
         form = StudentUpdateForm(request.POST, instance=student)
         if form.is_valid():
             form.save()
             return redirect('student_list', admin_id=admin_id)
     else: 
-        student = get_object_or_404(Student, id=student_id)
-        form = StudentUpdateForm(request.POST, instance=student)
+        form = StudentUpdateForm(instance=student)
         
     return render(request, 'update_student.html', {'form': form, 'administrateur':administrateur, 'student': student})
 
@@ -327,12 +338,10 @@ def liste_matieres(request, responsable_id):
     matieres = Matiere.objects.all()
     return render(request, 'liste_matieres.html', {'responsable': responsable, 'matieres': matieres})
 
-from .models import Filiere
-
 def liste_filieres(request, admin_id):
     administrateur=get_object_or_404(Administrateur, id=admin_id)
     filieres = Filiere.objects.all()
-    return render(request, 'liste_filieres.html', {'filieres': filieres, 'administrateur':administrateur})
+    return render(request, 'liste_filieres.html', {'administrateur':administrateur, 'filieres': filieres})
 
 def supprimer_matiere(request, matiere_id):
     matiere = Matiere.objects.get(id=matiere_id)
@@ -351,7 +360,7 @@ def ajouter_filiere(request, admin_id):
         if form.is_valid():
             form.save()
             messages.success(request, 'Filiere ajoutée avec succès.')
-            return redirect('liste_filieres')
+            return redirect('liste_filieres', admin_id=admin_id)
         else:
             messages.error(request, 'Erreur lors de l\'ajout de la filiere. Veuillez vérifier les informations.')
     else:

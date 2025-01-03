@@ -119,12 +119,12 @@
     <div class="container my-4">
         <h1 class="mb-4">Liste des Profs</h1>
         <a href="{% url 'add_teacher' administrateur.id %}" class="btn btn-success mb-3">Ajouter un Prof</a>
-        <a href="#" class="btn btn-success mb-3">Rechercher un Prof</a>
+        <a href="{% url 'filter_teachers' administrateur.id %}" class="btn btn-success mb-3">Rechercher un Prof</a>
 
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>ID</th>
+                    <th>Matricule</th>
                     <th>Prénom</th>
                     <th>Nom</th>
                     <th>Profession</th>
@@ -135,14 +135,14 @@
             <tbody>
                 {% for teacher in teachers %}
                 <tr>
-                    <td>{{ teacher.id }}</td>
+                    <td>{{ teacher.matricule | upper }}</td>
                     <td>{{ teacher.first_name }}</td>
                     <td>{{ teacher.last_name }}</td>
                     <td>{{ teacher.profession }}</td>
                     <td>{{ teacher.email }}</td>
                     <td>
                         <a href="{% url 'update_teacher' administrateur.id teacher.id %}" class="btn btn-warning btn-sm">Modifier</a>
-                        <a href="{% url 'delete_teacher_by_id' teacher.id %}" class="btn btn-danger btn-sm">Supprimer</a>
+                        <a href="{% url 'delete_teacher_by_id' administrateur.id teacher.id %}" class="btn btn-danger btn-sm">Supprimer</a>
                     </td>
                 </tr>
                 {% endfor %}

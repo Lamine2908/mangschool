@@ -9,13 +9,29 @@ class CustomUserCreationForm(UserCreationForm):
         model = get_user_model()  
         fields = ('username', 'email')
 
+# class CustomUserCreationForm(UserCreationForm):
+#     password1 = forms.CharField(
+#         label="Mot de passe",
+#         strip=False,
+#         widget=forms.PasswordInput(attrs={'autocomplete': 'new-password', 'class': 'form-control'}),
+#     )
+#     password2 = forms.CharField(
+#         label="Confirmer le mot de passe",
+
+#         widget=forms.PasswordInput(attrs={'autocomplete': 'new-password', 'class': 'form-control'}),
+#         strip=False,
+#     )
+#     class Meta(UserCreationForm.Meta):
+#         model = get_user_model()  
+#         fields = ('password1', 'password2')
+
 class ConnexionForm(forms.Form):
-    matricule = forms.CharField(
-        label="Matricule", 
-        max_length=15, 
-        widget=forms.TextInput(attrs={
+    mot_de_passe = forms.CharField(
+        label="mot_de_passe", 
+        max_length=50, 
+        widget=forms.PasswordInput(attrs={
             'class': 'form-control',
-            'placeholder': 'Entrez votre matricule'
+            'placeholder': 'Entrez votre mot de passe'
         })
     )
     email = forms.EmailField(
@@ -30,10 +46,10 @@ class ConnexionForm(forms.Form):
     def clean(self):
         cleaned_data = super().clean()
         
-        matricule = cleaned_data.get('matricule')
+        mot_de_passe = cleaned_data.get('mot_de_passe')
         email = cleaned_data.get('email')
         
-        if not matricule or not email :
+        if not mot_de_passe or not email :
             raise forms.ValidationError("Veuillez reessayer.")
 
         return cleaned_data
@@ -44,11 +60,14 @@ from .models import Student, Filiere
 class StudentForm(forms.ModelForm):
     class Meta:
         model = Student
-        fields = ['matricule', 'first_name', 'last_name', 'filiere', 'classe', 'metier', 'email', 'photo']
+        fields = ['first_name', 'last_name', 'filiere', 'classe', 'metier', 'email', 'photo', 'date_naissance', 'lieu_naissance', 'nin']
         widgets = {
-            'matricule': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Entrez le matricule'}),            
             'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Entrez le prénom'}),
             'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Entrez le nom de famille'}),
+            'nin': forms.NumberInput(attrs={'class': 'form-control', 'placeholder':'Entrer le nin'}),
+            'date_naissance': forms.DateInput(attrs={'type': 'date'}),
+            'lieu_naissance': forms.TextInput(attrs={'class': 'form-control'}),
+            'adresse': forms.TextInput(attrs={'class': 'form-control'}),
             'filiere': forms.Select(attrs={'class': 'form-control'}),
             'classe': forms.Select(attrs={'class': 'form-control'}),
             'metier': forms.Select(attrs={'class': 'form-control', 'placeholder': 'Entrez le métier'}),
@@ -61,20 +80,20 @@ class StudentForm(forms.ModelForm):
         self.fields['filiere'].queryset = Filiere.objects.all()
         self.fields['classe'].queryset = Classe.objects.all()
         
-class ResponsableFiliereForm(forms.ModelForm):
-    class Meta:
-        model = ResponsableFiliere
-        fields = ['matricule', 'first_name', 'last_name', 'profession','email']
+# class ResponsableFiliereForm(forms.ModelForm):
+#     class Meta:
+#         model = ResponsableFiliere
+#         fields = ['first_name', 'last_name', 'profession','email']
 
 class ResponsableClasseForm(forms.ModelForm):
     class Meta:
         model = ResponsableClasse
-        fields = ['matricule', 'first_name', 'last_name','email']
+        fields = ['first_name', 'last_name','email']
 
 class TeacherForm(forms.ModelForm):
     class Meta:
         model = Teacher
-        fields = ['matricule', 'first_name', 'last_name', 'profession', 'email']
+        fields = ['first_name', 'last_name', 'profession', 'email']
         
 class FiliereForm(forms.ModelForm):
     class Meta:
@@ -84,12 +103,12 @@ class FiliereForm(forms.ModelForm):
 class ResponsableFiliereForm(forms.ModelForm):
     class Meta:
         model = ResponsableFiliere
-        fields = ['matricule', 'first_name', 'last_name', 'profession', 'email', 'num_tel', 'grade']
+        fields = ['first_name', 'last_name', 'profession', 'email', 'num_tel']
 
 class ResponsableUpdateForm(forms.ModelForm):
     class Meta:
         model = ResponsableFiliere
-        fields = ['matricule', 'first_name', 'last_name', 'profession', 'email', 'num_tel', 'grade']
+        fields = ['matricule', 'first_name', 'last_name', 'profession', 'email', 'num_tel']
 
     def clean(self):
         cleaned_data = super().clean()
@@ -98,11 +117,10 @@ class ResponsableUpdateForm(forms.ModelForm):
         first_name = cleaned_data.get('first_name')
         last_name = cleaned_data.get('last_name')
         profession = cleaned_data.get('profession')
-        grade = cleaned_data.get('grade')
         email = cleaned_data.get('email')
         num_tel = cleaned_data.get('num_tel')
 
-        if not matricule or not first_name or not last_name or not profession or not grade or not email or not num_tel:
+        if not matricule or not first_name or not last_name or not profession  or not email or not num_tel:
             raise forms.ValidationError("Tous les champs obligatoires doivent être remplis.")
 
         return cleaned_data
@@ -110,7 +128,7 @@ class ResponsableUpdateForm(forms.ModelForm):
 class TeacherUpdateForm(forms.ModelForm):
     class Meta:
         model = Teacher
-        fields = ['matricule', 'first_name', 'last_name', 'profession', 'email']
+        fields = ['first_name', 'last_name', 'profession', 'email']
         widgets = {
             'first_name': forms.TextInput(attrs={
                 'class': 'form-control',
@@ -120,10 +138,8 @@ class TeacherUpdateForm(forms.ModelForm):
                 'class': 'form-control',
                 'placeholder': 'Entrez le nom de famille du prof'
             }),
-             'matricule': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Entrez le matricule du prof'
-            }),
+            
+
             'profession': forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Sélectionnez la profession'
@@ -137,13 +153,12 @@ class TeacherUpdateForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()
 
-        matricule = cleaned_data.get('matricule')
         first_name = cleaned_data.get('first_name')
         last_name = cleaned_data.get('last_name')
         profession = cleaned_data.get('profession')
         email = cleaned_data.get('email')
 
-        if not matricule or not first_name or not last_name or not profession or not email:
+        if not first_name or not last_name or not profession or not email:
             raise forms.ValidationError("Tous les champs obligatoires doivent être remplis.")
 
         return cleaned_data
@@ -152,9 +167,9 @@ class TeacherUpdateForm(forms.ModelForm):
 class StudentUpdateForm(forms.ModelForm):
     class Meta:
         model = Student
-        fields = ['matricule', 'first_name', 'last_name', 'filiere', 'metier', 'classe', 'email', 'photo']
+        fields = ['first_name', 'last_name', 'filiere', 'metier', 'classe', 'email', 'photo']
         widgets = {
-            'matricule': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Entrez le matricule'}),                       
+
             'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Entrez le prénom de l\'élève'}),
             'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Entrez le nom de famille de l\'élève'}),
             'filiere': forms.Select(attrs={'class': 'form-control', 'placeholder': 'Sélectionnez la filière'}),
@@ -166,15 +181,16 @@ class StudentUpdateForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
-        
-        matricule = cleaned_data.get('matricule')
+
         first_name = cleaned_data.get('first_name')
         last_name = cleaned_data.get('last_name')
+        classe = cleaned_data.get('classe')
         filiere = cleaned_data.get('filiere')
         metier = cleaned_data.get('metier')
         email = cleaned_data.get('email')
-        photo=cleaned_data.get('photo')
-        if not matricule or not first_name or not last_name or not filiere  or not metier or not email or not photo:
+        # photo=cleaned_data.get('photo')
+
+        if not first_name or not last_name or not classe or not filiere  or not metier or not email:
             raise forms.ValidationError("Tous les champs obligatoires doivent être remplis.")
         return cleaned_data
 
@@ -319,7 +335,7 @@ class ComptableForm(forms.ModelForm):
 
     class Meta:
         model = Comptable
-        fields = ['matricule','first_name', 'last_name', 'email', 'teachers', 'students']
+        fields = ['first_name', 'last_name', 'email', 'teachers', 'students']
         
 # class ValidatePaymentForm(forms.ModelForm):
 #     class Meta:
@@ -433,7 +449,7 @@ class ProjetForm(forms.Form):
 class ResponsableMetierForm(forms.Form):
     class Meta :
         Model = ResponsableMetier
-        field = ['matricule', 'first_name', 'last_name', 'profession', 'status', 'email', 'num_tel'] 
+        field = ['first_name', 'last_name', 'profession', 'status', 'email', 'num_tel'] 
 
 class PointageForm(forms.ModelForm):
     class Meta:

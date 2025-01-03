@@ -14,7 +14,7 @@
     }
 
     .navbar {
-        background-color: #0d6efd;
+        background-color: #28a745; 
     }
 
     .navbar-brand,
@@ -23,7 +23,7 @@
     }
 
     .navbar-nav .nav-link:hover {
-        color: #cce5ff !important;
+        color: #a8e6a1 !important; 
     }
 
     .hero {
@@ -60,7 +60,7 @@
 
     .section-icon {
         font-size: 2.5rem;
-        color: #d0690e; 
+        color: #28a745; 
         margin-bottom: 15px;
     }
 
@@ -78,16 +78,16 @@
     }
 
     .section-card .btn {
-        background-color: #d0690e;
+        background-color: #28a745; 
         color: #ffffff;
     }
 
     .section-card .btn:hover {
-        background-color: #d0690e; 
+        background-color: #218838; 
     }
 
     .footer {
-        background-color: #d0690e; 
+        background-color: #28a745; 
         color: #ffffff;
         padding: 20px 0;
     }
@@ -107,23 +107,21 @@
             <ul class="navbar-nav">
                
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{% url 'espaceadmins' %}">Acceuil</a>
+                    <a class="nav-link active" aria-current="page" href="{% url 'espaceadmin' administrateur.id %}">Acceuil</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'teacher_list' %}">Lister les profs</a>
+                    <a class="nav-link" href="{% url 'teacher_list' administrateur.id %}">Lister les profs</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'connexion' %}">Déconnexion</a>
-                </li>
+                
             </ul>
         </div>
     </nav>
     <div class="container my-4">
-        <h1 class="mb-4">Filtrer les profs</h1>
+        <h1 class="mb-4">Filtrer les professeurs</h1>
         <form method="get" class="mb-4">
             <div class="row">
                 <div class="col-md-2">
-                    <input type="text" name="id" class="form-control" placeholder="ID" value="{{ request.GET.id }}">
+                    <input type="text" name="matricule" class="form-control" placeholder="Matricule" value="{{ request.GET.matricule }}">
                 </div>
                 <div class="col-md-2">
                     <input type="text" name="first_name" class="form-control" placeholder="Prénom" value="{{ request.GET.first_name }}">
@@ -133,8 +131,8 @@
                 </div>
 
                 <div class="col-md-2">
-                    <button type="submit" class="btn btn-primary">Filtrer</button>
-                    <a href="{% url 'teacher_list' %}" class="btn btn-secondary">Retour</a>
+                    <button type="submit" class="btn btn-success">Filtrer</button>
+                    <a href="{% url 'teacher_list' administrateur.id %}" class="btn btn-secondary">Retour</a>
                 </div>
             </div>
            
@@ -143,7 +141,7 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>ID</th>
+                    <th>Matricule</th>
                     <th>Prénom</th>
                     <th>Nom</th>
                     <th>Profession</th>
@@ -153,7 +151,7 @@
             <tbody>
                 {% for teacher in teachers %}
                 <tr>
-                    <td>{{ teacher.id }}</td>
+                    <td>{{ teacher.matricule | upper }}</td>
                     <td>{{ teacher.first_name }}</td>
                     <td>{{ teacher.last_name }}</td>
                     <td>{{ teacher.profession }}</td>
