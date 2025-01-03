@@ -221,7 +221,7 @@ def delete_student_by_id(request, student_id):
 
     return render(request, 'delete_students.html', {'student': student})
 
-def filter_students_view(request, admin_id):
+def filter_students(request, admin_id):
     administrateur=get_object_or_404(Administrateur, id=admin_id)
     students = Student.objects.all()
 

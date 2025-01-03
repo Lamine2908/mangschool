@@ -119,7 +119,7 @@
                     <a class="nav-link" href="{% url 'espaceadmin' administrateur.id %}">Accueil</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'filter_students_view' administrateur.id %}">Filtrer les élèves</a>
+                    <a class="nav-link" href="{% url 'filter_students' administrateur.id %}">Filtrer les élèves</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'connexion' %}">Déconnexion</a>
@@ -131,7 +131,7 @@
     <div class="container my-4">
         <h1 class="mb-4">Liste des Élèves</h1>
         <a href="{% url 'add_student' administrateur.id %}" class="btn btn-primary mb-3">Ajouter un Élève</a>
-        <a href="{% url 'filter_students_view' administrateur.id %}" class="btn btn-primary mb-3">Rechercher un Élève</a>
+        <a href="{% url 'filter_students' administrateur.id %}" class="btn btn-primary mb-3">Rechercher un Élève</a>
 
         <table class="table table-striped">
             <thead>
