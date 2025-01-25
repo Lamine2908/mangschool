@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cahier de Cours | {{teacher.last_name}}</title>
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            background-color: #f4f6f9;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .container {
+            max-width: 900px;
+            margin-top: 30px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .navbar {
+            background-color: #28a745;
+            padding: 15px 20px;
+        }
+
+        .navbar a {
+            color: #fff;
+            font-size: 1.1rem;
+            padding: 10px;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .navbar a:hover {
+            color: #e9ecef;
+        }
+
+        .navbar .active {
+            color: #ffd700;
+        }
+
+        .form-section {
+            background-color: #fff;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            animation: slideIn 0.7s ease-in-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .form-section h5 {
+            color: #343a40;
+            font-size: 1.3rem;
+            text-transform: uppercase;
+            font-weight: bold;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #28a745;
+            padding-bottom: 10px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            font-size: 0.95rem;
+            color: #495057;
+        }
+
+        .form-group i {
+            margin-right: 8px;
+            color: #28a745;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 100%; /* Ajuster la largeur des champs */
+        }
+
+        .form-row .col-md-6 {
+            max-width: 48%;
+            margin-right: 2%;
+        }
+
+        .form-row .col-md-6:last-child {
+            margin-right: 0;
+        }
+
+        .form-row .col-md-4 {
+            max-width: 31%; /* Champs encore plus petits et côte à côte */
+            margin-right: 2%;
+        }
+
+        .form-row .col-md-4:last-child {
+            margin-right: 0;
+        }
+
+        .btn-primary {
+            background-color: #28a745;
+            border-color: #28a745;
+            padding: 10px 20px;
+            font-size: 1.1rem;
+            width: 100%;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #218838;
+            border-color: #1e7e34;
+            transform: translateY(-2px);
+        }
+
+        .alert {
+            background-color: #f8d7da;
+            color: #721c24;
+            border-color: #f5c6cb;
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .text-center {
+            margin-bottom: 30px;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+        }
+
+        .form-group .custom-select {
+            border-radius: 5px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <a href="#">Geschool</a>
+        <a href="{% url 'espaceprof' teacher.id %}">Accueil</a>
+        <a href="#" class="active">
+            <marquee>{{ teacher.first_name }} {{ teacher.last_name }}</marquee>
+        </a>
+    </ul>
+    <li class="navbar-nav ms-auto">
+        <a class="nav-link " href="{% url 'connexion' %}">Déconnexion</a>
+    </li>
+</ul>
+    </nav>
+
+    <div class="container">
+        <h2 class="mb-4 text-center">Remplir le Cahier de Texte</h2>
+
+        <form method="post">
+            {% csrf_token %}
+            
+            {% if messages %}
+                <div class="alert alert-danger" role="alert">
+                    {% for message in messages %}
+                        {{ message }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="form-section">
+                <h5><i class="fas fa-info-circle"></i> Informations Générales</h5>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="teacher_name"><i class="fas fa-user"></i> Professeur</label>
+                        <input type="text" class="form-control" id="teacher_name" value="{{ teacher.first_name }} {{ teacher.last_name }}" readonly>
+                    </div>
+
+                    <div class="form-group col-md-4">
+                        <label for="classe"><i class="fas fa-chalkboard"></i> Classe</label>
+                        <select name="classe" id="classe" class="form-control" required>
+                            <option value="">Sélectionnez une classe</option>
+                            {% for classe in classes %}
+                                <option value="{{ classe.id }}">{{ classe.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="form-group col-md-4">
+                        <label for="id_date"><i class="fas fa-calendar-alt"></i> Date</label>
+                        {{ form.date }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="id_horaire"><i class="fas fa-clock"></i> Horaire</label>
+                    {{ form.horaire }}
+                </div>
+
+                <div class="form-group col-md-4">
+                    <label for="id_duree"><i class="fas fa-hourglass-half"></i> Durée</label>
+                    {{ form.duree }}
+                </div>
+
+                <div class="form-group col-md-4">
+                    <label for="id_competence"><i class="fas fa-book"></i> Compétence</label>
+                    {{ form.competence }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="id_uea"><i class="fas fa-layer-group"></i> UEA</label>
+                {{ form.uea }}
+            </div>
+
+            <div class="form-group">
+                <label for="id_elements_constituifs"><i class="fas fa-puzzle-piece"></i> Éléments Constitutifs</label>
+                {{ form.elements_constituifs }}
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h5><i class="fas fa-book-reader"></i> Théorie</h5>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="id_duree_theorie"><i class="fas fa-hourglass-start"></i> Durée de la Théorie</label>
+                    {{ form.duree_theorie }}
+                </div>
+                
+                <div class="form-group col-md-4">
+                    <label for="id_corpus_theorie"><i class="fas fa-scroll"></i> Corpus de la Théorie</label>
+                    {{ form.corpus_theorie }}
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h5><i class="fas fa-chalkboard-teacher"></i> Travaux Dirigés (TD)</h5>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="id_duree_td"><i class="fas fa-hourglass"></i> Durée des TD</label>
+                    {{ form.duree_td }}
+                </div>
+
+                <div class="form-group col-md-4">
+                    <label for="id_corpus_td"><i class="fas fa-file-alt"></i> Corpus des TD</label>
+                    {{ form.corpus_td }}
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h5><i class="fas fa-flask"></i> Travaux Pratiques (TP)</h5>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="id_duree_tp"><i class="fas fa-clock"></i> Durée des TP</label>
+                    {{ form.duree_tp }}
+                </div>
+
+                <div class="form-group col-md-4">
+                    <label for="id_corpus_tp"><i class="fas fa-clipboard"></i> Corpus des TP</label>
+                    {{ form.corpus_tp }}
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+        </div>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.0/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

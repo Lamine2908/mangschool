@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajouter un Responsable de Filière</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f9fbfd;
+            color: #333;
+            animation: fadeInBody 1s ease-in-out;
+        }
+
+        .navbar {
+            background-color: #2C6B2F; 
+        }
+
+        .navbar-brand,
+        .nav-link {
+            color: #ffffff !important;
+        }
+
+        .navbar-nav .nav-link:hover {
+            background-color: #56A755;
+            color: #fff !important;
+        }
+
+        .hero {
+            background-color: #2C6B2F;
+            color: #ffffff;
+            padding: 20px 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+        }
+
+        .section-icon {
+            font-size: 2.5rem;
+            color: #2C6B2F;
+            margin-bottom: 15px;
+        }
+
+        .section-card {
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            padding: 20px;
+        }
+
+        .section-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .section-card .btn {
+            background-color: #2C6B2F;
+            color: #ffffff;
+        }
+
+        .section-card .btn:hover {
+            background-color: #56A755;
+        }
+
+        .footer {
+            background-color: #2C6B2F;
+            color: #ffffff;
+            padding: 20px 0;
+        }
+
+        .footer p {
+            margin: 0;
+        }
+
+        /* Améliorations pour le formulaire */
+        .form-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-title {
+            font-size: 2rem;
+            color: #01001ace;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-top: 5px;
+            font-size: 1rem;
+        }
+
+        .form-group input[type="file"] {
+            padding: 10px;
+        }
+
+        .btn-custom {
+            background-color: #2C6B2F;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            width: 100%;
+            border: none;
+            font-size: 1.1rem;
+        }
+
+        .btn-custom:hover {
+            background-color: #56A755;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="#"><marquee>Geschool</marquee></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'espaceadmin' administrateur.id %}">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'espaceadmin' administrateur.id %}">Accueil</a>
+                </li>
+            </ul>
+            <li class="navbar-nav ms-auto">
+                <a class="nav-link " href="{% url 'connexion' %}">Déconnexion</a>
+            </li>
+        </ul>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container form-container">
+        <h2 class="form-title">Modifier {{responsableFiliere.first_name | upper }} {{responsableFiliere.last_name}}</h2>
+        <form method="POST" action="{% url 'ajouter_responsable' administrateur.id %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="id_first_name">Prénom :</label>
+                        {{ form.first_name }}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="id_last_name">Nom :</label>
+                        {{ form.last_name }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="id_profession">Profession :</label>
+                        {{ form.profession }}
+                    </div>
+                </div>
+                
+            </div>
+            <div class="form-group">
+                <label for="id_email">Email :</label>
+                {{ form.email }}
+            </div>
+            <div class="form-group">
+                <label for="id_num_tel">Téléphone :</label>
+                {{ form.num_tel }}
+            </div>
+            <div class="form-group">
+                <label for="photo" class="form-label">Photo</label>
+                <input type="file" class="form-control" id="photo" name="photo" accept="image/*">
+            </div>
+            <button type="submit" class="btn btn-custom">Sauvegarder</button>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

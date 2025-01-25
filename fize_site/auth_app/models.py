@@ -22,7 +22,7 @@ class Administrateur(models.Model):
     adresse = models.CharField(max_length=100, default="adresse")
     telephone = models.IntegerField(unique=True, null=True)
     email = models.EmailField(unique=True, null=False, blank=False)
-    qr_code = models.ImageField(upload_to='qr_codes/students', blank=True, null=True)
+    qr_code = models.ImageField(upload_to='qr_codes/student', blank=True, null=True)
     photo = models.ImageField(upload_to='photos/admin', blank=True, null=True)  
     mot_de_passe = models.CharField(max_length=50, null=True)
     
@@ -66,7 +66,7 @@ class ResponsableFiliere(models.Model):
     profession = models.CharField(max_length=100, null=True)
     email = models.EmailField(null=True)
     num_tel = models.IntegerField(unique=True, null=True)
-    qr_code = models.ImageField(upload_to='qr_codes/students', blank=True, null=True)
+    qr_code = models.ImageField(upload_to='qr_codes/responsable', blank=True, null=True)
     office = models.CharField(max_length=20, null=True)
     prise_de_fonction = models.DateField(null=True)
     photo = models.ImageField(upload_to='photos/responsable', blank=True, null=True)  
@@ -240,7 +240,7 @@ class Student(models.Model):
         blank=True
     )
     email = models.EmailField( null=True, blank=True)
-    qr_code = models.ImageField(upload_to='qr_codes/students', blank=True, null=True)
+    qr_code = models.ImageField(upload_to='qr_codes/student', blank=True, null=True)
     photo = models.ImageField(upload_to='photos/', blank=True, null=True)
     mot_de_passe = models.CharField(max_length=50, null=True)
     def __str__(self):

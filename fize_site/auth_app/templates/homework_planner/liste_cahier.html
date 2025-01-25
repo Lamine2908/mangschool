@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filtrer les Cahiers de Cours</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #343a40;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            color: #28a745;
+        }
+
+        .container {
+            width: 90%;
+            margin: 30px auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        form {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        label {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        input[type="text"],
+        input[type="date"] {
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            width: 200px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #28a745;
+            color: #ffffff;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #218838; 
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border: 1px solid #dee2e6;
+        }
+
+        th {
+            background-color: #28a745;
+            color: #ffffff;
+            text-transform: uppercase;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        tr:hover {
+            background-color: #e9ecef;
+        }
+
+        td {
+            color: #495057;
+        }
+
+        td[colspan="15"] {
+            text-align: center;
+            font-style: italic;
+            color: #868e96;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 10px;
+            text-decoration: none;
+            color: #28a745;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: #218838; 
+        }
+
+        .navbar {
+            background-color: #28a745;
+            padding: 10px 20px;
+        }
+
+        .navbar a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: bold;
+            margin-right: 15px;
+            transition: color 0.3s ease;
+        }
+
+        .navbar a:hover {
+            color: #c3e6cb;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <a class="navbar-brand" href="#">Geschool</a>
+        <a href="{% url 'espaceprof' teacher.id %}">Accueil</a>
+        <a href="#" class="active">
+            <marquee>{{ teacher.first_name }} {{ teacher.last_name }}</marquee>
+        </a>
+    </ul>
+    <li class="navbar-nav ms-auto">
+        <a class="nav-link " href="{% url 'connexion' %}">Déconnexion</a>
+    </li>
+</ul>    </nav>
+    <div class="container">
+        <h1>Cahiers de Texte</h1>
+        <form method="get" action="{% url 'liste_cahiers' teacher.id %}">
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date" value="{{ request.GET.date }}">
+            <label for="competence">Compétence:</label>
+            <input type="text" id="competence" name="competence" value="{{ request.GET.competence }}">
+            <button type="submit">Filtrer</button>
+        </form>
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Compétence</th>
+                    <th>UEA</th>
+                    <th>Durée</th>
+                    <th>Horaire</th>
+                    <th>Durée Théorie</th>
+                    <th>Corpus Théorie</th>
+                    <th>Durée TD</th>
+                    <th>Corpus TD</th>
+                    <th>Durée TP</th>
+                    <th>Corpus TP</th>
+                    <th>Durée TPA</th>
+                    <th>Corpus TPA</th>
+                    <th>Durée Stage</th>
+                    <th>Corpus Stage</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cahier in cahiers %}
+                <tr>
+                    <td>{{ cahier.date }}</td>
+                    <td>{{ cahier.competence }}</td>
+                    <td>{{ cahier.uea }}</td>
+                    <td>{{ cahier.duree }}</td>
+                    <td>{{ cahier.horaire }}</td>
+                    <td>{{ cahier.duree_theorie }}</td>
+                    <td>{{ cahier.corpus_theorie }}</td>
+                    <td>{{ cahier.duree_td }}</td>
+                    <td>{{ cahier.corpus_td }}</td>
+                    <td>{{ cahier.duree_tp }}</td>
+                    <td>{{ cahier.corpus_tp }}</td>
+                    <td>{{ cahier.duree_tpa }}</td>
+                    <td>{{ cahier.corpus_tpa }}</td>
+                    <td>{{ cahier.duree_stage }}</td>
+                    <td>{{ cahier.corpus_stage }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="15">Aucun cahier de cours disponible.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>

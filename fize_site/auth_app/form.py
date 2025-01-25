@@ -108,19 +108,18 @@ class ResponsableFiliereForm(forms.ModelForm):
 class ResponsableUpdateForm(forms.ModelForm):
     class Meta:
         model = ResponsableFiliere
-        fields = ['matricule', 'first_name', 'last_name', 'profession', 'email', 'num_tel']
+        fields = ['first_name', 'last_name', 'profession', 'email', 'num_tel']
 
     def clean(self):
         cleaned_data = super().clean()
 
-        matricule = cleaned_data.get('matricule')
         first_name = cleaned_data.get('first_name')
         last_name = cleaned_data.get('last_name')
         profession = cleaned_data.get('profession')
         email = cleaned_data.get('email')
         num_tel = cleaned_data.get('num_tel')
 
-        if not matricule or not first_name or not last_name or not profession  or not email or not num_tel:
+        if not  first_name or not last_name or not profession  or not email or not num_tel:
             raise forms.ValidationError("Tous les champs obligatoires doivent être remplis.")
 
         return cleaned_data
@@ -167,7 +166,7 @@ class TeacherUpdateForm(forms.ModelForm):
 class StudentUpdateForm(forms.ModelForm):
     class Meta:
         model = Student
-        fields = ['first_name', 'last_name', 'filiere', 'metier', 'classe', 'email', 'photo']
+        fields = ['first_name', 'last_name', 'filiere', 'metier', 'classe', 'email', 'photo', 'mot_de_passe']
         widgets = {
 
             'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Entrez le prénom de l\'élève'}),
@@ -177,6 +176,7 @@ class StudentUpdateForm(forms.ModelForm):
             'metier': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Entrez le métier'}),
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Entrez l\'email de l\'élève'}),
             'photo': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+            'mot_de_passe' : forms.PasswordInput(attrs={'class': 'form-control'}),
         }
 
     def clean(self):
@@ -188,11 +188,19 @@ class StudentUpdateForm(forms.ModelForm):
         filiere = cleaned_data.get('filiere')
         metier = cleaned_data.get('metier')
         email = cleaned_data.get('email')
-        # photo=cleaned_data.get('photo')
+        photo=cleaned_data.get('photo')
 
-        if not first_name or not last_name or not classe or not filiere  or not metier or not email:
+        if not first_name or not last_name or not filiere  or not metier or not email:
             raise forms.ValidationError("Tous les champs obligatoires doivent être remplis.")
         return cleaned_data
+    
+class mot_de_passeForm(forms.ModelForm):
+    class Meta:
+        model = Student
+        fields = ['mot_de_passe']
+        widgets = {
+            'mot_de_passe' : forms.PasswordInput(attrs={'class': 'form-control'}),
+        }
 
 class CahierDeCoursForm(forms.ModelForm):
     classe = forms.ModelChoiceField(
@@ -446,11 +454,35 @@ class ProjetForm(forms.Form):
         Model = Projet
         field = ['libelle', 'description', 'date', 'student']
         
-class ResponsableMetierForm(forms.Form):
-    class Meta :
-        Model = ResponsableMetier
-        field = ['first_name', 'last_name', 'profession', 'status', 'email', 'num_tel'] 
 
+class ResponsableMetierForm(forms.ModelForm):
+    class Meta :
+        model = ResponsableMetier
+        fields = ['first_name', 'last_name', 'profession', 'status', 'email', 'num_tel'] 
+        widgets = {
+
+            'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Entrez le prénom de l\'élève'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Entrez le nom de famille de l\'élève'}),
+            'num_tel': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Sélectionnez la filière'}),
+            'status': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Entrez le classe'}),
+            'profession': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Entrez le métier'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Entrez l\'email de l\'élève'}),
+        }
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        first_name = cleaned_data.get('first_name')
+        last_name = cleaned_data.get('last_name')
+        num_tel = cleaned_data.get('num_tel')
+        status = cleaned_data.get('status')
+        profession = cleaned_data.get('profession')
+        email = cleaned_data.get('email')
+
+        if not first_name or not last_name or not status  or not profession or not email or not num_tel:
+            raise forms.ValidationError("Tous les champs obligatoires doivent être remplis.")
+        return cleaned_data
+    
 class PointageForm(forms.ModelForm):
     class Meta:
         model = Pointage

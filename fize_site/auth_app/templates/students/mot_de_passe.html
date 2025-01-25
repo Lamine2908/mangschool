@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modifier Élève</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f9fbfd;
+            color: #333;
+        }
+
+        .navbar {
+            background-color: #2C6B2F; 
+        }
+
+        .navbar-brand,
+        .nav-link {
+            color: #ffffff !important;
+        }
+
+        .navbar-nav .nav-link:hover {
+            background-color: #56A755;
+            color: #fff !important;
+        }
+
+        .hero {
+            background-color: #d0690e;
+            color: #ffffff;
+            padding: 30px 1;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            color: yellow;
+        }
+
+        .hero p {
+            font-size: 2rem;
+            color: white;
+        }
+
+        .footer {
+            background-color: #2C6B2F;
+            color: #ffffff;
+            padding: 20px 0;
+        }
+
+        .footer p {
+            margin: 0;
+        }
+
+        /* Formulaire */
+        .form-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-title {
+            font-size: 2rem;
+            color: #2C6B2F;
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-top: 5px;
+            font-size: 1rem;
+        }
+
+        .form-group input[type="file"] {
+            padding: 10px;
+        }
+
+        .btn-custom {
+            background-color: #2C6B2F;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            width: 100%;
+            border: none;
+            font-size: 1.1rem;
+        }
+
+        .btn-custom:hover {
+            background-color: #56A755;
+        }
+
+        /* Styling pour les autres éléments */
+        .navbar-brand marquee {
+            font-size: 1.5rem;
+            color: yellow;
+        }
+
+        /* Cards */
+        .section-card {
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .section-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .section-card .btn {
+            background-color: #d0690e;
+            color: #ffffff;
+        }
+
+        .section-card .btn:hover {
+            background-color: #c56f08;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="#"><marquee>Geschool</marquee></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <li class="navbar-nav ms-auto">
+            <a class="nav-link " href="{% url 'espaceeleve' student.id %}">Acceuil</a>
+        </li>
+        <li class="navbar-nav ms-auto">
+            <a class="nav-link " href="{% url 'espaceeleve' student.id %}">Retour</a>
+        </li>
+        <div class="collapse navbar-collapse" id="navbarNav">
+
+            <li class="navbar-nav ms-auto">
+                <a class="nav-link " href="{% url 'student_detail' student.id %}"><strong><i>{{student.first_name}} {{student.last_name}}</i></strong></a>
+            </li>
+            <li class="navbar-nav ms-auto">
+                <a class="nav-link " href="{% url 'connexion' %}">Déconnexion</a>
+            </li>
+            
+        </div>
+    </nav>
+    <div class="container">
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-8">
+                <div class="card shadow">
+                    <div class="card-header text-center">
+                        <h2>
+                            <strong>Changement de mot de passe</strong>
+                        </h2>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            
+                            {% if form.non_field_errors %}
+                                <div class="alert alert-danger" role="alert">
+                                    {% for error in form.non_field_errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+
+                        
+                            
+                            <div class="mb-3">
+                                <label for="classe" class="form-label">Classe : {{ student.first_name }}</label>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="filiere" class="form-label">Filière : {{ student.filiere }}</label>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="metier" class="form-label">Métier : {{ student.metier }}</label>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email : {{ student.email }}</label>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="mot_de_passe" class="form-label">Nouveau Mot de passe</label>
+                                {{ form.mot_de_passe }}
+                            </div>
+
+                            <div class="d-grid"> 
+                                <button type="submit" class="btn btn-success">Sauvegarder</button> 
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

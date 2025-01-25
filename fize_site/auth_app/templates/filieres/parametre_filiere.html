@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espace Responsable de Filière - Geschool</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .navbar {
+            background-color: #28a745;
+        }
+
+        .navbar-brand,
+        .nav-link {
+            color: #ffffff !important;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #d4edda !important;
+        }
+
+        .hero {
+            background: url('https://images.ctfassets.net/63bmaubptoky/sZriYkvztFPUnfxy83p_SiPo-cUxTL2x5XzyC5FRwvs/e37799a95f714bd48891d63c91c930be/logiciel-de-gestion-etablissement-scolaire-FR-Capterra-Header.png?w=2200') no-repeat center center;
+            background-size: cover;
+            color: #ffffff;
+            padding: 120px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            z-index: 2;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            z-index: 2;
+        }
+
+        .section-icon {
+            font-size: 2.5rem;
+            color: #28a745;
+            margin-bottom: 15px;
+        }
+
+        .section-card {
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .section-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .section-card .btn {
+            background-color: #28a745;
+            color: #ffffff;
+        }
+
+        .section-card .btn:hover {
+            background-color: #218838;
+        }
+
+        .footer {
+            background-color: #28a745;
+            color: #ffffff;
+            padding: 20px 0;
+        }
+
+        .footer p {
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="#">Geschool</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'responsable_filiere' responsable.id %}">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#"><marquee>{{responsable.first_name}} {{responsable.last_name}}</marquee></a>
+                </li>
+            </ul>
+            <li class="navbar-nav ms-auto">
+                <a class="nav-link " href="{% url 'connexion' %}">Déconnexion</a>
+            </li>
+        </ul>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container my-5">
+        <div class="row text-center">
+            <div class="col-md-4 mb-4">
+                <div class="section-card p-4">
+                    <i class="bi bi-book section-icon"></i>
+                    <h3>Affecter les professeurs</h3>
+                    <p>Gerer les professeurs de votre filiere.</p>
+                    <a href="{% url 'affecter_professeur' responsable.id %}" class="btn btn-primary">Affecter</a>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="section-card p-4">
+                    <i class="bi bi-journal section-icon"></i>
+                    <h3>Gestion des Matières</h3>
+                    <p>Gérez les matières et les cours de votre filière.</p>
+                    <a href="{% url 'ajouter_matiere' responsable.id %}" class="btn btn-primary">Ajouter</a>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="section-card p-4">
+                    <i class="bi bi-journal section-icon"></i>
+                    <h3>Liste des Matières</h3>
+                    <p>Lister les matières de votre filière.</p>
+                    <a href="{% url 'liste_matieres' responsable.id %}" class="btn btn-primary">Lister</a>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="section-card p-4">
+                    <i class="bi bi-gear section-icon"></i>
+                    <h3>Paramètres</h3>
+                    <p>Configurez d'autres paramètres de votre filière.</p>
+                    <a href="#" class="btn btn-primary">Configurer</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer text-center">
+        <p>© 2024 Geschool. Tous droits réservés.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
